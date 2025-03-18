@@ -1,0 +1,1167 @@
+{
+  "type": "2",
+  "mmsi": "413884042",
+  "config": [
+    "iotHosts",
+    "iotElectrics",
+    "iotCab"
+  ],
+  "iotHosts": [
+    {
+      "id": 1869927329074634800,
+      "time": "2024-12-20 10:06:31",
+      "name": "主机1",
+      "mmsi": "413884042",
+      "data": {
+        "status": {
+          "value": "运行中"
+        },
+        "runningTime": {
+          "name": "运行时间",
+          "min": 0,
+          "max": 10000000,
+          "value": 1000,
+          "unit": "小时",
+          "type": "1"
+        },
+        "hostSpeed": {
+          "name": "主机转速",
+          "min": 0,
+          "max": 1000,
+          "value": 683,
+          "unit": "r/s",
+          "type": "1"
+        },
+        "lubricatingOilPressureOne": {
+          "name": "滑油压力1",
+          "min": 0,
+          "max": 10,
+          "value": 2,
+          "unit": "Mpa",
+          "type": "1"
+        },
+        "oilOutletTemp": {
+          "name": "滑油出机温度",
+          "min": -40,
+          "max": 200,
+          "value": 52,
+          "unit": "℃",
+          "type": "1"
+        },
+        "gasPressure": {
+          "name": "燃油压力",
+          "min": 0,
+          "max": 10,
+          "value": 2.5,
+          "unit": "Mpa",
+          "type": "1"
+        },
+        "gasTemp": {
+          "name": "燃油温度",
+          "min": -40,
+          "max": 200,
+          "value": 28,
+          "unit": "℃",
+          "type": "1"
+        },
+        "hostLoad": {
+          "name": "主机负荷",
+          "min": 0,
+          "max": 110,
+          "value": 60,
+          "unit": "℃",
+          "type": "1"
+        },
+        "boostAirPressureOne": {
+          "name": "增压空气压力1",
+          "min": 0,
+          "max": 10,
+          "value": 1,
+          "unit": "Mpa",
+          "type": "1"
+        },
+        "backupPowerSupplyVoltage": {
+          "name": "备用电源电压",
+          "min": 0,
+          "max": 400,
+          "value": 200,
+          "unit": "V",
+          "type": "1"
+        },
+        "jetTiming": {
+          "name": "喷气正时",
+          "min": 0,
+          "max": 100,
+          "value": 40,
+          "unit": "",
+          "type": "1"
+        },
+        "jetDuration": {
+          "name": "喷气持续期",
+          "min": 0,
+          "max": 100,
+          "value": 70,
+          "unit": "",
+          "type": "1"
+        },
+        "startingTimes": {
+          "name": "当前起动次数",
+          "min": 0,
+          "max": 65535,
+          "value": 100,
+          "unit": "次",
+          "type": "1"
+        },
+        "powerSupplyVoltage": {
+          "name": "主电源电压",
+          "min": 0,
+          "max": 400,
+          "value": 220,
+          "unit": "V",
+          "type": "1"
+        },
+        "exhaustTempOne": {
+          "name": "1#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 260,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempTwo": {
+          "name": "2#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 255,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempThree": {
+          "name": "3#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 270,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempFour": {
+          "name": "4#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 275,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempFive": {
+          "name": "5#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 288,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempSix": {
+          "name": "6#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 267,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempSeven": {
+          "name": "7#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempEight": {
+          "name": "8#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempNine": {
+          "name": "9#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempTen": {
+          "name": "10#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempEleven": {
+          "name": "11#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempTwelve": {
+          "name": "12#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "averageExhaustTemp": {
+          "name": "缸平均排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "activateAirPressure": {
+          "name": "起动空气压力",
+          "min": 0,
+          "max": 10,
+          "value": 2.4,
+          "unit": "Mpa",
+          "type": "1"
+        }
+      },
+      "config": {
+        "processFields": [
+          "exhaustTempOne",
+          "exhaustTempTwo",
+          "exhaustTempThree",
+          "exhaustTempFour",
+          "exhaustTempFive",
+          "exhaustTempSix"
+        ],
+        "dashboardFields": [
+          "hostSpeed",
+          "lubricatingOilPressureOne",
+          "oilOutletTemp",
+          "gasPressure",
+          "gasTemp",
+          "activateAirPressure",
+          "hostLoad",
+          "boostAirPressureOne",
+          "turbochargerSpeed",
+          "activateAirPressure",
+          "freshwaterTempOne",
+          "vortexFrontTempTwo",
+          "freshwaterPressure"
+        ],
+        "system": [
+          {
+            "name": "主机参数",
+            "processFields": [
+              "backupPowerSupplyVoltage",
+              "jetTiming",
+              "jetDuration",
+              "hostLoad",
+              "startingTimes",
+              "powerSupplyVoltage"
+            ]
+          },
+          {
+            "name": "排气温度",
+            "processFields": [
+              "exhaustTempOne",
+              "exhaustTempTwo",
+              "exhaustTempThree",
+              "exhaustTempFour",
+              "exhaustTempFive",
+              "exhaustTempSix",
+              "exhaustTempSeven",
+              "exhaustTempEight",
+              "exhaustTempNine",
+              "exhaustTempTen",
+              "exhaustTempEleven",
+              "exhaustTempTwelve",
+              "averageExhaustTemp"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": 2869927329074634800,
+      "time": "2024-12-20 10:06:31",
+      "name": "主机2",
+      "mmsi": "413884042",
+      "data": {
+        "status": {
+          "value": "运行中"
+        },
+        "runningTime": {
+          "name": "运行时间",
+          "min": 0,
+          "max": 10000000,
+          "value": 1000,
+          "unit": "小时",
+          "type": "1"
+        },
+        "hostSpeed": {
+          "name": "主机转速",
+          "min": 0,
+          "max": 1000,
+          "value": 689,
+          "unit": "r/s",
+          "type": "1"
+        },
+        "lubricatingOilPressureOne": {
+          "name": "滑油压力1",
+          "min": 0,
+          "max": 10,
+          "value": 4,
+          "unit": "Mpa",
+          "type": "1"
+        },
+        "oilOutletTemp": {
+          "name": "滑油出机温度",
+          "min": -40,
+          "max": 200,
+          "value": 54,
+          "unit": "℃",
+          "type": "1"
+        },
+        "gasPressure": {
+          "name": "燃油压力",
+          "min": 0,
+          "max": 10,
+          "value": 2.3,
+          "unit": "Mpa",
+          "type": "1"
+        },
+        "gasTemp": {
+          "name": "燃油温度",
+          "min": -40,
+          "max": 200,
+          "value": 28,
+          "unit": "℃",
+          "type": "1"
+        },
+        "hostLoad": {
+          "name": "主机负荷",
+          "min": 0,
+          "max": 110,
+          "value": 60,
+          "unit": "%",
+          "type": "1"
+        },
+        "boostAirPressureOne": {
+          "name": "增压空气压力1",
+          "min": 0,
+          "max": 10,
+          "value": 1,
+          "unit": "Mpa",
+          "type": "1"
+        },
+        "backupPowerSupplyVoltage": {
+          "name": "备用电源电压",
+          "min": 0,
+          "max": 400,
+          "value": 200,
+          "unit": "V",
+          "type": "1"
+        },
+        "jetTiming": {
+          "name": "喷气正时",
+          "min": 0,
+          "max": 100,
+          "value": 40,
+          "unit": "",
+          "type": "1"
+        },
+        "jetDuration": {
+          "name": "喷气持续期",
+          "min": 0,
+          "max": 100,
+          "value": 70,
+          "unit": "",
+          "type": "1"
+        },
+        "startingTimes": {
+          "name": "当前起动次数",
+          "min": 0,
+          "max": 65535,
+          "value": 100,
+          "unit": "次",
+          "type": "1"
+        },
+        "powerSupplyVoltage": {
+          "name": "主电源电压",
+          "min": 0,
+          "max": 400,
+          "value": 220,
+          "unit": "V",
+          "type": "1"
+        },
+        "exhaustTempOne": {
+          "name": "1#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 266,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempTwo": {
+          "name": "2#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 278,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempThree": {
+          "name": "3#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 263,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempFour": {
+          "name": "4#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 258,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempFive": {
+          "name": "5#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 259,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempSix": {
+          "name": "6#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 280,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempSeven": {
+          "name": "7#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempEight": {
+          "name": "8#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempNine": {
+          "name": "9#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempTen": {
+          "name": "10#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempEleven": {
+          "name": "11#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempTwelve": {
+          "name": "12#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "averageExhaustTemp": {
+          "name": "缸平均排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "activateAirPressure": {
+          "name": "起动空气压力",
+          "min": 0,
+          "max": 10,
+          "value": 2.2,
+          "unit": "Mpa",
+          "type": "1"
+        }
+      },
+      "config": {
+        "processFields": [
+          "exhaustTempOne",
+          "exhaustTempTwo",
+          "exhaustTempThree",
+          "exhaustTempFour",
+          "exhaustTempFive",
+          "exhaustTempSix"
+        ],
+        "dashboardFields": [
+          "hostSpeed",
+          "lubricatingOilPressureOne",
+          "oilOutletTemp",
+          "gasPressure",
+          "gasTemp",
+          "activateAirPressure",
+          "hostLoad",
+          "boostAirPressureOne",
+          "turbochargerSpeed",
+          "activateAirPressure",
+          "freshwaterTempOne",
+          "vortexFrontTempTwo",
+          "freshwaterPressure"
+        ],
+        "system": [
+          {
+            "name": "主机参数",
+            "processFields": [
+              "backupPowerSupplyVoltage",
+              "jetTiming",
+              "jetDuration",
+              "hostLoad",
+              "startingTimes",
+              "powerSupplyVoltage"
+            ]
+          },
+          {
+            "name": "排气温度",
+            "processFields": [
+              "exhaustTempOne",
+              "exhaustTempTwo",
+              "exhaustTempThree",
+              "exhaustTempFour",
+              "exhaustTempFive",
+              "exhaustTempSix",
+              "exhaustTempSeven",
+              "exhaustTempEight",
+              "exhaustTempNine",
+              "exhaustTempTen",
+              "exhaustTempEleven",
+              "exhaustTempTwelve",
+              "averageExhaustTemp"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "iotElectrics": [
+    {
+      "id": 1869927329071634801,
+      "time": "2024-12-20 10:06:31",
+      "name": "电机1",
+      "mmsi": "413884042",
+      "data": {
+        "status": {
+          "value": "运行中"
+        },
+        "runningTime": {
+          "name": "运行时间",
+          "min": 0,
+          "max": 10000000,
+          "value": 1000,
+          "unit": "小时",
+          "type": "1"
+        },
+        "hostSpeed": {
+          "name": "主机转速",
+          "min": 0,
+          "max": 1000,
+          "value": 690,
+          "unit": "r/s",
+          "type": "1"
+        },
+        "lubricatingOilPressureOne": {
+          "name": "滑油压力1",
+          "min": 0,
+          "max": 10,
+          "value": 4,
+          "unit": "Mpa",
+          "type": "1"
+        },
+        "oilOutletTemp": {
+          "name": "滑油出机温度",
+          "min": -40,
+          "max": 200,
+          "value": 52,
+          "unit": "℃",
+          "type": "1"
+        },
+        "gasPressure": {
+          "name": "燃油压力",
+          "min": 0,
+          "max": 10,
+          "value": 6,
+          "unit": "Mpa",
+          "type": "1"
+        },
+        "gasTemp": {
+          "name": "燃油温度",
+          "min": -40,
+          "max": 200,
+          "value": -30,
+          "unit": "℃",
+          "type": "1"
+        },
+        "hostLoad": {
+          "name": "主机负荷",
+          "min": 0,
+          "max": 110,
+          "value": 60,
+          "unit": "℃",
+          "type": "1"
+        },
+        "boostAirPressureOne": {
+          "name": "增压空气压力1",
+          "min": 0,
+          "max": 10,
+          "value": "转速",
+          "unit": "Mpa",
+          "type": "1"
+        },
+        "backupPowerSupplyVoltage": {
+          "name": "备用电源电压",
+          "min": 0,
+          "max": 400,
+          "value": 200,
+          "unit": "V",
+          "type": "1"
+        },
+        "jetTiming": {
+          "name": "喷气正时",
+          "min": 0,
+          "max": 100,
+          "value": 40,
+          "unit": "",
+          "type": "1"
+        },
+        "jetDuration": {
+          "name": "喷气持续期",
+          "min": 0,
+          "max": 100,
+          "value": 70,
+          "unit": "",
+          "type": "1"
+        },
+        "startingTimes": {
+          "name": "当前起动次数",
+          "min": 0,
+          "max": 65535,
+          "value": 100,
+          "unit": "次",
+          "type": "1"
+        },
+        "powerSupplyVoltage": {
+          "name": "主电源电压",
+          "min": 0,
+          "max": 400,
+          "value": 220,
+          "unit": "V",
+          "type": "1"
+        },
+        "exhaustTempOne": {
+          "name": "1#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempTwo": {
+          "name": "1#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempThree": {
+          "name": "1#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempFour": {
+          "name": "1#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempFive": {
+          "name": "1#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempSix": {
+          "name": "1#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempSeven": {
+          "name": "1#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempEight": {
+          "name": "1#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempNine": {
+          "name": "1#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempTen": {
+          "name": "1#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempEleven": {
+          "name": "1#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempTwelve": {
+          "name": "1#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "averageExhaustTemp": {
+          "name": "缸平均排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        }
+      },
+      "config": {
+        "processFields": [
+          "backupPowerSupplyVoltage",
+          "jetTiming",
+          "jetDuration",
+          "hostLoad",
+          "startingTimes",
+          "powerSupplyVoltage"
+        ],
+        "dashboardFields": [
+          "hostSpeed",
+          "lubricatingOilPressureOne",
+          "oilOutletTemp",
+          "gasPressure",
+          "gasTemp",
+          "hostLoad",
+          "boostAirPressureOne",
+          "turbochargerSpeed",
+          "activateAirPressure",
+          "freshwaterTempOne",
+          "vortexFrontTempTwo",
+          "freshwaterPressure"
+        ],
+        "system": [
+          {
+            "name": "主机参数",
+            "processFields": [
+              "backupPowerSupplyVoltage",
+              "jetTiming",
+              "jetDuration",
+              "hostLoad",
+              "startingTimes",
+              "powerSupplyVoltage"
+            ]
+          },
+          {
+            "name": "排气温度",
+            "processFields": [
+              "exhaustTempOne",
+              "exhaustTempTwo",
+              "exhaustTempThree",
+              "exhaustTempFour",
+              "exhaustTempFive",
+              "exhaustTempSix",
+              "exhaustTempSeven",
+              "exhaustTempEight",
+              "exhaustTempNine",
+              "exhaustTempTen",
+              "exhaustTempEleven",
+              "exhaustTempTwelve",
+              "averageExhaustTemp"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": 1869927329071634802,
+      "time": "2024-12-20 10:06:31",
+      "name": "电机2",
+      "mmsi": "413884042",
+      "data": {
+        "status": {
+          "value": "运行中"
+        },
+        "runningTime": {
+          "name": "运行时间",
+          "min": 0,
+          "max": 10000000,
+          "value": 1000,
+          "unit": "小时",
+          "type": "1"
+        },
+        "hostSpeed": {
+          "name": "主机转速",
+          "min": 0,
+          "max": 1000,
+          "value": 683,
+          "unit": "r/s",
+          "type": "1"
+        },
+        "lubricatingOilPressureOne": {
+          "name": "滑油压力1",
+          "min": 0,
+          "max": 10,
+          "value": 4,
+          "unit": "Mpa",
+          "type": "1"
+        },
+        "oilOutletTemp": {
+          "name": "滑油出机温度",
+          "min": -40,
+          "max": 200,
+          "value": 54,
+          "unit": "℃",
+          "type": "1"
+        },
+        "gasPressure": {
+          "name": "燃油压力",
+          "min": 0,
+          "max": 10,
+          "value": 6,
+          "unit": "Mpa",
+          "type": "1"
+        },
+        "gasTemp": {
+          "name": "燃油温度",
+          "min": -40,
+          "max": 200,
+          "value": -30,
+          "unit": "℃",
+          "type": "1"
+        },
+        "hostLoad": {
+          "name": "主机负荷",
+          "min": 0,
+          "max": 110,
+          "value": 60,
+          "unit": "℃",
+          "type": "1"
+        },
+        "boostAirPressureOne": {
+          "name": "增压空气压力1",
+          "min": 0,
+          "max": 10,
+          "value": 683,
+          "unit": "Mpa",
+          "type": "1"
+        },
+        "backupPowerSupplyVoltage": {
+          "name": "备用电源电压",
+          "min": 0,
+          "max": 400,
+          "value": 200,
+          "unit": "V",
+          "type": "1"
+        },
+        "jetTiming": {
+          "name": "喷气正时",
+          "min": 0,
+          "max": 100,
+          "value": 40,
+          "unit": "",
+          "type": "1"
+        },
+        "jetDuration": {
+          "name": "喷气持续期",
+          "min": 0,
+          "max": 100,
+          "value": 70,
+          "unit": "",
+          "type": "1"
+        },
+        "startingTimes": {
+          "name": "当前起动次数",
+          "min": 0,
+          "max": 65535,
+          "value": 100,
+          "unit": "次",
+          "type": "1"
+        },
+        "powerSupplyVoltage": {
+          "name": "主电源电压",
+          "min": 0,
+          "max": 400,
+          "value": 220,
+          "unit": "V",
+          "type": "1"
+        },
+        "exhaustTempOne": {
+          "name": "1#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempTwo": {
+          "name": "1#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempThree": {
+          "name": "1#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempFour": {
+          "name": "1#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempFive": {
+          "name": "1#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempSix": {
+          "name": "1#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempSeven": {
+          "name": "1#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempEight": {
+          "name": "1#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempNine": {
+          "name": "1#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempTen": {
+          "name": "1#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempEleven": {
+          "name": "1#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "exhaustTempTwelve": {
+          "name": "1#缸排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        },
+        "averageExhaustTemp": {
+          "name": "缸平均排气温度",
+          "min": 0,
+          "max": 600,
+          "value": 95,
+          "unit": "℃",
+          "type": "1"
+        }
+      },
+      "config": {
+        "processFields": [
+          "backupPowerSupplyVoltage",
+          "jetTiming",
+          "jetDuration",
+          "hostLoad",
+          "startingTimes",
+          "powerSupplyVoltage"
+        ],
+        "dashboardFields": [
+          "hostSpeed",
+          "lubricatingOilPressureOne",
+          "oilOutletTemp",
+          "gasPressure",
+          "gasTemp",
+          "hostLoad",
+          "boostAirPressureOne",
+          "turbochargerSpeed",
+          "activateAirPressure",
+          "freshwaterTempOne",
+          "vortexFrontTempTwo",
+          "freshwaterPressure"
+        ],
+        "system": [
+          {
+            "name": "主机参数",
+            "processFields": [
+              "backupPowerSupplyVoltage",
+              "jetTiming",
+              "jetDuration",
+              "hostLoad",
+              "startingTimes",
+              "powerSupplyVoltage"
+            ]
+          },
+          {
+            "name": "排气温度",
+            "processFields": [
+              "exhaustTempOne",
+              "exhaustTempTwo",
+              "exhaustTempThree",
+              "exhaustTempFour",
+              "exhaustTempFive",
+              "exhaustTempSix",
+              "exhaustTempSeven",
+              "exhaustTempEight",
+              "exhaustTempNine",
+              "exhaustTempTen",
+              "exhaustTempEleven",
+              "exhaustTempTwelve",
+              "averageExhaustTemp"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "iotCab": {
+    "id": 1869554875156254700,
+    "time": "2024-12-19 09:26:31",
+    "name": "舵机",
+    "mmsi": "413884042",
+    "data": {
+      "status": {
+        "value": "运行中"
+      },
+      "runningTime": {
+        "name": "运行时间",
+        "min": 0,
+        "max": 10000000,
+        "value": 1000,
+        "unit": "小时",
+        "type": "1"
+      },
+      "rudderAngle": {
+        "name": "舵角",
+        "min": -40,
+        "max": 40,
+        "value": -5,
+        "unit": "°"
+      },
+      "rotationSpeed": {
+        "name": "回转转速",
+        "min": 0,
+        "max": 2000,
+        "value": 100,
+        "unit": "r/s"
+      },
+      "course": {
+        "name": "航向",
+        "min": 0,
+        "max": 360,
+        "value": 100,
+        "unit": "°"
+      }
+    }
+  }
+}
