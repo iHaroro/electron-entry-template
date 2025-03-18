@@ -1,6 +1,35 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, Menu } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
+
+const template = [
+  {
+    label: '查看',
+    submenu: [
+      {
+        label: '刷新',
+        role: 'reload'
+      },
+      {
+        label: '强制刷新',
+        role: 'forceReload'
+      },
+      {
+        label: '调试工具',
+        role: 'toggleDevTools'
+      }
+    ]
+  },
+  {
+    label: '操作',
+    submenu: [
+      {
+        label: '退出',
+        role: 'quit'
+      }
+    ]
+  }
+]
 
 // 安装/卸载时处理在 Windows 上创建/删除快捷方式。
 if (started) {
@@ -8,24 +37,42 @@ if (started) {
 }
 
 const createWindow = () => {
+  const menu = Menu.buildFromTemplate(template)
+  Menu.setApplicationMenu(menu)
+  
   // 创建浏览器窗口。
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1920,
+    height: 1080,
+    icon: path.join(__dirname, '../images/icon.icon'),
+    frame: true,
+    devTools: true,
+    nodeIntegration: true,
+    nodeIntegrationInWorker: true,
+    enableRemoteModule: true,
+    sandbox: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     }
   });
   
-  // 并加载应用程序的 index.html。
+  console.log('MAIN_WINDOW_VITE_DEV_SERVER_URL', MAIN_WINDOW_VITE_DEV_SERVER_URL)
+  console.log('MAIN_WINDOW_VITE_NAME', MAIN_WINDOW_VITE_NAME)
+  
+  // 并加载应用程序的 index.html
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
   } else {
     mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
+    
+    // 拦截所有路由请求，确保返回 index.html
+    mainWindow.webContents.on('did-fail-load', () => {
+      mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
+    });
   }
   
   // 打开 DevTools。
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 };
 
 // 当 Electron 完成时，将调用此方法

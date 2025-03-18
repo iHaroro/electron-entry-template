@@ -25,7 +25,27 @@
  *  });
  * ```
  */
+import 'animate.css'
+import '@/assets/styles/main.scss'
+// 全局通用样式
+import '@/assets/styles/common.scss'
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+import App from './App.vue'
+import router from './router'
+import 'dayjs/locale/zh-cn'
+// 注册指令
+import registerDirectives from '@/directive'
+// 工具方法
+import { fitChartSize } from '@/assets/js/dataUtils.js'
 
-import './index.css';
+const app = createApp(App)
 
-console.log('👋 This message is being logged by "renderer.js", included via Vite');
+// 注册全局方法
+app.config.globalProperties.fitChartSize = fitChartSize
+app.use(createPinia())
+app.use(router)
+
+registerDirectives(app)
+
+app.mount('#app')

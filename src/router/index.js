@@ -1,20 +1,20 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import { getTokenFormApplication } from '@/utils/userInfo.js'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
       name: 'HomePage',
-      component: () => import('@/views/home'),
+      component: () => import('@/views/home')
     },
     {
       path: '/login',
       name: 'LoginPage',
-      component: () => import('@/views/login'),
-    },
-  ],
+      component: () => import('@/views/login')
+    }
+  ]
 })
 
 router.beforeEach((to, from, next) => {
