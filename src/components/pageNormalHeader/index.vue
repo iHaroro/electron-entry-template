@@ -1,15 +1,16 @@
 <template>
   <div class="top-box">
-    <selectBox
-      v-model:value="mmsi"
-      :options="boats"
-      :options-props="{
-        name: 'name',
-        value: 'mmsi',
-        key: 'mmsi',
-      }"
-      @change="handleChangeBoat"
-    />
+    <!--<selectBox-->
+    <!--  v-model:value="mmsi"-->
+    <!--  :options="boats"-->
+    <!--  :options-props="{-->
+    <!--    name: 'name',-->
+    <!--    value: 'mmsi',-->
+    <!--    key: 'mmsi',-->
+    <!--  }"-->
+    <!--  @change="handleChangeBoat"-->
+    <!--/>-->
+    <div class="top-left-box"></div>
     <div class="top-title">
       <span class="top-title_title">设备信息</span>
     </div>
@@ -23,7 +24,7 @@
 <script setup>
 import { inject, ref, onMounted } from 'vue'
 import { BOAT_INFO } from '@/provide/boat.js'
-import selectBox from '@/components/selectBoxNew'
+// import selectBox from '@/components/selectBoxNew'
 
 defineOptions({ name: 'PageNormalHeader' })
 
@@ -31,17 +32,17 @@ const emit = defineEmits(['back', 'changeBoat'])
 const props = defineProps({
   boat: {
     type: String,
-    default: '',
-  },
+    default: ''
+  }
 })
 
 const mmsi = ref(null) // 当前的选中的船舶
-const boatInfoInject = inject(BOAT_INFO)
-const boats = boatInfoInject.boats
+// const boatInfoInject = inject(BOAT_INFO)
+// const boats = boatInfoInject.boats
 
-const handleChangeBoat = (boat) => {
-  emit('changeBoat', boat)
-}
+// const handleChangeBoat = (boat) => {
+//   emit('changeBoat', boat)
+// }
 
 const backHandler = () => {
   emit('back')
@@ -60,6 +61,10 @@ onMounted(() => {
   width: 100%;
   height: vh(48);
   margin-top: vh(15);
+
+  .top-left-box {
+    min-width: vw(244);
+  }
 
   .top-title {
     position: relative;

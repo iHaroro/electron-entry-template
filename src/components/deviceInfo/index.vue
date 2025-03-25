@@ -3,10 +3,6 @@
     <div class="device-info-box">
       <div class="top-box">
         <div class="top-title">
-          <netStateBox class="net-state-box-position" :status="deviceInfo.shipStatus" />
-          <span class="update-time" v-if="currentDeviceUpdateTime">
-            更新时间：{{ currentDeviceUpdateTime }}
-          </span>
           <span class="top-title_title">设备信息</span>
         </div>
       </div>
@@ -100,7 +96,7 @@
                 <div>查看更多</div>
                 <img src="@/assets/images/more_right_icon.png" alt="" />
               </div>
-              <alarmInfoList :boat-info="boatInfo" :list="alarmInfo" />
+              <alarmInfoList :list="alarmInfo" />
             </div>
           </div>
         </div>
@@ -123,7 +119,6 @@ import dashboardParams from '@/components/dashboardParams'
 import alarmInfoList from '@/components/alarmInfoList'
 import titleComponent from '@/components/titleComponent'
 import deviceWarnTable from '@/components/deviceWarnTable'
-import netStateBox from '@/components/netStateBox'
 import { getShipDevice, getShipAlarm } from '@/api/device.js'
 import { storeToRefs } from 'pinia'
 import { computed, inject, onMounted, onUnmounted, ref } from 'vue'
@@ -135,7 +130,6 @@ defineOptions({ name: 'DeviceInfo' })
 
 let timer = null
 let destroyed = false
-const boats = ref([]) // 船舶列表
 const boat = ref(null) // 当前的选中的船舶
 const deviceTypes = ref({}) // 设备类型
 const deviceType = ref(null) // 选中的设备类型
@@ -187,7 +181,7 @@ const changeDeviceType = (value) => {
   const params = {
     mmsi: boat.value,
     type: chartDeviceType.value,
-    time: TIME_TYPE.WEEK,
+    time: TIME_TYPE.WEEK
   }
   // 舵机设备无需查询历史数据
   if (deviceType.value !== DEVICE_TYPES.SERVO_DEVICE.value) {
@@ -205,7 +199,7 @@ const refreshData = () => {
     if (destroyed) return
     getDeviceData({
       reset: false,
-      initChart: false,
+      initChart: false
     })
   }, refreshTime)
 }
@@ -246,9 +240,9 @@ const getDeviceData = async ({ reset = false, initChart = false }) => {
       type: chartDeviceType.value,
       // 默认请求主机设备图表数据
       name: deviceInfo.value[deviceInfo.value.config[0]]?.length
-        ? deviceInfo.value[deviceInfo.value.config[0]][0].name
-        : deviceInfo.value[deviceInfo.value.config[0]].name,
-      time: TIME_TYPE.WEEK,
+            ? deviceInfo.value[deviceInfo.value.config[0]][0].name
+            : deviceInfo.value[deviceInfo.value.config[0]].name,
+      time: TIME_TYPE.WEEK
     })
   }
 
@@ -285,15 +279,6 @@ const chartDeviceType = computed(() => {
     default:
       return null
   }
-})
-
-/**
- * @function boatInfo
- * @description 船舶信息
- * @returns {object} 船舶信息
- **/
-const boatInfo = computed(() => {
-  return boats.value.find((item) => item.mmsi === boat.value)
 })
 
 /**
@@ -336,34 +321,11 @@ const setDefaultShip = () => {
   boat.value = boatInfo.mmsi ? `${boatInfo.mmsi}` : null
 }
 
-const currentDeviceUpdateTime = computed(() => {
-  const data = deviceInfo.value[deviceType.value]
-
-  if (DEVICE_TYPES.MAIN_DEVICE.value === deviceType.value) {
-    // 主机
-    const [{ dataTime }] = data
-    console.log('主机更新时间:', dataTime)
-    return dataTime
-  } else if (DEVICE_TYPES.ELECTRICS_DEVICE.value === deviceType.value) {
-    // 电机
-    const { dataTime } = data[electricsTypeIndex.value]
-    console.log('电机更新时间:', dataTime)
-    return dataTime
-  } else if (DEVICE_TYPES.SERVO_DEVICE.value === deviceType.value) {
-    console.log('舵机更新时间:', data.dataTime)
-    // 舵机
-    return data.dataTime
-  }
-
-  console.log('全局更新时间缺省:', deviceInfo.value.updateTime)
-  return deviceInfo.value.updateTime
-})
-
 onMounted(() => {
   setDefaultShip()
   getDeviceData({
     reset: true,
-    initChart: true,
+    initChart: true
   })
 })
 

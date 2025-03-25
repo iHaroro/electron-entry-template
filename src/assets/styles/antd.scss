@@ -133,9 +133,9 @@
             }
 
             &:last-child {
-                .ant-table-cell {
-                  border-bottom: 0;
-                }
+              .ant-table-cell {
+                border-bottom: 0;
+              }
             }
 
             .ant-table-cell {
@@ -241,16 +241,173 @@
         }
 
         .ant-table-body {
-            .ant-table-tbody {
-              .ant-table-placeholder {
-                &:hover {
-                 .ant-table-cell {
-                    background-color: transparent;
-                    border-bottom: none;
-                  }
+          .ant-table-tbody {
+            .ant-table-placeholder {
+              &:hover {
+                .ant-table-cell {
+                  background-color: transparent;
+                  border-bottom: none;
                 }
               }
             }
+          }
+        }
+      }
+    }
+  }
+}
+
+// 主表格
+.custom-main-table {
+  &.ant-table-wrapper {
+    .ant-table {
+      background-color: transparent;
+
+      .ant-table-container {
+        .ant-table-header {
+          background: linear-gradient(0, #1C3B68 0%, rgba(2, 43, 76, 0) 100%);
+
+          .ant-table-thead {
+            background: linear-gradient(0, #1C3B68 0%, rgba(2, 43, 76, 0) 100%);
+
+            .ant-table-cell {
+              background-color: rgba(54, 109, 135, 0.21);
+              border-bottom: none;
+              text-align: center;
+              color: rgba(0, 252, 238, 1);
+              font-weight: 500;
+              font-size: sizeUtils.vh(16);
+              line-height: sizeUtils.vh(22);
+              padding: sizeUtils.vh(12) sizeUtils.vw(16);
+
+              &::before {
+                display: none;
+              }
+            }
+          }
+        }
+
+        .ant-table-tbody {
+          .ant-table-row {
+            &:hover {
+              position: relative;
+
+              .ant-table-cell {
+                background-color: rgba(54, 109, 135, 0.68);
+
+                &:first-child {
+                  border-radius: 0;
+                }
+
+                &:last-child {
+                  border-radius: 0;
+                }
+              }
+            }
+
+            &:last-child {
+              .ant-table-cell {
+                border-bottom: 0;
+              }
+            }
+
+            .ant-table-cell {
+              background-color: rgba(54, 109, 135, 0.21);
+              border-top-color: transparent;
+
+              &.ant-table-cell-row-hover {
+                background-color: transparent;
+              }
+            }
+          }
+        }
+
+        .ant-table-content {
+          .ant-table-thead {
+            background: linear-gradient(0, #1C3B68 0%, rgba(2, 43, 76, 0) 100%);
+
+            .ant-table-cell {
+              background-color: transparent;
+              border-bottom: none;
+              text-align: center;
+              color: rgba(0, 252, 238, 1);
+              font-weight: 500;
+              font-size: sizeUtils.vh(16);
+              line-height: sizeUtils.vh(22);
+              padding: sizeUtils.vh(12) sizeUtils.vw(16);
+
+              &::before {
+                display: none;
+              }
+            }
+          }
+
+          .ant-table-tbody {
+            .ant-table-row {
+
+              .ant-table-cell {
+                border-top-color: transparent;
+
+                &.ant-table-cell-row-hover {
+                  background-color: transparent;
+                }
+              }
+
+              &:hover {
+                position: relative;
+
+                .ant-table-cell {
+                  background-color: rgba(54, 109, 135, 0.68);
+
+                  &:first-child {
+                    border-radius: 0;
+                  }
+
+                  &:last-child {
+                    border-radius: 0;
+                  }
+                }
+              }
+
+              &:last-child {
+                .ant-table-cell {
+                  border-bottom: none;
+                }
+              }
+            }
+
+            .ant-table-placeholder {
+              &:hover {
+                .ant-table-cell {
+                  background-color: transparent;
+                  border-bottom: none;
+                }
+              }
+
+              .ant-table-cell {
+                padding: sizeUtils.vh(17) sizeUtils.vw(16);
+                background-color: transparent;
+                border-bottom: none;
+                color: rgba(221, 240, 246, 1);
+                font-weight: 400;
+                font-size: sizeUtils.vh(14);
+                line-height: sizeUtils.vh(20);
+              }
+            }
+          }
+        }
+
+        .ant-table-body {
+          .ant-table-tbody {
+            .ant-table-placeholder {
+              &:hover {
+                .ant-table-cell {
+                  background-color: rgba(54, 109, 135, 0.68);
+                  border-bottom: none;
+                }
+              }
+            }
+          }
         }
       }
     }

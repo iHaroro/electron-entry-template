@@ -3,10 +3,6 @@
     <div class="ai-copilot-box">
       <div class="top-box">
         <div class="top-title">
-          <netStateBox class="net-state-box-position" :status="deviceInfo.shipStatus" />
-          <span class="update-time" v-if="currentDeviceUpdateTime">
-            更新时间：{{ currentDeviceUpdateTime }}
-          </span>
           <span class="top-title_title">智能驾驶舱</span>
         </div>
       </div>
@@ -302,18 +298,12 @@ import TitleComponent from '@/components/titleComponent'
 import dashboardCompass from '@/components/dashboardCompass'
 import dashboardCompassEmpty from '@/components/dashboardCompassEmpty'
 import dashboardAiServo from '@/components/dashboardAiServo'
-import netStateBox from '@/components/netStateBox'
-// import dashboardNormal from '@/components/dashboardNormal'
-// import videoPlayer from '@/components/videoPlayer'
-// import SelectBox from '@/components/selectBoxNew'
-// import ezuikitPlayerCopilot from '@/components/ezuikitPlayerCopilot'
 import dashboardMeter from '@/components/dashboardMeter'
 import LivePlayer from '@/components/LivePlayer'
-import { usePageControlStore } from '@/stores/pageControl.js'
 import { computed, inject, onMounted, onUnmounted, ref } from 'vue'
 import { BOAT_INFO } from '@/provide/boat.js'
 import { getDest, getDrivingCab, getShipSrs, updateShipMap } from '@/api/copilot.js'
-import { getShipList, getShipDevice } from '@/api/device.js'
+import { getShipDevice } from '@/api/device.js'
 import { debugLog } from '@/utils/utils.js'
 import { HOST_TYPE } from '@/constants/device.js'
 import { updateMonitorToken } from '@/api/monitor.js'
@@ -345,7 +335,6 @@ let refreshDisabled = false
 const refreshTime = 1000 * 10 // 10s刷新一次数据
 const boatInfoInject = inject(BOAT_INFO)
 const boatInfo = computed(() => boatInfoInject.getBoatInfo())
-const boats = ref([]) // 船舶列表
 const boat = ref(null) // 当前的选中的船舶
 const OCEAN_MAP_KEY = ref(Date.now())
 const RADAR_KEY = ref(Date.now() + 1)
@@ -364,14 +353,6 @@ const hostSpeed = ref({}) // 主机转速
 const csx = ref(null) // 船艏向
 const deviceInfo = ref({}) // 当前船舶的设备信息
 const destInfo = ref({})
-const oceanSource = ref({
-  url: '',
-  type: 'flv'
-})
-const radarSource = ref({
-  url: '',
-  type: 'flv'
-})
 
 const oceanVideoConfig = ref({
   ref: ref(null),
@@ -384,8 +365,6 @@ const radarVideoConfig = ref({
   monitorUrl: '',
   accessToken: ''
 })
-const pageControlStore = usePageControlStore()
-const { goBack } = pageControlStore
 
 const setOceanRef = (el) => {
   oceanVideoConfig.value.ref = el
@@ -416,18 +395,6 @@ const changeType = (value) => {
   } else if (value === TYPES.RADAR.value) {
     RADAR_KEY.value = Date.now() + 1
   }
-}
-
-/**
- * @function getShipListData
- * @description 获取船舶列表数据
- **/
-const getShipListData = () => {
-  getShipList().then((res) => {
-    console.log('船舶数据', res.data)
-    boats.value = res.data
-    boat.value = boat.value || res.data[0].mmsi
-  })
 }
 
 /**
@@ -604,43 +571,16 @@ const refreshCopilotData = () => {
   }, refreshTime)
 }
 
-/**
- * @function refreshUpdateShipMap
- * @description 通知设备推流心跳
- **/
-const refreshUpdateShipMap = () => {
-  if (refreshDisabled) return
-  let type = null
-  switch (currentTypeActive.value) {
-    case TYPES.OCEAN_MAP.value:
-      type = UPDATE_TYPE.MAP
-      break
-    case TYPES.RADAR.value:
-      type = UPDATE_TYPE.LD
-      break
-    default:
-      break
-  }
-  updateShipMap({ mmsi: boat.value, type })
-  refreshUpdateShipMapTimer = setTimeout(() => {
-    refreshUpdateShipMap()
-  }, 5000)
-}
-
-const currentDeviceUpdateTime = computed(() => {
-  return deviceInfo.value.updateTime
-})
-
 onMounted(() => {
-  // refreshUpdateShipMap()
   setDefaultShip()
-  getShipListData()
   refreshCopilotData()
   getShipSrsData()
 })
 
 onUnmounted(() => {
   refreshDisabled = true
+  clearTimeout(timer)
+  clearTimeout(refreshUpdateShipMapTimer)
 })
 </script>
 

@@ -12,15 +12,12 @@ import { useBoatInfo } from '@/composables/useBoatInfo.js'
 
 defineOptions({ name: 'DevicePage' })
 
-const { boats, boatInfo, setBoatInfo, getBoatInfo, setBoats, getBoats } = useBoatInfo()
+const { boatInfo, setBoatInfo, getBoatInfo } = useBoatInfo()
 
 provide(BOAT_INFO, {
-  boats,
   boatInfo,
   setBoatInfo,
-  setBoats,
-  getBoatInfo,
-  getBoats,
+  getBoatInfo
 })
 </script>
 

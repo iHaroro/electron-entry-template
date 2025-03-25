@@ -11,15 +11,11 @@ import { useBoatInfo } from '@/composables/useBoatInfo.js'
 
 defineOptions({ name: 'MonitorPage' })
 
-const { boats, boatInfo, setBoatInfo, getBoatInfo, setBoats, getBoats } = useBoatInfo()
+const { boatInfo, getBoatInfo } = useBoatInfo()
 
 provide(BOAT_INFO, {
-  boats,
   boatInfo,
-  setBoatInfo,
-  setBoats,
-  getBoatInfo,
-  getBoats,
+  getBoatInfo
 })
 </script>
 

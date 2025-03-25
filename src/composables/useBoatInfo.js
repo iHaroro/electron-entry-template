@@ -9,6 +9,7 @@ export function useBoatInfo() {
 
   const setBoatInfo = (data) => (boatInfo.value = data)
   const getBoatInfo = () => boatInfo.value
+  
   const setBoats = (list) => (boats.value = list)
   const getBoats = () => boats.value
 

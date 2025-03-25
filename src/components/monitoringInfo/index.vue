@@ -3,10 +3,6 @@
     <div class="monitoring-box">
       <div class="top-box">
         <div class="top-title">
-          <netStateBox class="net-state-box-position" :status="deviceInfo.shipStatus" />
-          <span class="update-time" v-if="currentDeviceUpdateTime">
-            更新时间：{{ currentDeviceUpdateTime }}
-          </span>
           <span class="top-title_title">设备信息</span>
         </div>
       </div>
@@ -38,7 +34,7 @@
             <LivePlayer
               class="live-player-container"
               controls
-              :key="cameraConfigList[currentVideoIndex].url"
+              :key="cameraConfigList[currentVideoIndex].key"
               :url="cameraConfigList[currentVideoIndex].url"
             />
           </div>
@@ -67,7 +63,6 @@ import { getShipDevice } from '@/api/device.js'
 import pageLayout from '@/components/pageLayout'
 import titleComponent from '@/components/titleComponent'
 import empty from '@/components/empty'
-import netStateBox from '@/components/netStateBox'
 import LivePlayer from '@/components/LivePlayer'
 import { getShipMonitorConfig } from '@/api/monitor.js'
 import { BOAT_INFO } from '@/provide/boat.js'
@@ -246,16 +241,13 @@ const getCameraConfigList = async () => {
 
   cameraConfigList.value = configList.map((item, index) => {
     // TODO MOCK START
-    let url = 'http://192.168.2.147/main/0.live.flv'
-
-    if (index !== 0) {
-      url = `http://192.168.2.${index}/main/0.live.flv`
-    }
+    const url = 'http://192.168.2.147/main/0.live.flv'
     // TODO MOCK END
 
     return {
       ...item,
       url,
+      key: `live-video-${index}`,
       ref: null
     }
   })
@@ -269,10 +261,6 @@ const setDefaultShip = () => {
   const boatInfo = boatInfoInject.getBoatInfo()
   boat.value = boatInfo.mmsi ? `${boatInfo.mmsi}` : null
 }
-
-const currentDeviceUpdateTime = computed(() => {
-  return deviceInfo.value.updateTime
-})
 
 const initGetDeviceLoop = () => {
   alarmPollInstance = new Polling(
