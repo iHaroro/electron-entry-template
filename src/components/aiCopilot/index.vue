@@ -2,20 +2,12 @@
   <page-layout>
     <div class="ai-copilot-box">
       <div class="top-box">
-        <selectBox
-          v-model:value="boat"
-          :options="boats"
-          :options-props="{
-            name: 'name',
-            value: 'mmsi',
-            key: 'mmsi',
-          }"
-          @change="handleChangeBoat"
-        />
-        <div class="top-title">智能驾驶舱</div>
-        <div class="new-select-btn back-btn" @click.stop="goBack">
-          <img class="back-icon" src="@/assets/images/back_btn_icon.png" alt="" />
-          <span>返回</span>
+        <div class="top-title">
+          <netStateBox class="net-state-box-position" :status="deviceInfo.shipStatus" />
+          <span class="update-time" v-if="currentDeviceUpdateTime">
+            更新时间：{{ currentDeviceUpdateTime }}
+          </span>
+          <span class="top-title_title">智能驾驶舱</span>
         </div>
       </div>
 
@@ -26,17 +18,17 @@
             <div class="left-box_top-list-box">
               <div class="left-box-top_state">
                 <div class="left-box_top-list-box-from-box">
-                  <p>{{ destInfo.legStartPortNameCn }}</p>
+                  <p :title="destInfo.legStartPortNameCn">{{ destInfo.legStartPortNameCn }}</p>
                   <p>[{{ destInfo.legStartPortCtryCode }}]</p>
                 </div>
                 <div class="left-box_top-list-box-state-box">
                   <div class="state-name-cn">{{ boatInfo.statusNameCn }}</div>
                   <img class="to-from-icon" src="@/assets/images/to_from_icon.png" alt="" />
-                  <div class="state-end-time">ETA：{{ boatInfo.eta }}</div>
+                  <!--<div class="state-end-time">ETA：{{ boatInfo.eta }}</div>-->
                   <!--<div class="state-end-time">ETA：{{ destInfo.legEndTime }}</div>-->
                 </div>
                 <div class="left-box_top-list-box-to-box">
-                  <p>{{ destInfo.legEndPortNameCn }}</p>
+                  <p :title="destInfo.legEndPortNameCn">{{ destInfo.legEndPortNameCn }}</p>
                   <p>[{{ destInfo.legEndPortCtryCode }}]</p>
                 </div>
               </div>
@@ -127,14 +119,19 @@
                 :ref="(el) => setOceanRef(el)"
               >
                 <!--<videoPlayer :source="oceanSource" :key="`player_${TYPES.OCEAN_MAP.value}`" />-->
-                <ezuikitPlayerCopilot
-                  id="OCEAN_PLAYER"
+                <!--<ezuikitPlayerCopilot-->
+                <!--  id="OCEAN_PLAYER"-->
+                <!--  v-if="oceanVideoConfig.monitorUrl"-->
+                <!--  :key="`player_${TYPES.OCEAN_MAP.value}`"-->
+                <!--  :ref-instance="oceanVideoConfig.ref"-->
+                <!--  :url="oceanVideoConfig.monitorUrl"-->
+                <!--  :access-token="oceanVideoConfig.accessToken"-->
+                <!--  @refreshAccessToken="handleRefreshToken"-->
+                <!--/>-->
+                <LivePlayer
                   v-if="oceanVideoConfig.monitorUrl"
                   :key="`player_${TYPES.OCEAN_MAP.value}`"
-                  :ref-instance="oceanVideoConfig.ref"
-                  :url="oceanVideoConfig.monitorUrl"
-                  :access-token="oceanVideoConfig.accessToken"
-                  @refreshAccessToken="handleRefreshToken"
+                  :url="'http://192.168.2.147/main/0.live.flv' || oceanVideoConfig.monitorUrl"
                 />
               </div>
               <div class="no-signal-box" v-else>
@@ -150,14 +147,19 @@
                 :ref="(el) => setRadarRef(el)"
               >
                 <!--<videoPlayer :source="radarSource" :key="`player_${TYPES.RADAR.value}`" />-->
-                <ezuikitPlayerCopilot
-                  id="RADAR_PLAYER"
+                <!--<ezuikitPlayerCopilot-->
+                <!--  id="RADAR_PLAYER"-->
+                <!--  v-if="radarVideoConfig.monitorUrl"-->
+                <!--  :key="`player_${TYPES.RADAR.value}`"-->
+                <!--  :ref-instance="radarVideoConfig.ref"-->
+                <!--  :url="radarVideoConfig.monitorUrl"-->
+                <!--  :access-token="radarVideoConfig.accessToken"-->
+                <!--  @refreshAccessToken="handleRefreshToken"-->
+                <!--/>-->
+                <LivePlayer
                   v-if="radarVideoConfig.monitorUrl"
                   :key="`player_${TYPES.RADAR.value}`"
-                  :ref-instance="radarVideoConfig.ref"
-                  :url="radarVideoConfig.monitorUrl"
-                  :access-token="radarVideoConfig.accessToken"
-                  @refreshAccessToken="handleRefreshToken"
+                  :url="'http://192.168.2.147/main/0.live.flv' || radarVideoConfig.monitorUrl"
                 />
               </div>
               <div class="no-signal-box" v-else>
@@ -300,11 +302,13 @@ import TitleComponent from '@/components/titleComponent'
 import dashboardCompass from '@/components/dashboardCompass'
 import dashboardCompassEmpty from '@/components/dashboardCompassEmpty'
 import dashboardAiServo from '@/components/dashboardAiServo'
+import netStateBox from '@/components/netStateBox'
 // import dashboardNormal from '@/components/dashboardNormal'
 // import videoPlayer from '@/components/videoPlayer'
-import SelectBox from '@/components/selectBoxNew'
-import ezuikitPlayerCopilot from '@/components/ezuikitPlayerCopilot'
+// import SelectBox from '@/components/selectBoxNew'
+// import ezuikitPlayerCopilot from '@/components/ezuikitPlayerCopilot'
 import dashboardMeter from '@/components/dashboardMeter'
+import LivePlayer from '@/components/LivePlayer'
 import { usePageControlStore } from '@/stores/pageControl.js'
 import { computed, inject, onMounted, onUnmounted, ref } from 'vue'
 import { BOAT_INFO } from '@/provide/boat.js'
@@ -321,18 +325,18 @@ const TYPES = {
   OCEAN_MAP: {
     name: '海图',
     value: '1',
-    show: false,
+    show: false
   },
   RADAR: {
     name: '雷达',
     value: '2',
-    show: false,
-  },
+    show: false
+  }
 }
 
 const UPDATE_TYPE = {
   MAP: 'map',
-  LD: 'ld',
+  LD: 'ld'
 }
 
 let timer = null
@@ -362,23 +366,23 @@ const deviceInfo = ref({}) // 当前船舶的设备信息
 const destInfo = ref({})
 const oceanSource = ref({
   url: '',
-  type: 'flv',
+  type: 'flv'
 })
 const radarSource = ref({
   url: '',
-  type: 'flv',
+  type: 'flv'
 })
 
 const oceanVideoConfig = ref({
   ref: ref(null),
   monitorUrl: '',
-  accessToken: '',
+  accessToken: ''
 })
 
 const radarVideoConfig = ref({
   ref: ref(null),
   monitorUrl: '',
-  accessToken: '',
+  accessToken: ''
 })
 const pageControlStore = usePageControlStore()
 const { goBack } = pageControlStore
@@ -424,16 +428,6 @@ const getShipListData = () => {
     boats.value = res.data
     boat.value = boat.value || res.data[0].mmsi
   })
-}
-
-/**
- * @function handleChangeBoat
- * @description 切换船舶事件
- **/
-const handleChangeBoat = () => {
-  clearTimeout(timer)
-  refreshCopilotData()
-  getShipSrsData()
 }
 
 /**
@@ -633,6 +627,10 @@ const refreshUpdateShipMap = () => {
   }, 5000)
 }
 
+const currentDeviceUpdateTime = computed(() => {
+  return deviceInfo.value.updateTime
+})
+
 onMounted(() => {
   // refreshUpdateShipMap()
   setDefaultShip()
@@ -664,6 +662,7 @@ onUnmounted(() => {
     height: vh(48);
 
     .top-title {
+      position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -671,13 +670,35 @@ onUnmounted(() => {
       height: vh(44);
       margin: 0 vw(11);
       text-align: center;
-      font-family: YouSheBiaoTiHei;
       font-size: vh(24);
       color: rgba(221, 240, 246, 1);
       letter-spacing: vw(2);
-      background-image: url('@/assets/images/top_component_title.png');
+      //background-image: url('@/assets/images/top_component_title.png');
+      background-image: url('@/assets/images/device_top_component_title.png');
       background-size: 100% 100%;
       background-repeat: no-repeat;
+
+      .net-state-box-position {
+        position: absolute;
+        left: vw(24);
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      .top-title_title {
+        font-family: YouSheBiaoTiHei;
+        font-size: vh(24);
+        letter-spacing: vw(2);
+      }
+
+      .update-time {
+        position: absolute;
+        left: vw(138);
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: vh(16);
+        color: rgba(221, 240, 246, 1);
+      }
     }
 
     .back-btn {
@@ -708,31 +729,48 @@ onUnmounted(() => {
         //);
 
         .left-box_top-list-box {
-          width: vw(353);
-          height: vh(195);
-          margin: vh(20) auto;
+          width: 100%;
+          height: vh(213);
           background-image: url('@/assets/images/voyage_bg.png');
-          background-size: 100% 100%;
+          background-size: vw(353) vh(195);
           background-repeat: no-repeat;
+          background-position: center;
 
           .left-box-top_state {
             display: flex;
             justify-content: space-between;
 
-            .left-box_top-list-box-from-box {
-              margin-left: vw(7);
-              margin-top: vh(80);
+            .left-box_top-list-box-from-box,
+            .left-box_top-list-box-to-box {
+              max-width: vw(100);
+              margin-top: vh(90);
               font-weight: 500;
               font-size: 16px;
               color: rgba(221, 240, 246, 1);
               line-height: vh(22);
               letter-spacing: 1px;
               text-align: center;
+
+              p {
+                width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              }
+            }
+
+            .left-box_top-list-box-from-box {
+              margin-left: vw(25);
+            }
+
+            .left-box_top-list-box-to-box {
+              margin-right: vw(25);
             }
 
             .left-box_top-list-box-state-box {
               flex: 1;
-              margin-top: vh(68);
+              //margin-top: vh(88);
+              margin-top: vh(108);
               text-align: center;
 
               .state-name-cn {
@@ -756,17 +794,6 @@ onUnmounted(() => {
                 color: #ffa217;
                 line-height: vh(20);
               }
-            }
-
-            .left-box_top-list-box-to-box {
-              margin-right: vw(7);
-              margin-top: vh(80);
-              font-weight: 500;
-              font-size: 16px;
-              color: rgba(221, 240, 246, 1);
-              line-height: vh(22);
-              letter-spacing: 1px;
-              text-align: center;
             }
           }
         }
@@ -906,7 +933,7 @@ onUnmounted(() => {
 
         .stream-box {
           margin-top: vh(15);
-          height: vh(780);
+          height: vh(770);
         }
 
         .center-box_top-title-item {
@@ -925,7 +952,7 @@ onUnmounted(() => {
 
         .no-signal-box {
           width: 100%;
-          height: calc(100% - vh(62));
+          height: calc(100% - vh(72));
           margin-top: vh(10);
 
           .no-signal-bg {
@@ -997,7 +1024,7 @@ onUnmounted(() => {
         .sailing-box {
           box-sizing: border-box;
           margin-top: vh(10);
-          height: vh(442);
+          height: vh(432);
           padding-top: vh(39);
           background-image: url('@/assets/images/sailing_bg.png');
           background-size: 100% 100%;

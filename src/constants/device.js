@@ -11,6 +11,7 @@ import PUMP_COMMON from '@/assets/images/PUMP_COMMON.png'
 import UN_RUNNING_BG from '@/assets/images/UN_RUNNING_bg.png'
 import RUNNING_BG from '@/assets/images/RUNNING_bg.png'
 import OFFLINE_BG from '@/assets/images/OFFLINE_bg.png'
+import NOT_CONNECTED_BG from '@/assets/images/NOT_CONNECTED_bg.png'
 
 import ERROR_ICON from '@/assets/images/ERROR_ICON.png'
 import SUCCESS_ICON from '@/assets/images/SUCCESS_ICON.png'
@@ -143,6 +144,14 @@ export const DEVICE_STATUS = {
     name: '离线',
     style: {
       backgroundImage: `url(${OFFLINE_BG})`,
+      backgroundSize: '100% 100%',
+    },
+  },
+  NOT_CONNECTED: {
+    value: '3',
+    name: '未接入',
+    style: {
+      backgroundImage: `url(${NOT_CONNECTED_BG})`,
       backgroundSize: '100% 100%',
     },
   },

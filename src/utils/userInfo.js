@@ -1,4 +1,5 @@
 const TOKEN_KEY = 'token'
+const CONFIG_KEY = 'config'
 
 /**
  * @function getTokenFormApplication
@@ -24,4 +25,23 @@ export const setTokenToApplication = (token) => {
  **/
 export const cleanTokenFromApplication = () => {
   return localStorage.removeItem(TOKEN_KEY)
+}
+
+/**
+ * @function getConfigFromApplication
+ * @description 从应用中获取config
+ * @returns {object} config
+ **/
+export const getConfigFromApplication = () => {
+  return localStorage.getItem(CONFIG_KEY) || ''
+}
+
+/**
+ * @function setConfigToApplication
+ * @description 将config设置到本地
+ * @param {string} config
+ * @returns {object} config
+ **/
+export const setConfigToApplication = (config) => {
+  return localStorage.setItem(CONFIG_KEY, config)
 }

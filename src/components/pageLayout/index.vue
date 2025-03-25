@@ -1,7 +1,11 @@
 <template>
   <div class="layout-container" :style="layoutStyle">
     <CommonHeader />
-    <div class="page-container" :style="containerStyle">
+    <div
+      class="page-container"
+      :class="{ 'is-fixed-container': isFixContainer }"
+      :style="containerStyle"
+    >
       <slot />
     </div>
   </div>
@@ -19,6 +23,10 @@ defineProps({
   containerStyle: {
     type: Object,
     default: () => ({}),
+  },
+  isFixContainer: {
+    type: Boolean,
+    default: true,
   },
 })
 </script>
@@ -39,12 +47,15 @@ defineProps({
   background: linear-gradient(180deg, #000e26 0%, #00225e 66%, #002156 100%);
 
   .page-container {
-    position: absolute;
-    top: vh($navBarTop);
-    left: 0;
-    right: 0;
-    bottom: 0;
     margin: 0 vw(22) vh(12);
+
+    &.is-fixed-container {
+      position: absolute;
+      top: vh($navBarTop);
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
   }
 }
 </style>

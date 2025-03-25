@@ -8,36 +8,80 @@
       <div class="time-box">
         <span class="date">{{ nowDate }}</span>
         <span class="time">{{ nowTime }}</span>
-        <a-popconfirm placement="bottom" title="是否确认退出登录？" ok-text="确认" cancel-text="取消" @confirm="logout">
-          <div class="logout-box"></div>
-        </a-popconfirm>
+        <!--<a-popconfirm placement="bottom" title="是否确认退出登录？" ok-text="确认" cancel-text="取消" @confirm="logout">-->
+        <!--  <div class="logout-box"></div>-->
+        <!--</a-popconfirm>-->
       </div>
-      <!--<iframe-->
-      <!--  width="250"-->
-      <!--  scrolling="no"-->
-      <!--  height="25"-->
-      <!--  frameborder="0"-->
-      <!--  allowtransparency="true"-->
-      <!--  src="https://i.tianqi.com?c=code&id=26&color=%23FFFFFF&icon=1&site=18"-->
-      <!--/>-->
+    </div>
+
+    <div class="menu-container">
+      <div class="left-menu-box">
+        <div
+          class="menu-item"
+          v-for="item in leftMenus"
+          :key="item.path"
+          :class="{ active: activeMenuPath === item.path }"
+          @click="jumpMenu(item)"
+        >
+          {{ item.name }}
+        </div>
+      </div>
+      <div class="center-holder"></div>
+      <div class="right-menu-box">
+        <div
+          class="menu-item"
+          v-for="item in rightMenus"
+          :key="item.path"
+          :class="{ active: activeMenuPath === item.path }"
+          @click="jumpMenu(item)"
+        >
+          {{ item.name }}
+        </div>
+      </div>
     </div>
   </div>
 </template>
 <script setup>
 import { computed, ref, onMounted } from 'vue'
 import dayjs from 'dayjs'
-import { cleanTokenFromApplication } from '@/utils/userInfo.js'
+import { useRoute, useRouter } from 'vue-router'
+// import { cleanTokenFromApplication } from '@/utils/userInfo.js'
 
 defineOptions({
-  name: 'CommonHeader'
+  name: 'CommonHeader',
 })
 
-const datetime = ref(Date.now())
+const route = useRoute()
+const router = useRouter()
+const leftMenus = ref([
+  {
+    name: '智能驾驶室',
+    path: '/aiCopilot',
+  },
+  {
+    name: '智能机舱',
+    path: '/deviceInfo',
+  },
+  {
+    name: '视频预警',
+    path: '/monitoringInfo',
+  },
+])
+const rightMenus = ref([
+  {
+    name: '报警信息',
+    path: '/alarmInfo',
+  },
+  // {
+  //   name: '历史数据',
+  //   path: '/historyInfo',
+  // },
+])
 
+const datetime = ref(Date.now())
 const nowDate = computed(() => {
   return dayjs(datetime.value).format('YYYY年MM月DD日')
 })
-
 const nowTime = computed(() => {
   return dayjs(datetime.value).format('HH:mm:ss')
 })
@@ -49,9 +93,17 @@ const updateTime = () => {
   }, 1000)
 }
 
-const logout = () => {
-  cleanTokenFromApplication()
-  location.replace('/login')
+// const logout = () => {
+//   cleanTokenFromApplication()
+//   location.replace('/login')
+// }
+
+const activeMenuPath = computed(() => {
+  return route.path
+})
+
+const jumpMenu = (item) => {
+  router.push(item.path)
 }
 
 onMounted(() => {
@@ -60,7 +112,7 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-$headerHeight: 115;
+$headerHeight: 140;
 
 .page-container-bg_header {
   position: absolute;
@@ -70,19 +122,12 @@ $headerHeight: 115;
   display: flex;
   width: vw(1920);
   height: vh($headerHeight);
-  background-image: url('@/assets/images/top_header_bg_new.png');
+  background-image: url('@/assets/images/ship_top_header_bg_new.png');
   background-repeat: no-repeat;
   background-size: vw(1920) vh($headerHeight);
 
   .page-container-bg_header_left {
     flex: 1;
-    margin-top: vh(22);
-    margin-left: vw(58);
-    line-height: vh(30);
-    text-align: left;
-    //font-size: vh(22);
-    font-size: 18px;
-    letter-spacing: vw(4);
   }
 
   .page-container-bg_header_content {
@@ -101,25 +146,19 @@ $headerHeight: 115;
 
   .page-container-bg_header_right {
     flex: 1;
-    margin-top: vh(32);
-    //margin-left: vw(58);
-    //margin-right: vh(58);
-    //line-height: vh(30);
-    //text-align: right;
-    //font-size: vh(22);
-    //letter-spacing: vw(4);
 
     .time-box {
       display: flex;
       justify-content: flex-end;
       align-items: center;
+      margin-top: vh(22);
       margin-right: vw(24);
       color: rgba(221, 240, 246, 1);
 
       .date {
-        margin-right: vw(18);
+        margin-right: vw(16);
         font-weight: 400;
-        font-size: vh(12);
+        font-size: vh(16);
         line-height: vh(18);
       }
 
@@ -138,6 +177,65 @@ $headerHeight: 115;
         background-repeat: no-repeat;
         background-position: center;
       }
+    }
+  }
+
+  .menu-container {
+    position: absolute;
+    top: vh(51);
+    left: vw(59);
+    right: vw(59);
+    width: 100%;
+    display: flex;
+
+    .left-menu-box,
+    .right-menu-box {
+      flex: 1;
+      display: flex;
+
+      .menu-item {
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: vw(176);
+        height: vh(49);
+        font-size: vh(16);
+        font-weight: 500;
+        line-height: vh(22);
+        background-repeat: no-repeat;
+        background-size: vw(166) vh(41);
+        background-position: center center;
+
+        &.active {
+          background-size: vw(176) vh(49);
+        }
+      }
+    }
+
+    .left-menu-box {
+      .menu-item {
+        background-image: url('@/assets/images/left_menu_bg.png');
+
+        &.active {
+          background-image: url('@/assets/images/left_menu_bg_active.png');
+        }
+      }
+    }
+
+    .right-menu-box {
+      .menu-item {
+        background-image: url('@/assets/images/right_menu_bg.png');
+
+        &.active {
+          background-image: url('@/assets/images/right_menu_bg_active.png');
+        }
+      }
+    }
+
+    .center-holder {
+      flex: 1;
+      height: vh(1);
     }
   }
 }

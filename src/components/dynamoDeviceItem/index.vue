@@ -244,7 +244,7 @@ onMounted(() => {
 .single-device-box {
   box-sizing: border-box;
   width: 100%;
-  height: vh(790);
+  height: vh(768);
   padding: vh(25) vw(25);
   background-image: url('@/assets/images/single_host_bg.png');
   background-size: 100% 100%;

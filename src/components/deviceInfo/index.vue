@@ -2,29 +2,12 @@
   <pageLayout>
     <div class="device-info-box">
       <div class="top-box">
-        <selectBox
-          v-model:value="boat"
-          :options="boats"
-          :options-props="{
-            name: 'name',
-            value: 'mmsi',
-            key: 'mmsi',
-          }"
-          @change="handleChangeBoat"
-        />
         <div class="top-title">
-          <span class="net-state-box">
-            <img class="net-state-icon" :src="netStateData.icon" :alt="netStateData.name" />
-            <span class="net-state-desc" :style="netStateData.style">{{ netStateData.name }}</span>
-          </span>
+          <netStateBox class="net-state-box-position" :status="deviceInfo.shipStatus" />
           <span class="update-time" v-if="currentDeviceUpdateTime">
             更新时间：{{ currentDeviceUpdateTime }}
           </span>
           <span class="top-title_title">设备信息</span>
-        </div>
-        <div class="new-select-btn back-btn" @click.stop="goBack">
-          <img class="back-icon" src="@/assets/images/back_btn_icon.png" alt="" />
-          <span>返回</span>
         </div>
       </div>
 
@@ -128,7 +111,7 @@
   <deviceWarnTable v-if="showWarnTable" :boat="boat" @back="closeMoreWarnList" />
 </template>
 <script setup>
-import { DEVICE_TYPES, HOST_TYPE, SHIP_NET_STATE_MAP } from '@/constants/device.js'
+import { DEVICE_TYPES, HOST_TYPE } from '@/constants/device.js'
 import pageLayout from '@/components/pageLayout'
 import empty from '@/components/empty'
 import doubleDeviceItem from '@/components/doubleDeviceItem'
@@ -138,15 +121,14 @@ import servoDeviceItem from '@/components/servoDeviceItem'
 import servoSwitcherItem from '@/components/servoSwitcherItem'
 import dashboardParams from '@/components/dashboardParams'
 import alarmInfoList from '@/components/alarmInfoList'
-import selectBox from '@/components/selectBoxNew'
 import titleComponent from '@/components/titleComponent'
 import deviceWarnTable from '@/components/deviceWarnTable'
-import { getShipList, getShipDevice, getShipAlarm } from '@/api/device.js'
+import netStateBox from '@/components/netStateBox'
+import { getShipDevice, getShipAlarm } from '@/api/device.js'
 import { storeToRefs } from 'pinia'
 import { computed, inject, onMounted, onUnmounted, ref } from 'vue'
 import { useDeviceChartControlStore, DEVICE_TYPE, TIME_TYPE } from '@/stores/deviceChartControl.js'
-import { usePageControlStore } from '@/stores/pageControl.js'
-import { isEmpty, getValueMapFromMap } from '@/utils/utils.js'
+import { isEmpty } from '@/utils/utils.js'
 import { BOAT_INFO } from '@/provide/boat.js'
 
 defineOptions({ name: 'DeviceInfo' })
@@ -167,9 +149,6 @@ const boatInfoInject = inject(BOAT_INFO)
 const deviceChartControlStore = useDeviceChartControlStore()
 const { setRequestParams } = deviceChartControlStore
 const { chartData } = storeToRefs(deviceChartControlStore)
-
-const pageControlStore = usePageControlStore()
-const { goBack } = pageControlStore
 
 const electricsTypeIndex = ref(0)
 
@@ -205,33 +184,16 @@ const closeMoreWarnList = () => {
  **/
 const changeDeviceType = (value) => {
   deviceType.value = value
-  setRequestParams({
+  const params = {
     mmsi: boat.value,
     type: chartDeviceType.value,
     time: TIME_TYPE.WEEK,
-    // 默认请求主机设备图表数据
-    name:
-      deviceType.value === DEVICE_TYPES.SERVO_DEVICE.value
-        ? deviceInfo.value[deviceType.value].name
-        : deviceInfo.value[deviceType.value][0].name,
-  })
-}
-
-const netStateData = computed(() => {
-  const map = getValueMapFromMap(SHIP_NET_STATE_MAP)
-  return map[`${deviceInfo.value.shipStatus}`] || {}
-})
-
-/**
- * @function handleChangeBoat
- * @description 切换船舶事件
- **/
-const handleChangeBoat = () => {
-  clearTimeout(timer)
-  getDeviceData({
-    reset: true,
-    initChart: true,
-  })
+  }
+  // 舵机设备无需查询历史数据
+  if (deviceType.value !== DEVICE_TYPES.SERVO_DEVICE.value) {
+    params.name = deviceInfo.value[deviceType.value].name
+  }
+  setRequestParams(params)
 }
 
 /**
@@ -326,18 +288,6 @@ const chartDeviceType = computed(() => {
 })
 
 /**
- * @function getShipListData
- * @description 获取船舶列表数据
- **/
-const getShipListData = () => {
-  getShipList().then((res) => {
-    console.log('船舶数据', res.data)
-    boats.value = res.data
-    boat.value = boat.value || res.data[0].mmsi
-  })
-}
-
-/**
  * @function boatInfo
  * @description 船舶信息
  * @returns {object} 船舶信息
@@ -411,11 +361,15 @@ const currentDeviceUpdateTime = computed(() => {
 
 onMounted(() => {
   setDefaultShip()
-  getShipListData()
+  getDeviceData({
+    reset: true,
+    initChart: true,
+  })
 })
 
 onUnmounted(() => {
   destroyed = true
+  clearTimeout(timer)
 })
 </script>
 
@@ -443,28 +397,16 @@ onUnmounted(() => {
       margin: 0 vw(11);
       text-align: center;
       color: rgba(221, 240, 246, 1);
+      letter-spacing: vw(2);
       background-image: url('@/assets/images/device_top_component_title.png');
       background-size: 100% 100%;
       background-repeat: no-repeat;
 
-      .net-state-box {
+      .net-state-box-position {
         position: absolute;
         left: vw(24);
         top: 50%;
         transform: translateY(-50%);
-        display: flex;
-        align-items: center;
-
-        .net-state-icon {
-          margin-right: vw(2);
-        }
-
-        .net-state-desc {
-          font-weight: 500;
-          font-size: vh(16);
-          color: #29c14b;
-          line-height: vh(22);
-        }
       }
 
       .top-title_title {

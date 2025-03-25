@@ -1,33 +1,49 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import { getTokenFormApplication } from '@/utils/userInfo.js'
+import { getConfigFromApplication, setConfigToApplication } from '@/utils/userInfo.js'
+import { getGlobalConfig } from '@/api/public.js'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
+    // 默认重定向到aiCopilot智能驾驶页面
     {
       path: '/',
-      name: 'HomePage',
-      component: () => import('@/views/home')
+      redirect: '/aiCopilot'
     },
     {
-      path: '/login',
-      name: 'LoginPage',
-      component: () => import('@/views/login')
+      path: '/aiCopilot',
+      name: 'AiCopilotPage',
+      component: () => import('@/views/aiCopilot')
+    },
+    {
+      path: '/deviceInfo',
+      name: 'DeviceInfoPage',
+      component: () => import('@/views/deviceInfo')
+    },
+    {
+      path: '/monitoringInfo',
+      name: 'MonitoringInfoPage',
+      component: () => import('@/views/monitoringInfo')
+    },
+    {
+      path: '/alarmInfo',
+      name: 'AlarmInfoPage',
+      component: () => import('@/views/alarmInfo')
     }
   ]
 })
 
 router.beforeEach((to, from, next) => {
-  const token = getTokenFormApplication()
   console.log('路由跳转', to, from)
-  const whiteList = ['/login']
-  if (token || whiteList.includes(to.path)) {
-    // 已登录
+  const config = getConfigFromApplication()
+  console.log('系统配置', config)
+  if (config) {
     next()
   } else {
-    console.log(to)
-    // 未登录
-    next({ path: '/login' })
+    getGlobalConfig().then((res) => {
+      setConfigToApplication(JSON.stringify(res.data))
+      next()
+    })
   }
 })
 

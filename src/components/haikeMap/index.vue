@@ -92,9 +92,12 @@ const showLayerChanger = ref(false)
 const loading = ref(true)
 const showTools = ref(false)
 const currentConfig = ref({ zoom: defaultZoom })
-let timer = null
-const initDate = Date.now()
-const refreshInterval = 1000 * 60 * 50 // 50分钟刷新authKey
+let authKeyTimer = null
+const initAuthKeyDate = Date.now()
+const refreshAuthKeyInterval = 1000 * 60 * 50 // 50分钟刷新authKey
+let shipTimer = null
+const initShipDate = Date.now()
+const refreshShipInterval = 1000 * 60 * 10 // 10分钟重新绘制船舶位置
 
 const mapData = ref({
   auth_key: getAuthKey(),
@@ -399,9 +402,9 @@ const zoomOut = debounce(() => {
  * @description 刷新 authKey
  **/
 const refreshAuthKey = () => {
-  timer = setTimeout(() => {
+  authKeyTimer = setTimeout(() => {
     const now = Date.now()
-    if (now - initDate >= refreshInterval) {
+    if (now - initAuthKeyDate >= refreshAuthKeyInterval) {
       // 刷新 authKey
       postMessage({
         type: 'update-auth-key',
@@ -409,7 +412,19 @@ const refreshAuthKey = () => {
       })
       refreshAuthKey()
     }
-  }, refreshInterval)
+  }, refreshAuthKeyInterval)
+}
+
+const refreshShipPosition = () => {
+  shipTimer = setTimeout(() => {
+    const now = Date.now()
+    if (now - initShipDate >= refreshShipInterval) {
+      // 刷新 authKey
+      removeShipsPosition()
+      drawShipsPosition()
+      refreshShipPosition()
+    }
+  }, refreshShipInterval)
 }
 
 /**
@@ -447,11 +462,13 @@ onMounted(() => {
   window.sendMsg = postMessage
   initMessageListener()
   refreshAuthKey()
+  refreshShipPosition()
 })
 
 onBeforeUnmount(() => {
   destroyMessageListener()
-  clearTimeout(timer)
+  clearTimeout(authKeyTimer)
+  clearTimeout(shipTimer)
 })
 
 // 根据传入船舶数据绘制船舶

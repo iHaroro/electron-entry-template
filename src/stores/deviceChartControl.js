@@ -7,8 +7,8 @@ const defaultDeviceChartData = {
   name: '',
   xaxle: new Array(7).fill(0).map((_, index) => {
     return dayjs()
-      .subtract(6 - index, 'day')
-      .format('YYYY-MM-DD')
+    .subtract(6 - index, 'day')
+    .format('YYYY-MM-DD')
   }),
   yaxle: new Array(7).fill(0),
 }
@@ -42,8 +42,10 @@ export const useDeviceChartControlStore = defineStore('deviceChartControl', () =
     fieldName: '', // 字段名称
   })
   const chartData = ref(defaultDeviceChartData)
+  const chartLoading = ref(false)
 
   const getChartData = (param = {}) => {
+    chartLoading.value = true
     setRequestParams(param)
     getShipEcharts({
       mmsi: requestParams.value.mmsi,
@@ -53,7 +55,10 @@ export const useDeviceChartControlStore = defineStore('deviceChartControl', () =
       paramName: requestParams.value.paramName,
     }).then((res) => {
       console.log('获取图表数据', res)
+      chartLoading.value = false
       chartData.value = res?.data || defaultDeviceChartData
+    }).then(() => {
+      chartLoading.value = false
     })
   }
 
@@ -78,6 +83,7 @@ export const useDeviceChartControlStore = defineStore('deviceChartControl', () =
   return {
     requestParams,
     chartData,
+    chartLoading,
     getChartData,
     setRequestParams,
   }

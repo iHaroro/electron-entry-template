@@ -13,8 +13,11 @@ import { storeToRefs } from 'pinia'
 import { RouterView } from 'vue-router'
 import { useLoadingStore } from '@/stores/loadingControl.js'
 
+defineOptions({ name: 'ShipApp' })
+
 const loadingControl = useLoadingStore()
 const { isLoading, options } = storeToRefs(loadingControl)
+
 const customTheme = {
   algorithm: theme.darkAlgorithm,
   token: {},

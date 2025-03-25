@@ -1,31 +1,33 @@
 <template>
-  <div class="chart-info-box">
-    <div class="device-run-state-box">
-      <div class="device-info-run-time">
-        <span>{{ deviceName }}</span>
-      </div>
+  <a-spin :spinning="chartLoading">
+    <div class="chart-info-box">
+      <div class="device-run-state-box">
+        <div class="device-info-run-time">
+          <span>{{ deviceName }}</span>
+        </div>
 
-      <div class="device-state-box">
-        <div
-          class="state-btn"
-          :class="{ active: requestParams.time === dataTypes.week.type }"
-          @click="getData(dataTypes.week.type)"
-        >
-          {{ dataTypes.week.name }}
-        </div>
-        <div
-          class="state-btn"
-          :class="{ active: requestParams.time === dataTypes.month.type }"
-          @click="getData(dataTypes.month.type)"
-        >
-          {{ dataTypes.month.name }}
+        <div class="device-state-box">
+          <div
+            class="state-btn"
+            :class="{ active: requestParams.time === dataTypes.week.type }"
+            @click="getData(dataTypes.week.type)"
+          >
+            {{ dataTypes.week.name }}
+          </div>
+          <div
+            class="state-btn"
+            :class="{ active: requestParams.time === dataTypes.month.type }"
+            @click="getData(dataTypes.month.type)"
+          >
+            {{ dataTypes.month.name }}
+          </div>
         </div>
       </div>
+      <div class="chart-box">
+        <div ref="dashboardRef" class="chart" width="390" height="250"></div>
+      </div>
     </div>
-    <div class="chart-box">
-      <div ref="dashboardRef" class="chart" width="390" height="250"></div>
-    </div>
-  </div>
+  </a-spin>
 </template>
 
 <script setup>
@@ -58,14 +60,14 @@ const dataTypes = ref({
 let myChart = null
 const chartControlStore = useDeviceChartControlStore()
 const { getChartData } = chartControlStore
-const { requestParams } = storeToRefs(chartControlStore)
+const { requestParams, chartLoading } = storeToRefs(chartControlStore)
 
 const drawChart = () => {
   !myChart && (myChart = echarts.init(dashboardRef.value))
   console.log('渲染图表数据', requestParams.value?.fieldName, requestParams.value?.name)
   const name = requestParams.value?.name
-    ? `${requestParams.value?.fieldName}(${requestParams.value?.name})`
-    : requestParams.value?.fieldName
+               ? `${requestParams.value?.fieldName}(${requestParams.value?.name})`
+               : requestParams.value?.fieldName
   const option = getOptions({
     name,
     yaxle: props.chartData.yaxle,
@@ -76,8 +78,8 @@ const drawChart = () => {
 
 const deviceName = computed(() => {
   return requestParams.value?.name
-    ? `${requestParams.value?.fieldName}(${requestParams.value?.name})`
-    : requestParams.value?.fieldName
+         ? `${requestParams.value?.fieldName}(${requestParams.value?.name})`
+         : requestParams.value?.fieldName
 })
 
 const getData = (dataType) => {
@@ -188,7 +190,7 @@ watch(
 
   .chart-box {
     width: vw(392);
-    height: vh(280);
+    height: vh(260);
     margin-top: vh(30);
 
     .chart {

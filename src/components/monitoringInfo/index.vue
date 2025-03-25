@@ -1,194 +1,54 @@
 <template>
-  <pageLayout>
+  <pageLayout :is-fix-container="false" :containerStyle="containerStyle">
     <div class="monitoring-box">
       <div class="top-box">
-        <selectBox
-          v-model:value="boat"
-          :options="boats"
-          :options-props="{
-            name: 'name',
-            value: 'mmsi',
-            key: 'mmsi',
-          }"
-          @change="handleChangeBoat"
-        />
         <div class="top-title">
+          <netStateBox class="net-state-box-position" :status="deviceInfo.shipStatus" />
+          <span class="update-time" v-if="currentDeviceUpdateTime">
+            更新时间：{{ currentDeviceUpdateTime }}
+          </span>
           <span class="top-title_title">设备信息</span>
         </div>
-        <div class="new-select-btn back-btn" @click.stop="goBack">
-          <img class="back-icon" src="@/assets/images/back_btn_icon.png" alt="" />
-          <span>返回</span>
-        </div>
       </div>
-
-      <!--四屏-->
-      <template v-if="girdModel === GIRD_CONFIGS.FOUR.value">
-        <div class="page-container-left">
-          <titleComponent :styles="{ backgroundImage: `url(${monitorLargeBg})` }">
-            <div class="title-info">监控信息</div>
-          </titleComponent>
-
-          <!--<div class="btn sort-btn" @click.stop="openSortDialog">排序</div>-->
-
-          <!--<tabsBox class="tab-box" v-model:value="girdModel" :options="girdConfig" />-->
-
-          <!--<template v-if="realRenderCameraList?.length && showVideos">-->
-          <!--  <div class="monitoring-list-box" :key="`monitor-box-${monitorBoxKey}`">-->
-          <!--    <monitorBorder-->
-          <!--      v-for="(item, index) in realRenderCameraList"-->
-          <!--      :key="item.id"-->
-          <!--      class="monitoring-item"-->
-          <!--    >-->
-          <!--      <div class="monitor-box">-->
-          <!--        <div class="video-box" :ref="(el) => setRefMap(el, item)">-->
-          <!--          <ezuikitPlayer-->
-          <!--            :id="index"-->
-          <!--            :ref-instance="item.ref"-->
-          <!--            :url="item.monitorUrl"-->
-          <!--            :access-token="item.accessToken"-->
-          <!--            @refreshAccessToken="handleRefreshToken"-->
-          <!--          />-->
-          <!--        </div>-->
-          <!--        <div class="name-box" @click.stop="openMonitorDetail(item)">{{ item.name }}</div>-->
-          <!--      </div>-->
-          <!--    </monitorBorder>-->
-          <!--  </div>-->
-          <!--</template>-->
-          <template v-if="cameraConfigList?.length && showVideos">
-            <div class="switch-monitor-gird">
-              <div class="device-tab-box">
-                <div class="device-tab-list">
-                  <div class="scroll-icon left" @click="scrollBtnHandler('left')"></div>
-                  <div class="device-box" ref="deviceListRef">
-                    <div
-                      v-for="(item, index) in cameraConfigList"
-                      :key="item.id"
-                      class="device-tab-item"
-                      :class="{ active: index === currentVideoIndex }"
-                      @click.stop="changeCurrentVideo(index)"
-                    >
-                      {{ item.name }}
-                    </div>
-                  </div>
-                  <div class="scroll-icon right" @click="scrollBtnHandler('right')"></div>
-                </div>
-              </div>
-
-              <!--<button-->
-              <!--  class="prev-btn"-->
-              <!--  :disabled="currentVideoIndex === 0"-->
-              <!--  @click="changeCurrentVideo(currentVideoIndex - 1)"-->
-              <!--&gt;</button>-->
-              <!--<button-->
-              <!--  class="next-btn"-->
-              <!--  :disabled="currentVideoIndex === cameraConfigList.length - 1"-->
-              <!--  @click="changeCurrentVideo(currentVideoIndex + 1)"-->
-              <!--&gt;</button>-->
-
-              <switchMonitor
-                ref="switchMonitorRef"
-                class="video-container"
-                :key="cameraConfigList[currentVideoIndex].monitorUrl"
-                :video-config="cameraConfigList[currentVideoIndex]"
-              />
-            </div>
-          </template>
-          <template v-else>
-            <empty class="empty" />
-          </template>
-        </div>
-        <div class="page-container-right">
-          <div class="page-container-right_top">
-            <titleComponent text="报警信息" />
-            <div class="alarm-list-box">
-              <div class="more-btn-box" @click="showMoreWarnList">
-                <div>查看更多</div>
-                <img src="@/assets/images/more_right_icon.png" alt="" />
-              </div>
-              <template v-if="alarmList && alarmList?.length">
-                <div
-                  v-for="item in alarmList"
-                  :key="`monitor_alarm_${item}`"
-                  class="alarm-item"
-                  @click="openWarningDetail(item)"
-                >
-                  <img class="alarm-item-icon" :src="item.fullPicture" alt="" />
-                  <div class="info-box">
-                    <p class="info-name">{{ item.shipName }}</p>
-                    <p class="info-desc">报警摄像头：{{ item.cameraName }}</p>
-                    <p class="info-desc">报警内容：{{ item.areaName }}</p>
-                    <p class="info-desc">报警时间：{{ item.alarmTime }}</p>
-                  </div>
-                  <div class="btn-box">
-                    <div class="alarm-tag">{{ item.alarmTypeTxt }}</div>
+      <div class="page-container-left">
+        <titleComponent :styles="{ backgroundImage: `url(${monitorLargeBg})` }">
+          <div class="title-info">监控信息</div>
+        </titleComponent>
+        <template v-if="cameraConfigList?.length && showVideos">
+          <div class="switch-monitor-gird">
+            <!--设备切换TAB-->
+            <div class="device-tab-box">
+              <div class="device-tab-list">
+                <div class="scroll-icon left" @click="scrollBtnHandler('left')"></div>
+                <div class="device-box" ref="deviceListRef">
+                  <div
+                    v-for="(item, index) in cameraConfigList"
+                    :key="item.id"
+                    class="device-tab-item"
+                    :class="{ active: index === currentVideoIndex }"
+                    @click.stop="changeCurrentVideo(index)"
+                  >
+                    {{ item.name }}
                   </div>
                 </div>
-              </template>
-              <template v-else>
-                <empty class="empty" />
-              </template>
+                <div class="scroll-icon right" @click="scrollBtnHandler('right')"></div>
+              </div>
             </div>
-          </div>
-          <div class="page-container-right_bottom">
-            <titleComponent text="报警统计" />
-            <monitorAlarmChart class="line-chart-box" :chart-data="alarmEchartList" />
-          </div>
-        </div>
-      </template>
-      <!--单屏-->
-      <template v-else-if="girdModel === GIRD_CONFIGS.ONE.value">
-        <template v-if="realRenderCameraList?.length && showVideos">
-          <singleMonitor ref="singleMonitorRef" @close="changGirdModel(GIRD_CONFIGS.FOUR.value)" />
-        </template>
-        <template v-else>
-          <empty class="single-empty" />
-        </template>
-      </template>
-    </div>
-
-    <!--排序-->
-    <monitorSortDialog ref="monitorSortDialogRef" @close="handleClose" />
-
-    <!--监控详情-->
-    <monitorDetail ref="monitorDetailRef" @close="monitorDetailClose" />
-
-    <!-- 报警详情 -->
-    <Dialog ref="warnDialogRef" title="报警详情">
-      <div class="warning-detail-content">
-        <div class="warning-detail-item">
-          <div class="waring-detail-key">船名：</div>
-          <div class="warning-detail-value">{{ currentWarnDetail.shipName }}</div>
-        </div>
-        <div class="warning-detail-item">
-          <div class="waring-detail-key">设备名称：</div>
-          <div class="warning-detail-value">{{ currentWarnDetail.cameraName }}</div>
-        </div>
-        <div class="warning-detail-item">
-          <div class="waring-detail-key">报警时间：</div>
-          <div class="warning-detail-value">{{ currentWarnDetail.alarmTime }}</div>
-        </div>
-        <div class="warning-detail-item">
-          <div class="waring-detail-key">报警内容：</div>
-          <div class="warning-detail-value">{{ currentWarnDetail.alarmTypeTxt }}</div>
-        </div>
-        <div class="warning-detail-item">
-          <div class="waring-detail-key">报警图片：</div>
-          <div class="warning-detail-value no-bg">
-            <a-image
-              class="img"
-              width="94px"
-              height="94px"
-              :src="currentWarnDetail.fullPicture"
-              alt="报警图片"
+            <!--监控-->
+            <LivePlayer
+              class="live-player-container"
+              controls
+              :key="cameraConfigList[currentVideoIndex].url"
+              :url="cameraConfigList[currentVideoIndex].url"
             />
           </div>
-        </div>
+        </template>
+        <template v-else>
+          <empty class="empty" />
+        </template>
       </div>
-    </Dialog>
+    </div>
   </pageLayout>
-
-  <!--报警列表-->
-  <monitorWarnTable v-if="showWarnTable" :boat="boat" @back="closeMoreWarnList" />
 </template>
 
 <script setup>
@@ -200,104 +60,67 @@ import {
   ref,
   reactive,
   toRaw,
-  watch,
   isRef,
-  inject,
+  inject
 } from 'vue'
-import { getShipList } from '@/api/device.js'
-import { getShipMonitorAlarm, getShipMonitorAlarmEcharts, setAlarmRead } from '@/api/monitor.js'
+import { getShipDevice } from '@/api/device.js'
 import pageLayout from '@/components/pageLayout'
-import selectBox from '@/components/selectBoxNew'
 import titleComponent from '@/components/titleComponent'
-import Dialog from '@/components/dialog'
 import empty from '@/components/empty'
-import monitorWarnTable from '@/components/monitorWarnTable'
-// import monitorBorder from '@/components/monitorBorder'
-import monitorAlarmChart from '@/components/monitorAlarmChart'
-// import tabsBox from '@/components/tabsBox'
-import singleMonitor from '@/components/singleMonitor'
-import switchMonitor from '@/components/switchMonitor'
-// import ezuikitPlayer from '@/components/ezuikitPlayer'
-import monitorSortDialog from '@/components/monitorSortDialog'
-import monitorDetail from '@/components/monitorDetail'
-// import { usePageControlStore } from '@/stores/pageControl.js'
-import { updateMonitorToken, getShipMonitorConfig } from '@/api/monitor.js'
-import { usePageControlStore } from '@/stores/pageControl.js'
+import netStateBox from '@/components/netStateBox'
+import LivePlayer from '@/components/LivePlayer'
+import { getShipMonitorConfig } from '@/api/monitor.js'
 import { BOAT_INFO } from '@/provide/boat.js'
-import { debounce } from 'lodash'
 import { Polling } from '@/utils/polling.js'
+import { px2vh } from '@/assets/js/sizeUtils.js'
 import monitorLargeBg from '@/assets/images/monitor_title_bg.png'
 
 const GIRD_CONFIGS = {
   FOUR: {
     name: '四屏',
-    value: '1',
+    value: '1'
   },
   ONE: {
     name: '单屏',
-    value: '2',
-  },
+    value: '2'
+  }
 }
 
 defineOptions({ name: 'MonitoringInfo' })
 
-// 记录用户最后一次移动的位置及时间
-const unUseInterval = 5 * 60 * 1000 // 未使用时间间隔 5分钟
-let isDestroy = false
-let mouseMoveHandlerTimer = null
-let mouseMoveTime = Date.now()
-const mouseMovePoint = {
-  x: 0,
-  y: 0,
-}
-
 let alarmPollInstance = null
 
-const showWarnTable = ref(false)
-const warnDialogRef = ref(null) // 船舶列表
 const LOCAL_CAMERA_CONFIG_KEY = 'cameraConfig'
 const cameraLimit = 4 // 视频限制数量
-const boats = ref([]) // 船舶列表
+const deviceInfo = ref({}) // 当前船舶的设备信息
 const boat = ref(null) // 当前的选中的船舶
 const cameraConfigList = ref([]) // 摄像机配置列表
 const cameraSortConfigs = reactive({})
-const monitorBoxKey = ref(Date.now())
-const isNeedRefresh = ref(false)
 const girdModel = ref(GIRD_CONFIGS.FOUR.value)
-// const girdConfig = ref([GIRD_CONFIGS.FOUR, GIRD_CONFIGS.ONE])
-const singleMonitorRef = ref(null)
-const switchMonitorRef = ref(null)
-const monitorSortDialogRef = ref(null)
-const monitorDetailRef = ref(null)
 const deviceListRef = ref(null)
 const showVideos = ref(true)
 const currentVideoIndex = ref(0)
 
-const alarmList = ref([])
-const alarmEchartList = ref([])
-
-const currentWarnDetail = ref({})
-
 const boatInfoInject = inject(BOAT_INFO)
 
-const pageControlStore = usePageControlStore()
-const { goBack } = pageControlStore
+// const src = ref('rtsp://admin:djys2024@192.168.2.254:554/Streaming/Channels/101')
 
 /**
- * @function showMoreWarnList
- * @description 展示报警列表
+ * @function getDeviceData
+ * @description 获取设备数据
  **/
-const showMoreWarnList = () => {
-  showWarnTable.value = true
+const getDeviceData = () => {
+  // 获取设备数据
+  getShipDevice({ mmsi: boat.value }).then((res) => {
+    deviceInfo.value = res.data
+  })
 }
 
-/**
- * @function closeMoreWarnList
- * @description 关闭报警列表
- **/
-const closeMoreWarnList = () => {
-  showWarnTable.value = false
-}
+const containerStyle = computed(() => {
+  return {
+    marginTop: px2vh(140)
+  }
+})
 
 // /**
 //  * @function changGird
@@ -340,21 +163,10 @@ const scrollBtnHandler = (type) => {
   if (deviceListRef.value) {
     deviceListRef.value.scrollTo({
       left: scrollToLeft,
-      behavior: 'smooth',
+      behavior: 'smooth'
     })
     console.log(left)
   }
-}
-
-/**
- * @function openMonitorDetail
- * @description 打开监控详情
- * @param {object} item 当前监控配置数据
- **/
-const openMonitorDetail = (item) => {
-  console.log('open detail', item)
-  monitorDetailRef.value?.open(item)
-  showVideos.value = false
 }
 
 /**
@@ -388,50 +200,23 @@ const setCameraSortConfigs = (mmsi, configs) => {
   cameraSortConfigs[mmsi] = configs
   localStorage.setItem(
     LOCAL_CAMERA_CONFIG_KEY,
-    JSON.stringify(isRef(cameraSortConfigs) ? toRaw(cameraSortConfigs) : cameraSortConfigs),
+    JSON.stringify(isRef(cameraSortConfigs) ? toRaw(cameraSortConfigs) : cameraSortConfigs)
   )
 }
-
-// /**
-//  * @function openSortDialog
-//  * @description 打开排序弹窗
-//  **/
-// const openSortDialog = () => {
-//   monitorSortDialogRef.value.open(cameraConfigList.value, currentCameraSortConfig.value)
-// }
 
 /**
  * @function realRenderCameraList
  * @description 渲染的摄像机列表
  * @returns {array} 渲染的摄像机列表
  **/
-const realRenderCameraList = computed(() => {
-  if (!currentCameraSortConfig.value?.length || !cameraConfigList.value?.length) {
-    return []
-  }
-  return currentCameraSortConfig.value.map((id) => {
-    return cameraConfigList.value.find((item) => item.id === id)
-  })
-})
-
-/**
- * @function getShipListData
- * @description 获取船舶列表数据
- **/
-const getShipListData = async () => {
-  const boatsRes = await getShipList()
-  boats.value = boatsRes.data
-  boat.value = boat.value || boatsRes.data[0].mmsi
-}
-
-/**
- * @function handleChangeBoat
- * @description 船舶数据改变
- **/
-const handleChangeBoat = async (boat) => {
-  currentVideoIndex.value = 0
-  await getCameraConfigList()
-}
+// const realRenderCameraList = computed(() => {
+//   if (!currentCameraSortConfig.value?.length || !cameraConfigList.value?.length) {
+//     return []
+//   }
+//   return currentCameraSortConfig.value.map((id) => {
+//     return cameraConfigList.value.find((item) => item.id === id)
+//   })
+// })
 
 /**
  * @function currentCameraSortConfig
@@ -447,9 +232,6 @@ const currentCameraSortConfig = computed(() => {
  * @description 获取摄像机配置列表
  **/
 const getCameraConfigList = async () => {
-  // 清除鼠标时间,并清空之前的定时器数据
-  destroyMouseMoveHandler()
-
   const cameraConfigListRes = await getShipMonitorConfig({ mmsi: boat.value })
   console.log('监控摄像机配置', cameraConfigListRes)
   // const configList = JSON.parse('[{"id":13,"type":"1","typeTxt":"船舶","mmsi":"413884042","channelNumber":"5","serialNumber":"FH1501930","areaCode":"1","areaCodeTxt":"机舱","name":"主机右","verificationCode":"Djys2024","accessToken":"at.4yiytpvo939y7yfn4ksrpvx53axweawg-73u0q0kmuk-073pr7v-8nxwnqbwo","expireTime":"2024-12-30 10:06:47","monitorUrl":"ezopen://open.ys7.com/FH1501930/1.hd.live"},{"id":14,"type":"1","typeTxt":"船舶","mmsi":"413884042","channelNumber":"6","serialNumber":"FH1501930","areaCode":"1","areaCodeTxt":"机舱","name":"辅机右","verificationCode":"Djys2024","accessToken":"at.4yiytpvo939y7yfn4ksrpvx53axweawg-73u0q0kmuk-073pr7v-8nxwnqbwo","expireTime":"2024-12-30 10:06:47","monitorUrl":"ezopen://open.ys7.com/FH1501930/1.hd.live"},{"id":1,"type":"1","typeTxt":"船舶","mmsi":"413884042","channelNumber":"1","serialNumber":"FR8131769","areaCode":"1","areaCodeTxt":"机舱","name":"辅机左","verificationCode":"Djys2024","accessToken":"at.4yiytpvo939y7yfn4ksrpvx53axweawg-73u0q0kmuk-073pr7v-8nxwnqbwo","expireTime":"2024-12-30 10:06:47","monitorUrl":"ezopen://open.ys7.com/FR8131769/1.hd.live"},{"id":3,"type":"1","typeTxt":"船舶","mmsi":"413884042","channelNumber":"3","serialNumber":"FR8131769","areaCode":"1","areaCodeTxt":"机舱","name":"集控室","verificationCode":"Djys2024","accessToken":"at.4yiytpvo939y7yfn4ksrpvx53axweawg-73u0q0kmuk-073pr7v-8nxwnqbwo","expireTime":"2024-12-30 10:06:47","monitorUrl":"ezopen://open.ys7.com/FR8131769/3.hd.live"},{"id":5,"type":"1","typeTxt":"船舶","mmsi":"413884042","channelNumber":"5","serialNumber":"FR8131769","areaCode":"1","areaCodeTxt":"机舱","name":"主机左","verificationCode":"Djys2024","accessToken":"at.4yiytpvo939y7yfn4ksrpvx53axweawg-73u0q0kmuk-073pr7v-8nxwnqbwo","expireTime":"2024-12-30 10:06:47","monitorUrl":"ezopen://open.ys7.com/FR8131769/5.hd.live"},{"id":9,"type":"1","typeTxt":"船舶","mmsi":"413884042","channelNumber":"1","serialNumber":"FH1501930","areaCode":"2","areaCodeTxt":"甲板","name":"右舷向后","verificationCode":"Djys2024","accessToken":"at.4yiytpvo939y7yfn4ksrpvx53axweawg-73u0q0kmuk-073pr7v-8nxwnqbwo","expireTime":"2024-12-30 10:06:47","monitorUrl":"ezopen://open.ys7.com/FH1501930/1.hd.live"},{"id":11,"type":"1","typeTxt":"船舶","mmsi":"413884042","channelNumber":"3","serialNumber":"FH1501930","areaCode":"2","areaCodeTxt":"甲板","name":"LNG右","verificationCode":"Djys2024","accessToken":"at.4yiytpvo939y7yfn4ksrpvx53axweawg-73u0q0kmuk-073pr7v-8nxwnqbwo","expireTime":"2024-12-30 10:06:47","monitorUrl":"ezopen://open.ys7.com/FH1501930/1.hd.live"},{"id":12,"type":"1","typeTxt":"船舶","mmsi":"413884042","channelNumber":"4","serialNumber":"FH1501930","areaCode":"2","areaCodeTxt":"甲板","name":"甲板右向前","verificationCode":"Djys2024","accessToken":"at.4yiytpvo939y7yfn4ksrpvx53axweawg-73u0q0kmuk-073pr7v-8nxwnqbwo","expireTime":"2024-12-30 10:06:47","monitorUrl":"ezopen://open.ys7.com/FH1501930/1.hd.live"},{"id":2,"type":"1","typeTxt":"船舶","mmsi":"413884042","channelNumber":"2","serialNumber":"FR8131769","areaCode":"2","areaCodeTxt":"甲板","name":"LNG左","verificationCode":"Djys2024","accessToken":"at.4yiytpvo939y7yfn4ksrpvx53axweawg-73u0q0kmuk-073pr7v-8nxwnqbwo","expireTime":"2024-12-30 10:06:47","monitorUrl":"ezopen://open.ys7.com/FR8131769/2.hd.live"},{"id":4,"type":"1","typeTxt":"船舶","mmsi":"413884042","channelNumber":"4","serialNumber":"FR8131769","areaCode":"2","areaCodeTxt":"甲板","name":"左舷后视","verificationCode":"Djys2024","accessToken":"at.4yiytpvo939y7yfn4ksrpvx53axweawg-73u0q0kmuk-073pr7v-8nxwnqbwo","expireTime":"2024-12-30 10:06:47","monitorUrl":"ezopen://open.ys7.com/FR8131769/4.hd.live"},{"id":6,"type":"1","typeTxt":"船舶","mmsi":"413884042","channelNumber":"6","serialNumber":"FR8131769","areaCode":"2","areaCodeTxt":"甲板","name":"LNG主","verificationCode":"Djys2024","accessToken":"at.4yiytpvo939y7yfn4ksrpvx53axweawg-73u0q0kmuk-073pr7v-8nxwnqbwo","expireTime":"2024-12-30 10:06:47","monitorUrl":"ezopen://open.ys7.com/FR8131769/6.hd.live"},{"id":7,"type":"1","typeTxt":"船舶","mmsi":"413884042","channelNumber":"7","serialNumber":"FR8131769","areaCode":"2","areaCodeTxt":"甲板","name":"甲板左向前","verificationCode":"Djys2024","accessToken":"at.4yiytpvo939y7yfn4ksrpvx53axweawg-73u0q0kmuk-073pr7v-8nxwnqbwo","expireTime":"2024-12-30 10:06:47","monitorUrl":"ezopen://open.ys7.com/FR8131769/7.hd.live"},{"id":10,"type":"1","typeTxt":"船舶","mmsi":"413884042","channelNumber":"2","serialNumber":"FH1501930","areaCode":"3","areaCodeTxt":"驾驶室","name":"驾驶室","verificationCode":"Djys2024","accessToken":"at.4yiytpvo939y7yfn4ksrpvx53axweawg-73u0q0kmuk-073pr7v-8nxwnqbwo","expireTime":"2024-12-30 10:06:47","monitorUrl":"ezopen://open.ys7.com/FH1501930/1.hd.live"},{"id":15,"type":"1","typeTxt":"船舶","mmsi":"413884042","channelNumber":"7","serialNumber":"FH1501930","areaCode":"3","areaCodeTxt":"驾驶室","name":"球机","verificationCode":"Djys2024","accessToken":"at.4yiytpvo939y7yfn4ksrpvx53axweawg-73u0q0kmuk-073pr7v-8nxwnqbwo","expireTime":"2024-12-30 10:06:47","monitorUrl":"ezopen://open.ys7.com/FH1501930/1.hd.live"},{"id":8,"type":"1","typeTxt":"船舶","mmsi":"413884042","channelNumber":"8","serialNumber":"FR8131769","areaCode":"3","areaCodeTxt":"驾驶室","name":"球机","verificationCode":"Djys2024","accessToken":"at.4yiytpvo939y7yfn4ksrpvx53axweawg-73u0q0kmuk-073pr7v-8nxwnqbwo","expireTime":"2024-12-30 10:06:47","monitorUrl":"ezopen://open.ys7.com/FR8131769/8.hd.live"}]')
@@ -462,52 +244,21 @@ const getCameraConfigList = async () => {
     setCameraSortConfigs(boat.value, configs)
   }
 
-  cameraConfigList.value = configList.map((item) => {
+  cameraConfigList.value = configList.map((item, index) => {
+    // TODO MOCK START
+    let url = 'http://192.168.2.147/main/0.live.flv'
+
+    if (index !== 0) {
+      url = `http://192.168.2.${index}/main/0.live.flv`
+    }
+    // TODO MOCK END
+
     return {
       ...item,
-      ref: null,
+      url,
+      ref: null
     }
   })
-
-  // 绑定鼠标事件,并开始监听空闲时间
-  initMouseMoveHandler()
-}
-
-// /**
-//  * @function goBackStack
-//  * @description 返回上一页
-//  **/
-// const goBackStack = () => {
-//   goBack()
-// }
-
-/**
- * @function handleRefreshToken
- * @description 刷新token
- **/
-const handleRefreshToken = () => {
-  isNeedRefresh.value = true
-}
-
-/**
- * @function setRefMap
- * @description 设置refMap
- * @param {Element} el 当前的dom
- * @param {object} itemData 当前的索引
- **/
-const setRefMap = (el, itemData) => {
-  const index = cameraConfigList.value.findIndex((item) => item.id === itemData.id)
-  cameraConfigList.value[index].ref = el
-}
-
-/**
- * @function handleClose
- * @description 关闭排序弹窗回调
- * @param {object} data 配置数据
- **/
-const handleClose = (data) => {
-  setCameraSortConfigs(boat.value, data.configs)
-  monitorBoxKey.value = Date.now()
 }
 
 /**
@@ -519,177 +270,34 @@ const setDefaultShip = () => {
   boat.value = boatInfo.mmsi ? `${boatInfo.mmsi}` : null
 }
 
-/**
- * @function initMouseMoveHandler
- * @description 初始化鼠标移动事件
- **/
-const initMouseMoveHandler = () => {
-  isDestroy = false
-  // 初始化一个默认的鼠标位置
-  resetMouseMoveHandler({ pageX: 0, pageY: 0 })
-  document.addEventListener('mousemove', mouseMoveHandler)
-}
+const currentDeviceUpdateTime = computed(() => {
+  return deviceInfo.value.updateTime
+})
 
-/**
- * @function destroyMouseMoveHandler
- * @description 销毁鼠标移动事件
- **/
-const destroyMouseMoveHandler = () => {
-  isDestroy = true
-  // 清除倒计时
-  mouseMoveHandlerTimer !== null && clearTimeout(mouseMoveHandlerTimer)
-  document.removeEventListener('mousemove', mouseMoveHandler)
-}
-
-/**
- * @function mouseMoveHandler
- * @description 鼠标移动事件
- **/
-const mouseMoveHandler = debounce((event) => {
-  const { pageX, pageY } = event
-  console.log('鼠标位置：', pageX, pageY)
-
-  resetMouseMoveHandler({ pageX, pageY })
-}, 300)
-
-/**
- * @function resetMouseMoveHandler
- * @description 重置鼠标移动事件
- * @param {number} pageX
- * @param {number} pageY
- **/
-const resetMouseMoveHandler = ({ pageX, pageY }) => {
-  mouseMoveHandlerTimer !== null && clearTimeout(mouseMoveHandlerTimer)
-  mouseMoveTime = Date.now()
-  mouseMovePoint.x = pageX
-  mouseMovePoint.y = pageY
-  checkMouseMoveState()
-}
-
-/**
- * @function checkMouseMoveState
- * @description 检查鼠标上次移动停留的时间
- **/
-const checkMouseMoveState = () => {
-  if (isDestroy) {
-    return
-  }
-  // 每5s检测一次未操作时间
-  mouseMoveHandlerTimer = setTimeout(() => {
-    const now = Date.now()
-    // console.log(
-    //   'Timer:',
-    //   mouseMoveHandlerTimer,
-    //   '空闲时间:',
-    //   Math.floor((now - mouseMoveTime) / 1000),
-    //   '暂停时间:',
-    //   unUseInterval / 1000,
-    // )
-    if (now - mouseMoveTime >= unUseInterval) {
-      // 关闭视频
-      console.log(`未使用超过${unUseInterval / 1000 / 60}分钟，暂停视频`)
-      switchMonitorRef.value.videoRef.stopVideo()
-    } else {
-      checkMouseMoveState()
+const initGetDeviceLoop = () => {
+  alarmPollInstance = new Polling(
+    async () => {
+      console.log('开始轮询')
+      getDeviceData()
+    },
+    10 * 1000,
+    {
+      immediate: true,
+      onStop: () => console.log('轮询已停止')
     }
-  }, 1000)
-}
-
-/**
- * @function monitorDetailClose
- * @description 关闭监控详情
- **/
-const monitorDetailClose = () => {
-  showVideos.value = true
-}
-
-/**
- * @function getShipAlarmList
- * @description 获取船舶报警列表
- **/
-const getShipAlarmList = () => {
-  getShipMonitorAlarm({ mmsi: boat.value, pageSize: 3, pageNum: 1 }).then((res) => {
-    alarmList.value = res.data.list
-  })
-}
-
-/**
- * @function getShipAlarmEchartList
- * @description 获取船舶报警图标数据
- **/
-const getShipAlarmEchartList = () => {
-  getShipMonitorAlarmEcharts({ mmsi: boat.value }).then((res) => {
-    alarmEchartList.value = res.data
-  })
-}
-
-/**
- * @function openWarningDetail
- * @description 打开报警详情
- * @param {object} data 报警详情数据
- **/
-const openWarningDetail = (data) => {
-  currentWarnDetail.value = data
-  console.log(data)
-  setAlarmRead({ id: data.id })
-  warnDialogRef.value.open()
+  )
 }
 
 onMounted(() => {
   setDefaultShip()
   initCameraSortConfigs()
-  getShipListData()
-
-  // 使用示例
-  alarmPollInstance = new Polling(
-    async () => {
-      console.log('开始轮询')
-      getShipAlarmList()
-      getShipAlarmEchartList()
-    },
-    10 * 1000,
-    {
-      immediate: true,
-      onStop: () => console.log('轮询已停止'),
-    },
-  )
+  getCameraConfigList()
+  initGetDeviceLoop()
 })
 
 onBeforeUnmount(() => {
-  destroyMouseMoveHandler()
   alarmPollInstance.stop()
 })
-
-watch(isNeedRefresh, async () => {
-  if (isNeedRefresh.value) {
-    const accessTokenRes = await updateMonitorToken()
-    cameraConfigList.value = cameraConfigList.value.map((item) => {
-      return {
-        ...item,
-        accessToken: accessTokenRes.data,
-      }
-    })
-    isNeedRefresh.value = false
-    monitorBoxKey.value = Date.now()
-  }
-})
-
-watch(
-  [girdModel, realRenderCameraList],
-  async () => {
-    if (realRenderCameraList.value?.length) {
-      // 打开单屏
-      if (girdModel.value === GIRD_CONFIGS.ONE.value) {
-        await nextTick()
-        singleMonitorRef.value?.open(realRenderCameraList.value[0])
-      }
-    }
-  },
-  {
-    immediate: true,
-    flush: 'post',
-  },
-)
 </script>
 
 <style scoped lang="scss">
@@ -718,9 +326,17 @@ watch(
       margin: 0 vw(11);
       text-align: center;
       color: rgba(221, 240, 246, 1);
+      letter-spacing: vw(2);
       background-image: url('@/assets/images/device_top_component_title.png');
       background-size: 100% 100%;
       background-repeat: no-repeat;
+
+      .net-state-box-position {
+        position: absolute;
+        left: vw(24);
+        top: 50%;
+        transform: translateY(-50%);
+      }
 
       .top-title_title {
         font-family: YouSheBiaoTiHei;
@@ -730,7 +346,7 @@ watch(
 
       .update-time {
         position: absolute;
-        left: vw(20);
+        left: vw(138);
         top: 50%;
         transform: translateY(-50%);
         font-size: vh(16);
@@ -753,8 +369,8 @@ watch(
 
   .page-container-left {
     position: relative;
-    width: vw(1392);
-    height: vh(797);
+    width: 100%;
+    height: vh(830);
     margin-top: vh(13);
 
     .title-info {
@@ -768,8 +384,8 @@ watch(
 
     .switch-monitor-gird {
       position: relative;
-      width: vw(1392);
-      height: vh(797);
+      width: 100%;
+      height: vh(778);
       margin: vh(10) auto 0;
 
       .device-tab-box {
@@ -783,8 +399,7 @@ watch(
             rgba(0, 252, 238, 0.69),
             rgba(0, 252, 238, 0.51),
             rgba(3, 18, 44, 0)
-          )
-          1 1;
+        ) 1 1;
 
         .device-tab-list {
           box-sizing: border-box;
@@ -857,8 +472,9 @@ watch(
         }
       }
 
-      .video-container {
-        height: vh(730);
+      .live-player-container {
+        margin: 0 auto;
+        height: vh(710);
       }
 
       .prev-btn,

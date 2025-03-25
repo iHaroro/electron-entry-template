@@ -68,10 +68,6 @@ import { setAlarmRead } from '@/api/monitor.js'
 defineOptions({ name: 'AlarmInfoCellItem' })
 
 const props = defineProps({
-  boatInfo: {
-    type: Object,
-    default: () => ({}),
-  },
   list: {
     type: Array,
     default: () => [],

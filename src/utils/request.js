@@ -1,16 +1,16 @@
 import axios from 'axios'
 import { message } from 'ant-design-vue'
 import { getTokenFormApplication, cleanTokenFromApplication } from '@/utils/userInfo'
-import router from '@/router'
-import { usePageControlStore } from '@/stores/pageControl.js'
+// import router from '@/router'
+// import { usePageControlStore } from '@/stores/pageControl.js'
 // import { useLoadingStore } from '@/stores/loadingControl.js'
 
 // const loadingControl = useLoadingStore()
 // const { showLoading, hideLoading } = loadingControl
 // const hideDelay = 500
 
-const pageControl = usePageControlStore()
-const { reset } = pageControl
+// const pageControl = usePageControlStore()
+// const { reset } = pageControl
 
 // 请求实例
 const service = axios.create({
@@ -89,9 +89,9 @@ const handlerBusinessError = async (response) => {
   } = response
   switch (code) {
     case '403': // token失效
-      cleanTokenFromApplication()
-      message.error('登录失效，请重新登录')
-      location.replace('/login')
+      // cleanTokenFromApplication()
+      // message.error('登录失效，请重新登录')
+      // location.replace('/login')
       return Promise.reject()
     default:
       return Promise.reject(response.data)
