@@ -490,11 +490,6 @@ const getShipSrsData = async () => {
   RADAR_KEY.value = Date.now() + 1
 
   data.forEach((item) => {
-    // 开发环境用于测试的链接
-    // const isDev = import.meta.env.MODE !== 'development'
-    // const testFlvUrl = 'https://mister-ben.github.io/videojs-flvjs/bbb.flv'
-    // const testFlvUrl = 'https://djlm.dajvision.com/live/676990.flv'
-
     if (item.type === TYPES.OCEAN_MAP.value) {
       // oceanSource.value.url = isDev ? testFlvUrl : item.monitorUrl
       oceanVideoConfig.value.monitorUrl = item.monitorUrl

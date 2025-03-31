@@ -236,8 +236,8 @@ const getCameraConfigList = async () => {
 
   cameraConfigList.value = configList.map((item, index) => {
     // TODO MOCK START
-    // const url = 'http://192.168.2.147/main/0.live.flv'
-    const url = 'http://192.168.2.100/lives/m0.live.flv'
+    const url = 'http://192.168.2.147/main/0.live.flv'
+    // const url = 'http://192.168.2.100/lives/m0.live.flv'
     // const url = 'http://192.168.2.100/lives/m4.live.flv'
     // const url = 'http://192.168.2.100/lives/m5.live.flv'
     // const url = 'http://192.168.2.100/lives/m10.live.flv'
