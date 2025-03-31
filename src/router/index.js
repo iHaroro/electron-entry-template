@@ -29,6 +29,11 @@ const router = createRouter({
       path: '/alarmInfo',
       name: 'AlarmInfoPage',
       component: () => import('@/views/alarmInfo')
+    },
+    {
+      path: '/dataAnalysis',
+      name: 'DataAnalysisPage',
+      component: () => import('@/views/dataAnalysis')
     }
   ]
 })

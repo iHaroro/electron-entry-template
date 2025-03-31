@@ -1,6 +1,6 @@
 import { Menu } from 'electron'
 export const getMenuTemplate = (win) => {
-  const template = [
+  return [
     {
       label: "窗口",
       submenu: [
@@ -30,6 +30,10 @@ export const getMenuTemplate = (win) => {
         {
           label: '强制刷新',
           role: 'forceReload'
+        },
+        {
+          label: '调试工具',
+          role: 'toggleDevTools'
         }
       ]
     },
@@ -43,15 +47,6 @@ export const getMenuTemplate = (win) => {
       ]
     }
   ]
-  
-  // if (process.env.NODE_ENV === 'development') {
-  template[1].submenu.push({
-    label: '调试工具',
-    role: 'toggleDevTools'
-  })
-  // }
-  
-  return template
 }
 
 export const setMenu = (mainWindow) => {

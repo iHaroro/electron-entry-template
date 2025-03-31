@@ -1,6 +1,13 @@
 <template>
   <div class="monitor-container">
-    <LivePlayer ref="livePlayer" :videoUrl="url" :controls="controls" live stretch aspect="fullscreen" digital-zoom />
+    <LivePlayer
+      :videoUrl="url"
+      :controls="controls"
+      aspect="fullscreen"
+      live
+      stretch
+      digital-zoom
+    />
   </div>
 </template>
 
@@ -21,13 +28,13 @@ const props = defineProps({
     default: false
   }
 })
-
-const livePlayer = ref(null)
 </script>
 
 <style lang="scss" scoped>
 .monitor-container {
   position: relative;
+  display: flex;
+  flex-wrap: wrap;
   width: 100%;
   height: 100%;
 }

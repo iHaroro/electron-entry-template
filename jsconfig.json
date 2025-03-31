@@ -3,7 +3,8 @@
     "jsx": "preserve",
     "jsxImportSource": "vue",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@electron/*": ["./electron/*"]
     }
   },
   "exclude": ["node_modules", "dist"]

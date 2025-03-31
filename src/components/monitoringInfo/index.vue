@@ -1,11 +1,11 @@
 <template>
   <pageLayout :is-fix-container="false" :containerStyle="containerStyle">
     <div class="monitoring-box">
-      <div class="top-box">
-        <div class="top-title">
-          <span class="top-title_title">设备信息</span>
-        </div>
-      </div>
+      <!--<div class="top-box">-->
+      <!--  <div class="top-title">-->
+      <!--    <span class="top-title_title">设备信息</span>-->
+      <!--  </div>-->
+      <!--</div>-->
       <div class="page-container-left">
         <titleComponent :styles="{ backgroundImage: `url(${monitorLargeBg})` }">
           <div class="title-info">监控信息</div>
@@ -37,6 +37,15 @@
               :key="cameraConfigList[currentVideoIndex].key"
               :url="cameraConfigList[currentVideoIndex].url"
             />
+            <!--<div class="live-player-container" style="display: flex;flex-wrap: wrap;">-->
+            <!--  <LivePlayer-->
+            <!--    controls-->
+            <!--    v-for="item in 9"-->
+            <!--    style="width: 33.33333333%;height: 50%;"-->
+            <!--    :key="cameraConfigList[currentVideoIndex].key"-->
+            <!--    :url="cameraConfigList[currentVideoIndex].url"-->
+            <!--  />-->
+            <!--</div>-->
           </div>
         </template>
         <template v-else>
@@ -83,11 +92,8 @@ const GIRD_CONFIGS = {
 
 defineOptions({ name: 'MonitoringInfo' })
 
-let alarmPollInstance = null
-
 const LOCAL_CAMERA_CONFIG_KEY = 'cameraConfig'
 const cameraLimit = 4 // 视频限制数量
-const deviceInfo = ref({}) // 当前船舶的设备信息
 const boat = ref(null) // 当前的选中的船舶
 const cameraConfigList = ref([]) // 摄像机配置列表
 const cameraSortConfigs = reactive({})
@@ -100,20 +106,9 @@ const boatInfoInject = inject(BOAT_INFO)
 
 // const src = ref('rtsp://admin:djys2024@192.168.2.254:554/Streaming/Channels/101')
 
-/**
- * @function getDeviceData
- * @description 获取设备数据
- **/
-const getDeviceData = () => {
-  // 获取设备数据
-  getShipDevice({ mmsi: boat.value }).then((res) => {
-    deviceInfo.value = res.data
-  })
-}
-
 const containerStyle = computed(() => {
   return {
-    marginTop: px2vh(140)
+    marginTop: px2vh(126)
   }
 })
 
@@ -241,7 +236,11 @@ const getCameraConfigList = async () => {
 
   cameraConfigList.value = configList.map((item, index) => {
     // TODO MOCK START
-    const url = 'http://192.168.2.147/main/0.live.flv'
+    // const url = 'http://192.168.2.147/main/0.live.flv'
+    const url = 'http://192.168.2.100/lives/m0.live.flv'
+    // const url = 'http://192.168.2.100/lives/m4.live.flv'
+    // const url = 'http://192.168.2.100/lives/m5.live.flv'
+    // const url = 'http://192.168.2.100/lives/m10.live.flv'
     // TODO MOCK END
 
     return {
@@ -262,29 +261,10 @@ const setDefaultShip = () => {
   boat.value = boatInfo.mmsi ? `${boatInfo.mmsi}` : null
 }
 
-const initGetDeviceLoop = () => {
-  alarmPollInstance = new Polling(
-    async () => {
-      console.log('开始轮询')
-      getDeviceData()
-    },
-    10 * 1000,
-    {
-      immediate: true,
-      onStop: () => console.log('轮询已停止')
-    }
-  )
-}
-
 onMounted(() => {
   setDefaultShip()
   initCameraSortConfigs()
   getCameraConfigList()
-  initGetDeviceLoop()
-})
-
-onBeforeUnmount(() => {
-  alarmPollInstance.stop()
 })
 </script>
 
@@ -359,7 +339,7 @@ onBeforeUnmount(() => {
     position: relative;
     width: 100%;
     height: vh(830);
-    margin-top: vh(13);
+    margin-top: vh(20);
 
     .title-info {
       margin-left: vw(50);
@@ -374,7 +354,7 @@ onBeforeUnmount(() => {
       position: relative;
       width: 100%;
       height: vh(778);
-      margin: vh(10) auto 0;
+      margin: vh(12) auto 0;
 
       .device-tab-box {
         box-sizing: border-box;
@@ -462,7 +442,7 @@ onBeforeUnmount(() => {
 
       .live-player-container {
         margin: 0 auto;
-        height: vh(710);
+        height: vh(779);
       }
 
       .prev-btn,

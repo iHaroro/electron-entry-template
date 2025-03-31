@@ -1,8 +1,8 @@
 {
   "name": "desktop-ship-tool-app",
-  "productName": "desktop-ship-tool-app",
+  "productName": "云视船舶-船端",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "云视船舶船端应用工具",
   "main": ".vite/build/main.js",
   "scripts": {
     "dev:web": "vite --config vite.renderer.config.mjs",
@@ -37,6 +37,7 @@
     "@vue/eslint-config-prettier": "^10.1.0",
     "@vue/test-utils": "^2.4.6",
     "electron": "35.0.0",
+    "electron-updater": "^6.6.2",
     "eslint": "^9.14.0",
     "eslint-plugin-vue": "^9.30.0",
     "jsdom": "^25.0.1",

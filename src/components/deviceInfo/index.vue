@@ -1,11 +1,11 @@
 <template>
   <pageLayout>
     <div class="device-info-box">
-      <div class="top-box">
-        <div class="top-title">
-          <span class="top-title_title">设备信息</span>
-        </div>
-      </div>
+      <!--<div class="top-box">-->
+      <!--  <div class="top-title">-->
+      <!--    <span class="top-title_title">设备信息</span>-->
+      <!--  </div>-->
+      <!--</div>-->
 
       <div class="bottom-box">
         <div class="device-info-left">
@@ -77,7 +77,7 @@
         </div>
         <div class="device-info-right">
           <div class="device-info-right_top">
-            <titleComponent size="small">历史数据</titleComponent>
+            <titleComponent size="small" class="device-info-right_top-title">历史数据</titleComponent>
             <template
               v-if="
                 isEmpty(mainDeviceInfo) && isEmpty(electricsDeviceInfo) && isEmpty(cabDeviceInfo)
@@ -347,7 +347,7 @@ onUnmounted(() => {
     align-items: center;
     width: 100%;
     height: vh(48);
-    margin-top: vh(28);
+    margin-top: vh(13);
 
     .top-title {
       position: relative;
@@ -399,7 +399,7 @@ onUnmounted(() => {
   .bottom-box {
     display: flex;
     width: 100%;
-    margin-top: vh(16);
+    margin-top: vh(20);
 
     .device-info-left {
       position: relative;
@@ -412,19 +412,19 @@ onUnmounted(() => {
       .main-host-device {
         width: 100%;
         height: vh(797);
-        margin-top: vh(10);
+        margin-top: vh(16);
       }
 
       .dynamo-device {
         width: 100%;
         height: vh(797);
-        margin-top: vh(10);
+        margin-top: vh(16);
       }
 
       .servo-device {
         width: 100%;
         height: vh(797);
-        margin-top: vh(10);
+        margin-top: vh(16);
 
         .servo-device-box {
           display: flex;
@@ -505,14 +505,11 @@ onUnmounted(() => {
           margin-top: vh(90);
         }
 
+        .device-info-right_top-title {
+          margin-bottom: vh(16);
+        }
+
         .device-info-right_top-chart {
-          width: 100%;
-          height: vh(378);
-          margin-top: vh(10);
-          background-image: url('@/assets/images/history_data_bg.png');
-          background-size: 100% 100%;
-          background-repeat: no-repeat;
-          background-position: center center;
         }
       }
 

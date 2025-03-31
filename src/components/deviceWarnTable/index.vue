@@ -6,7 +6,7 @@
         <a-select
           ref="select"
           v-model:value="deviceType"
-          class="custom-from-item"
+          class="custom-from-item-input"
           allow-clear
           placeholder="请选择设备"
         >
@@ -15,7 +15,7 @@
           </a-select-option>
         </a-select>
 
-        <a-range-picker v-model:value="date" class="custom-from-item" allow-clear />
+        <a-range-picker v-model:value="date" class="custom-from-item-input" allow-clear />
 
         <div class="reset-btn" @click="resetHandler">
           <img class="btn-icon" src="@/assets/images/reset_icon.png" alt="" />
@@ -171,23 +171,25 @@ const getTableList = () => {
 onMounted(() => {
   setDefaultBoat()
   getDict()
+  resetHandler()
 })
 </script>
 
 <style scoped lang="scss">
 .table-page-box {
   box-sizing: border-box;
-  height: vh(848);
+  height: vh(826);
   padding: vh(40) vw(40) vh(33);
   margin-top: vh(28);
   border: 1px solid;
   border-image: linear-gradient(317deg, rgba(0, 254, 248, 0), rgba(0, 252, 238, 1)) 1 1;
+  background: linear-gradient(35deg, rgba(3, 18, 44, 0) 0%, rgba(13, 253, 240, 0.13) 100%);
 
   .search-box {
     display: flex;
     align-items: center;
 
-    .custom-from-item {
+    .custom-from-item-input {
       width: vw(320);
       margin-right: vw(24);
     }
@@ -231,7 +233,7 @@ onMounted(() => {
 
     .table-list {
       overflow-y: auto;
-      height: vh(626);
+      height: vh(600);
 
       .empty-box {
         margin-top: vh(120);
@@ -240,7 +242,7 @@ onMounted(() => {
     }
 
     .pagination {
-      margin-top: vh(40);
+      margin-top: vh(30);
       text-align: right;
     }
   }

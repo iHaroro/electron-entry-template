@@ -80,7 +80,7 @@ const deviceStatus = computed(() => {
 <style scoped lang="scss">
 .single-device-box {
   box-sizing: border-box;
-  height: vh(768);
+  height: vh(843);
   padding: vh(11) vw(25) vh(25);
   background-image: url('@/assets/images/servo_device_bg.png');
   background-size: 100% 100%;

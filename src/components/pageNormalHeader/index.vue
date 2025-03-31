@@ -60,7 +60,7 @@ onMounted(() => {
   align-items: center;
   width: 100%;
   height: vh(48);
-  margin-top: vh(15);
+  margin-top: vh(13);
 
   .top-left-box {
     min-width: vw(244);

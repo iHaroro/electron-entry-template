@@ -1,11 +1,11 @@
 <template>
   <page-layout>
     <div class="ai-copilot-box">
-      <div class="top-box">
-        <div class="top-title">
-          <span class="top-title_title">智能驾驶舱</span>
-        </div>
-      </div>
+      <!--<div class="top-box">-->
+      <!--  <div class="top-title">-->
+      <!--    <span class="top-title_title">智能驾驶舱</span>-->
+      <!--  </div>-->
+      <!--</div>-->
 
       <div class="info-box">
         <div class="left-box">
@@ -114,16 +114,6 @@
                 :key="OCEAN_MAP_KEY"
                 :ref="(el) => setOceanRef(el)"
               >
-                <!--<videoPlayer :source="oceanSource" :key="`player_${TYPES.OCEAN_MAP.value}`" />-->
-                <!--<ezuikitPlayerCopilot-->
-                <!--  id="OCEAN_PLAYER"-->
-                <!--  v-if="oceanVideoConfig.monitorUrl"-->
-                <!--  :key="`player_${TYPES.OCEAN_MAP.value}`"-->
-                <!--  :ref-instance="oceanVideoConfig.ref"-->
-                <!--  :url="oceanVideoConfig.monitorUrl"-->
-                <!--  :access-token="oceanVideoConfig.accessToken"-->
-                <!--  @refreshAccessToken="handleRefreshToken"-->
-                <!--/>-->
                 <LivePlayer
                   v-if="oceanVideoConfig.monitorUrl"
                   :key="`player_${TYPES.OCEAN_MAP.value}`"
@@ -142,16 +132,6 @@
                 :key="RADAR_KEY"
                 :ref="(el) => setRadarRef(el)"
               >
-                <!--<videoPlayer :source="radarSource" :key="`player_${TYPES.RADAR.value}`" />-->
-                <!--<ezuikitPlayerCopilot-->
-                <!--  id="RADAR_PLAYER"-->
-                <!--  v-if="radarVideoConfig.monitorUrl"-->
-                <!--  :key="`player_${TYPES.RADAR.value}`"-->
-                <!--  :ref-instance="radarVideoConfig.ref"-->
-                <!--  :url="radarVideoConfig.monitorUrl"-->
-                <!--  :access-token="radarVideoConfig.accessToken"-->
-                <!--  @refreshAccessToken="handleRefreshToken"-->
-                <!--/>-->
                 <LivePlayer
                   v-if="radarVideoConfig.monitorUrl"
                   :key="`player_${TYPES.RADAR.value}`"
@@ -302,11 +282,10 @@ import dashboardMeter from '@/components/dashboardMeter'
 import LivePlayer from '@/components/LivePlayer'
 import { computed, inject, onMounted, onUnmounted, ref } from 'vue'
 import { BOAT_INFO } from '@/provide/boat.js'
-import { getDest, getDrivingCab, getShipSrs, updateShipMap } from '@/api/copilot.js'
+import { getDest, getDrivingCab, getShipSrs } from '@/api/copilot.js'
 import { getShipDevice } from '@/api/device.js'
 import { debugLog } from '@/utils/utils.js'
 import { HOST_TYPE } from '@/constants/device.js'
-import { updateMonitorToken } from '@/api/monitor.js'
 import { decimalToDMS } from '@/utils/utils.js'
 
 defineOptions({ name: 'AiCopilot' })
@@ -356,14 +335,12 @@ const destInfo = ref({})
 
 const oceanVideoConfig = ref({
   ref: ref(null),
-  monitorUrl: '',
-  accessToken: ''
+  monitorUrl: ''
 })
 
 const radarVideoConfig = ref({
   ref: ref(null),
-  monitorUrl: '',
-  accessToken: ''
+  monitorUrl: ''
 })
 
 const setOceanRef = (el) => {
@@ -488,16 +465,6 @@ const hostDevices = computed(() => {
 })
 
 /**
- * @function handleRefreshToken
- * @description 刷新token
- **/
-const handleRefreshToken = async () => {
-  const accessTokenRes = await updateMonitorToken()
-  oceanVideoConfig.value.accessToken = accessTokenRes.data
-  radarVideoConfig.value.accessToken = accessTokenRes.data
-}
-
-/**
  * @function getShipDeviceData
  * @description 获取船舶设备数据
  **/
@@ -514,7 +481,6 @@ const getShipDeviceData = async () => {
 const getShipSrsData = async () => {
   const shipSrsRes = await getShipSrs({ mmsi: boat.value })
   const { data = [] } = shipSrsRes
-  await handleRefreshToken()
   // 先清空
   oceanVideoConfig.value.monitorUrl = ''
   radarVideoConfig.value.monitorUrl = ''
@@ -670,7 +636,7 @@ onUnmounted(() => {
 
         .left-box_top-list-box {
           width: 100%;
-          height: vh(213);
+          height: vh(235);
           background-image: url('@/assets/images/voyage_bg.png');
           background-size: vw(353) vh(195);
           background-repeat: no-repeat;
@@ -743,11 +709,11 @@ onUnmounted(() => {
         position: relative;
 
         .left-box_center-list-box {
-          margin-top: vh(10);
+          margin-top: vh(16);
 
           .compass-box {
             display: flex;
-            height: vh(210);
+            height: vh(231);
             margin-bottom: vh(15);
             background-image: url('@/assets/images/wind_direction_bg.png');
             background-size: 100% 100%;
@@ -755,15 +721,14 @@ onUnmounted(() => {
             .compass-box_left {
               width: vh(178);
               height: vh(178);
-              margin-top: vh(16);
+              margin-top: vh(26);
               margin-left: vw(54);
-              margin-right: vw(33);
+              margin-right: vw(53);
             }
 
             .compass-box_right {
               box-sizing: border-box;
               flex: 1;
-              padding-left: vw(20);
               padding-right: vw(20);
               font-size: vh(18);
 
@@ -819,7 +784,7 @@ onUnmounted(() => {
       }
 
       .left-box_bottom {
-        margin-top: vh(30);
+        margin-top: vh(24);
         //border: 2px solid rgba(25, 56, 121, 1);
         //background: linear-gradient(
         //  180deg,
@@ -833,9 +798,9 @@ onUnmounted(() => {
           display: flex;
           align-items: center;
           width: 100%;
-          height: vh(210);
-          margin-top: vh(10);
-          padding: 0 vw(21) 0 vw(53);
+          height: vh(232);
+          margin-top: vh(16);
+          padding: 0 vw(21) 0 vw(54);
           background-image: url('@/assets/images/wind_direction_bg_1.png');
           background-size: 100% 100%;
 
@@ -873,7 +838,7 @@ onUnmounted(() => {
 
         .stream-box {
           margin-top: vh(15);
-          height: vh(770);
+          height: vh(844);
         }
 
         .center-box_top-title-item {
@@ -959,13 +924,13 @@ onUnmounted(() => {
       height: 100%;
 
       .right-box_top {
-        margin-bottom: vh(24);
+        margin-bottom: vh(16);
 
         .sailing-box {
           box-sizing: border-box;
-          margin-top: vh(10);
-          height: vh(432);
-          padding-top: vh(39);
+          margin-top: vh(16);
+          height: vh(527);
+          padding-top: vh(76);
           background-image: url('@/assets/images/sailing_bg.png');
           background-size: 100% 100%;
           background-repeat: no-repeat;
@@ -1127,9 +1092,9 @@ onUnmounted(() => {
           display: flex;
           justify-content: center;
           align-items: center;
-          margin-top: vh(10);
+          margin-top: vh(16);
           width: vw(456);
-          height: vh(260);
+          height: vh(232);
           background-image: url('@/assets/images/servo_bg.png');
           background-size: 100% 100%;
           background-repeat: no-repeat;

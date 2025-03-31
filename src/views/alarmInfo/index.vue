@@ -1,32 +1,27 @@
 <template>
   <PageLayout>
     <div class="alarm-info-box">
-      <div class="top-box">
-        <div class="top-title">
-          <span class="top-title_title">报警信息</span>
-        </div>
-      </div>
       <div class="page-container">
         <div class="table-page-box">
           <div class="search-box">
-            <a-select
-              ref="select"
-              v-model:value="deviceType"
-              class="custom-from-item"
-              allow-clear
-              placeholder="请选择设备"
-            >
-              <a-select-option v-for="boat in deviceTypeList" :value="boat.code" :key="boat.code">
-                {{ boat.name }}
-              </a-select-option>
-            </a-select>
-
-            <a-range-picker v-model:value="date" class="custom-from-item" allow-clear />
-
-            <div class="reset-btn" @click="resetHandler">
-              <img class="btn-icon" src="@/assets/images/export_icon.png" alt="" />
-              导出历史
-            </div>
+            <a-form layout="inline">
+              <a-form-item label="选择设备">
+                <a-select
+                  ref="select"
+                  allow-clear
+                  class="from-input search-from-item-input"
+                  v-model:value="deviceType"
+                  placeholder="请选择设备"
+                >
+                  <a-select-option v-for="boat in deviceTypeList" :value="boat.code" :key="boat.code">
+                    {{ boat.name }}
+                  </a-select-option>
+                </a-select>
+              </a-form-item>
+              <a-form-item label="选择日期">
+                <a-range-picker v-model:value="date" allow-clear class="from-input search-from-item-input" />
+              </a-form-item>
+            </a-form>
 
             <div class="reset-btn" @click="resetHandler">
               <img class="btn-icon" src="@/assets/images/reset_icon.png" alt="" />
@@ -36,6 +31,10 @@
               <img class="btn-icon" src="@/assets/images/confirm_icon.png" alt="" />
               确认
             </div>
+            <!--<div class="reset-btn" @click="resetHandler">-->
+            <!--  <img class="btn-icon" src="@/assets/images/export_icon.png" alt="" />-->
+            <!--  导出历史-->
+            <!--</div>-->
           </div>
 
           <div class="table-box">
@@ -48,6 +47,23 @@
               :columns="columns"
               :loading="loading"
             >
+              <template #bodyCell="{ column, text }">
+                <!--设备名称-->
+                <template v-if="column.dataIndex === 'name'">
+                  <div class="device-name">
+                    <img class="device-name-icon" src="@/assets/images/alarm_list_item_icon.png" :alt="text" />
+                    设备名称：{{ text }}
+                  </div>
+                </template>
+                <!--报警内容-->
+                <template v-if="column.dataIndex === 'content'">
+                  <div class="device-warn-content">{{ text }}</div>
+                </template>
+                <!--报警时间-->
+                <template v-if="column.dataIndex === 'alarmTime'">
+                  <div class="device-warn-time">{{ text }}</div>
+                </template>
+              </template>
               <template v-slot:emptyText>
                 <div class="empty-box">
                   <Empty />
@@ -184,7 +200,7 @@ onMounted(() => {
     align-items: center;
     width: 100%;
     height: vh(48);
-    margin-top: vh(15);
+    margin-top: vh(13);
 
     .top-title {
       position: relative;
@@ -211,21 +227,23 @@ onMounted(() => {
 
   .page-container {
     width: 100%;
-    margin-top: vh(15);
+    margin-top: vh(22);
 
     .table-page-box {
+      position: relative;
       box-sizing: border-box;
-      height: vh(840);
-      padding: vh(32) vw(42) vh(36);
+      height: vh(907);
+      padding: vh(44) vw(44) vh(60);
       border: 1px solid;
       border-image: linear-gradient(317deg, rgba(0, 254, 248, 0), rgba(0, 252, 238, 1)) 1 1;
+      background: linear-gradient(35deg, rgba(3, 18, 44, 0) 0%, rgba(13, 253, 240, 0.13) 100%);
 
       .search-box {
         display: flex;
         align-items: center;
 
-        .custom-from-item {
-          width: vw(320);
+        .search-from-item-input {
+          width: vw(240);
           margin-right: vw(24);
         }
 
@@ -235,13 +253,13 @@ onMounted(() => {
           display: flex;
           align-items: center;
           justify-content: center;
-          width: vw(120);
-          height: vh(44);
-          //border-radius: 6px;
+          width: vw(114);
+          height: vh(32);
+          border-radius: 2px;
           margin-right: vw(8);
 
           .btn-icon {
-            height: vh(22);
+            height: vh(24);
             margin-right: vw(2);
           }
 
@@ -264,7 +282,7 @@ onMounted(() => {
       }
 
       .table-box {
-        margin-top: vh(48);
+        margin-top: vh(42);
 
         .table-list {
           overflow-y: auto;
@@ -277,11 +295,42 @@ onMounted(() => {
         }
 
         .pagination {
-          margin-top: vh(45);
+          position: absolute;
+          bottom: vh(60);
+          right: vw(44);
           text-align: right;
         }
       }
     }
+  }
+
+  .device-name {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 500;
+    font-size: vh(16);
+    color: rgba(0, 252, 238, 1);
+    line-height: vh(20);
+
+    .device-name-icon {
+      height: vh(16);
+      margin-right: vw(4);
+    }
+  }
+
+  .device-warn-content {
+    font-weight: 400;
+    font-size: vh(16);
+    color: rgba(255, 162, 23, 1);
+    line-height: vh(20);
+  }
+
+  .device-warn-time {
+    font-weight: 400;
+    font-size: vh(16);
+    color: rgba(221, 240, 246, 1);
+    line-height: vh(20);
   }
 }
 </style>

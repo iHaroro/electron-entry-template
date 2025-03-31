@@ -1,5 +1,33 @@
 @use "sizeUtils.scss" as sizeUtils;
 
+.from-input {
+  &.ant-select {
+    .ant-select-selector {
+      background-color: transparent;
+      border: 1px solid rgba(23, 101, 173, 1);
+      border-radius: 2px;
+
+      .ant-select-selection-placeholder {
+        color: rgba(242, 252, 255, .5);
+      }
+    }
+  }
+
+  &.ant-picker {
+    background-color: transparent;
+    border: 1px solid rgba(23, 101, 173, 1);
+    border-radius: 2px;
+
+    .ant-picker-input {
+      input {
+        &::placeholder {
+          color: rgba(242, 252, 255, .5) !important;
+        }
+      }
+    }
+  }
+}
+
 .boat-custom-loading {
   > div {
     > .ant-spin {
@@ -21,8 +49,8 @@
   //}
 }
 
-// 表单
-.custom-from-item {
+// 表单控件
+.custom-from-item-input {
   &.ant-picker {
     padding-top: 0;
     padding-bottom: 0;
@@ -272,13 +300,13 @@
 
             .ant-table-cell {
               background-color: rgba(54, 109, 135, 0.21);
-              border-bottom: none;
+              border-bottom: 1px solid rgba(0, 27, 75, 1);
               text-align: center;
               color: rgba(0, 252, 238, 1);
               font-weight: 500;
               font-size: sizeUtils.vh(16);
               line-height: sizeUtils.vh(22);
-              padding: sizeUtils.vh(12) sizeUtils.vw(16);
+              padding: sizeUtils.vh(14) sizeUtils.vw(16);
 
               &::before {
                 display: none;
@@ -294,6 +322,7 @@
 
               .ant-table-cell {
                 background-color: rgba(54, 109, 135, 0.68);
+                border-bottom: 1px solid rgba(0, 27, 75, 1);
 
                 &:first-child {
                   border-radius: 0;
@@ -307,7 +336,7 @@
 
             &:last-child {
               .ant-table-cell {
-                border-bottom: 0;
+                border-bottom: 1px solid rgba(0, 27, 75, 1);
               }
             }
 
@@ -328,13 +357,13 @@
 
             .ant-table-cell {
               background-color: transparent;
-              border-bottom: none;
+              border-bottom: 1px solid rgba(0, 27, 75, 1);
               text-align: center;
               color: rgba(0, 252, 238, 1);
               font-weight: 500;
               font-size: sizeUtils.vh(16);
               line-height: sizeUtils.vh(22);
-              padding: sizeUtils.vh(12) sizeUtils.vw(16);
+              padding: sizeUtils.vh(14) sizeUtils.vw(16);
 
               &::before {
                 display: none;
@@ -346,7 +375,7 @@
             .ant-table-row {
 
               .ant-table-cell {
-                border-top-color: transparent;
+                border-bottom: 1px solid rgba(0, 27, 75, 1);
 
                 &.ant-table-cell-row-hover {
                   background-color: transparent;
@@ -371,7 +400,7 @@
 
               &:last-child {
                 .ant-table-cell {
-                  border-bottom: none;
+                  border-bottom: 1px solid rgba(0, 27, 75, 1);
                 }
               }
             }
@@ -380,14 +409,14 @@
               &:hover {
                 .ant-table-cell {
                   background-color: transparent;
-                  border-bottom: none;
+                  border-bottom: 1px solid rgba(0, 27, 75, 1);
                 }
               }
 
               .ant-table-cell {
-                padding: sizeUtils.vh(17) sizeUtils.vw(16);
+                padding: sizeUtils.vh(14) sizeUtils.vw(16);
                 background-color: transparent;
-                border-bottom: none;
+                border-bottom: 1px solid rgba(0, 27, 75, 1);
                 color: rgba(221, 240, 246, 1);
                 font-weight: 400;
                 font-size: sizeUtils.vh(14);
@@ -403,7 +432,7 @@
               &:hover {
                 .ant-table-cell {
                   background-color: rgba(54, 109, 135, 0.68);
-                  border-bottom: none;
+                  border-bottom: 1px solid rgba(0, 27, 75, 1);
                 }
               }
             }
@@ -446,6 +475,43 @@
 
       .ant-select-arrow {
         color: rgba(221, 240, 246, 1);
+      }
+    }
+  }
+}
+
+// 标签页
+.custom-tabs {
+  &.ant-tabs {
+    .ant-tabs-nav {
+      .ant-tabs-nav-wrap {
+        .ant-tabs-tab {
+          padding: 7px 10px;
+
+          &:not(:first-child) {
+            margin: 0 0 0 12px;
+          }
+
+          .ant-tabs-tab-btn {
+            font-weight: 500;
+            font-size: 16px;
+            color: rgba(242, 252, 255, .7);
+            line-height: 22px;
+          }
+
+          &.ant-tabs-tab-active {
+            .ant-tabs-tab-btn {
+              font-weight: 400;
+              font-size: 18px;
+              color: rgba(0, 252, 238, 1);
+              line-height: 22px;
+            }
+          }
+        }
+
+        .ant-tabs-ink-bar {
+          background-color: rgba(0, 252, 238, 1);
+        }
       }
     }
   }

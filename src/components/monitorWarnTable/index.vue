@@ -6,7 +6,7 @@
         <a-select
           ref="select"
           v-model:value="alarmType"
-          class="custom-from-item"
+          class="custom-from-item-input"
           allow-clear
           placeholder="请选择报警类型"
         >
@@ -15,7 +15,7 @@
           </a-select-option>
         </a-select>
 
-        <a-range-picker v-model:value="date" class="custom-from-item" allow-clear />
+        <a-range-picker v-model:value="date" class="custom-from-item-input" allow-clear />
 
         <div class="reset-btn" @click="resetHandler">
           <img class="btn-icon" src="@/assets/images/reset_icon.png" alt="" />
@@ -208,7 +208,7 @@ onMounted(() => {
     display: flex;
     align-items: center;
 
-    .custom-from-item {
+    .custom-from-item-input {
       width: vw(320);
       margin-right: vw(24);
     }

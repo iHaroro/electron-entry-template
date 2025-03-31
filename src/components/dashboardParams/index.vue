@@ -43,19 +43,19 @@ defineOptions({ name: 'dashboardParams' })
 const props = defineProps({
   chartData: {
     type: Object,
-    default: () => {},
-  },
+    default: () => {}
+  }
 })
 const dashboardRef = ref(null)
 const dataTypes = ref({
   week: {
     type: TIME_TYPE.WEEK,
-    name: '近一周',
+    name: '近一周'
   },
   month: {
     type: TIME_TYPE.MONTH,
-    name: '近一月',
-  },
+    name: '近一月'
+  }
 })
 let myChart = null
 const chartControlStore = useDeviceChartControlStore()
@@ -71,7 +71,7 @@ const drawChart = () => {
   const option = getOptions({
     name,
     yaxle: props.chartData.yaxle,
-    xaxle: props.chartData.xaxle,
+    xaxle: props.chartData.xaxle
   })
   myChart.setOption(option)
 }
@@ -93,7 +93,7 @@ watch(
       drawChart()
     })
   },
-  { deep: true, immediate: true },
+  { deep: true, immediate: true }
 )
 </script>
 
@@ -102,6 +102,10 @@ watch(
   box-sizing: border-box;
   position: relative;
   padding: vh(24) vw(24);
+  background-image: url('@/assets/images/history_data_bg.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
 
   .device-run-state-box {
     display: flex;
@@ -190,7 +194,7 @@ watch(
 
   .chart-box {
     width: vw(392);
-    height: vh(260);
+    height: vh(326);
     margin-top: vh(30);
 
     .chart {
