@@ -13,6 +13,7 @@ import copy from 'rollup-plugin-copy'
 // https://vite.dev/config/
 export default defineConfig(() => {
   return {
+    
     plugins: [
       vue(),
       vueJsx(),

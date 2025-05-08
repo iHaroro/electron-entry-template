@@ -44,9 +44,9 @@
 
       <div class="page-content">
         <a-tabs v-model:activeKey="activeKey" class="custom-tabs">
-          <a-tab-pane key="1" tab="Tab 1">Content of Tab Pane 1</a-tab-pane>
-          <a-tab-pane key="2" tab="Tab 2" force-render>Content of Tab Pane 2</a-tab-pane>
-          <a-tab-pane key="3" tab="Tab 3">Content of Tab Pane 3</a-tab-pane>
+          <a-tab-pane v-for="(item, index) in systemClassify" :key="item.id" :tab="item.name">
+            <component :is="item.component" />
+          </a-tab-pane>
         </a-tabs>
       </div>
     </div>
@@ -54,19 +54,46 @@
 </template>
 
 <script setup>
-import TimeBox from '@/components/timeBox'
+import { ref, onBeforeMount, markRaw } from 'vue'
 import { RightOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons-vue'
-import { ref } from 'vue'
+import TimeBox from '@/components/timeBox'
+import SystemStateCharts from './components/SystemStateCharts'
+import ParamStateCharts from './components/ParamStateCharts'
+import { systemClassifyData } from './data'
 
 defineOptions({ name: 'DataAnalysisPage' })
 
 const collapsed = ref(false)
+const systemState = {
+  id: 'systemState',
+  name: '运行状态',
+  component: markRaw(SystemStateCharts)
+}
+const activeKey = ref(systemState.id)
+const systemClassify = ref([])
 const toggleCollapsed = () => {
   collapsed.value = !collapsed.value
 }
 
-const activeKey = ref('1')
+const getSystemClassifyData = () => {
+  // TODO MOCK DATA
+  systemClassify.value = [
+    // systemState,
+    ...(
+      systemClassifyData.map(item => {
+        return {
+          ...item,
+          component: markRaw(ParamStateCharts)
+        }
+      })
+    )
+  ]
+  activeKey.value = systemClassifyData[0].id
+}
 
+onBeforeMount(() => {
+  getSystemClassifyData()
+})
 
 </script>
 

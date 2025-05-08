@@ -484,6 +484,8 @@
 .custom-tabs {
   &.ant-tabs {
     .ant-tabs-nav {
+      margin-bottom: 0;
+
       .ant-tabs-nav-wrap {
         .ant-tabs-tab {
           padding: 7px 10px;

@@ -36,6 +36,7 @@ const createWindow = () => {
 // 当 Electron 完成时，将调用此方法
 // 初始化并准备好创建浏览器窗口。
 // 某些 API 只能在此事件发生后使用。
+
 app.whenReady().then(async () => {
   await refreshToken()
   createWindow()
@@ -75,6 +76,3 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
-
-// 在此文件中，您可以包含应用的特定 main 进程的其余部分
-// 您也可以将它们放在单独的文件中并在此处导入它们。

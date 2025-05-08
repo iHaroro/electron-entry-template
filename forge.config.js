@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require('node:path')
 const { FusesPlugin } = require('@electron-forge/plugin-fuses');
 const {
   FuseV1Options,
@@ -8,13 +8,18 @@ const {
 module.exports = {
   packagerConfig: {
     asar: true,
-    icon: path.join(__dirname, '/images/icon'),
+    icon: path.join(__dirname, 'images', 'icon.ico')
   },
   rebuildConfig: {},
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
-      config: {}
+      config: {
+        // package.json 中的 productName 不能指定为中文，否则同时指定setupIcon时会报错
+        // iconUrl: `file://${path.join(__dirname, 'images', 'icon.ico')}`,
+        setupIcon: path.join(__dirname, 'images', 'icon.ico'),
+        loadingGif: path.join(__dirname, 'images', 'install-spinner.gif')
+      }
     },
     {
       name: '@electron-forge/maker-zip',

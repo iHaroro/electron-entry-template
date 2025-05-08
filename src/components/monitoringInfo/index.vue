@@ -40,8 +40,8 @@
             <!--<div class="live-player-container" style="display: flex;flex-wrap: wrap;">-->
             <!--  <LivePlayer-->
             <!--    controls-->
-            <!--    v-for="item in 9"-->
-            <!--    style="width: 33.33333333%;height: 50%;"-->
+            <!--    v-for="item in 6"-->
+            <!--    style="width: 33.33333%;height: 50%;"-->
             <!--    :key="cameraConfigList[currentVideoIndex].key"-->
             <!--    :url="cameraConfigList[currentVideoIndex].url"-->
             <!--  />-->
@@ -61,7 +61,6 @@ import {
   computed,
   nextTick,
   onMounted,
-  onBeforeUnmount,
   ref,
   reactive,
   toRaw,

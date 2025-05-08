@@ -1,4 +1,3 @@
-import path from 'node:path'
 import { BrowserWindow } from 'electron'
 import { setMenu } from '@electron/utils/menuTemplate'
 import { preloadPath, iconPath } from '@/config'
@@ -22,18 +21,20 @@ import { preloadPath, iconPath } from '@/config'
  * @returns {BrowserWindow} - 创建的自定义窗口实例
  **/
 export const createCustomWindow = (options = {}) => {
+  
   const defaultOptions = {
     width: 1920,
     height: 1080,
     icon: iconPath,
     frame: true,
     devTools: true,
-    nodeIntegration: true,
-    nodeIntegrationInWorker: true,
-    enableRemoteModule: true,
-    sandbox: false,
+    nodeIntegration: true, // 允许渲染进程使用 Node.js API
+    nodeIntegrationInWorker: true, // 允许工作线程使用 Node.js API
+    enableRemoteModule: true, // 允许渲染进程使用远程模块
+    sandbox: false, // 沙盒模式，防止渲染进程访问系统资源
     webPreferences: {
-      preload: preloadPath
+      preload: preloadPath,
+      webSecurity: false
     },
     ...options
   };
