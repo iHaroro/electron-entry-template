@@ -90,3 +90,12 @@ typings/
 
 # Electron-Forge
 out/
+
+# vue pack dir
+dist/
+dist-zip/
+
+# idea configuration files
+.idea/
+
+/components.d.ts
