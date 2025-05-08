@@ -24,9 +24,9 @@ const createWindow = () => {
     mainWindow.loadFile(shipAppEntryPath)
     
     // 拦截所有路由请求，确保返回 index.html
-    mainWindow.webContents.on('did-fail-load', () => {
-      mainWindow.loadFile(shipAppEntryPath)
-    })
+    // mainWindow.webContents.on('did-fail-load', () => {
+    //   mainWindow.loadFile(shipAppEntryPath)
+    // })
   }
   
   // 打开 DevTools
@@ -66,6 +66,7 @@ app.whenReady().then(async () => {
 
 const refreshToken = async () => {
   tokenRes = await getTokenService()
+  console.log('get token', tokenRes.data.data)
 }
 
 // 当所有窗口都关闭时退出，macOS 除外。在那里，这很常见
