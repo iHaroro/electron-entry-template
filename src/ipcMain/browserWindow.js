@@ -18,7 +18,7 @@ export const initBrowserWindowIpcHandler = () => {
   })
   
   ipcMain.handle('getShipAppConfig', () => {
-    return {
+    const appConfig = {
       version: app.getVersion(),
       appPath: app.getAppPath(),
       // 应用的资源目录
@@ -32,7 +32,11 @@ export const initBrowserWindowIpcHandler = () => {
       // 开发时船端应用地址
       shipAppDevPath,
       // 开发时智能监控应用地址
-      monitorAppDevPath,
+      monitorAppDevPath
     }
+    
+    console.log('获取应用配置', appConfig)
+    
+    return appConfig
   })
 }

@@ -59,8 +59,6 @@ const htmlPlugin = () => {
   return {
     name: "html-path-manual",
     generateBundle(options, bundle) {
-      console.log('generateBundle options', options)
-      console.log('generateBundle bundle', bundle)
       for (let page of pages) {
         const htmlFile = bundle[page.htmlPath + page.htmlName]
         if (htmlFile) {
