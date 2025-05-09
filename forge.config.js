@@ -8,7 +8,7 @@ const {
 module.exports = {
   packagerConfig: {
     asar: true,
-    icon: path.join(__dirname, 'images', 'icon.ico')
+    icon: path.join(__dirname, 'images', 'icon')
   },
   rebuildConfig: {},
   makers: [
@@ -38,11 +38,11 @@ module.exports = {
     {
       name: '@electron-forge/plugin-vite',
       config: {
-        // `build` can specify multiple entry builds, which can be Main process, Preload scripts, Worker process, etc.
-        // If you are familiar with Vite configuration, it will look really familiar.
+        // 'build' 可以指定多个入口构建，可以是 Main process、Preload scripts、Worker process 等。
+        // 如果你熟悉 Vite 配置，它看起来会非常熟悉。
         build: [
           {
-            // `entry` is just an alias for `build.lib.entry` in the corresponding file of `config`.
+            // 'entry' 只是 'config' 对应文件中 'build.lib.entry' 的别名。
             entry: 'src/main.js',
             config: 'vite.main.config.mjs',
             target: 'main'
@@ -61,8 +61,7 @@ module.exports = {
         ]
       }
     },
-    // Fuses are used to enable/disable various Electron functionality
-    // at package time, before code signing the application
+    // Fuse 用于在对应用程序进行代码签名之前，在打包时启用/禁用各种 Electron 功能
     new FusesPlugin({
       version: FuseVersion.V1,
       [FuseV1Options.RunAsNode]: false,

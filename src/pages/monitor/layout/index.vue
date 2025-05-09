@@ -82,7 +82,7 @@ const toggleExpend = () => {
 const logout = () => {
   console.log('logout')
   cleanTokenFromApplication()
-  window.location.href = '/login'
+  window.location.href = '/monitor/#/login'
 }
 
 const userControl = useUserControl()

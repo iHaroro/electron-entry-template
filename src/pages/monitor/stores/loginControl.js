@@ -1,9 +1,10 @@
 import { md5 } from 'js-md5'
 import { login } from '@/pages/monitor/api/user.js'
+import { defineStore } from 'pinia'
 
 const salt = 'djys'
 
-export const useLoginControl = () => {
+export const useLoginControl = defineStore('loginControl', () => {
   const loginAction = ({
     userAccount,
     password
@@ -13,8 +14,8 @@ export const useLoginControl = () => {
       password: md5(salt + password)
     })
   }
-
+  
   return {
     loginAction
   }
-}
+})

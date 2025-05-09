@@ -108,7 +108,7 @@ const loginHandler = async () => {
       if (loginRes.code === '200') {
         message.success('登录成功')
         setTokenToApplication(loginRes.data)
-        await router.replace({ name: 'HomePage' })
+        await router.replace({ name: 'IndexPage' })
       }
     }
   }

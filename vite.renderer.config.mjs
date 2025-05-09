@@ -42,8 +42,11 @@ const multiplePagePlugin = () => ({
   name: "multiple-page-plugin",
   configureServer(server) {
     server.middlewares.use((req, res, next) => {
+      // 处理多页面路由
       for (let page of pages) {
         if (req.url.startsWith(`/${page.name}`)) {
+          console.log('server.middlewares.use', req.url, page.name)
+          console.log(req.url.startsWith(`/${page.name}`))
           req.url = `/${page.htmlPath}${page.htmlName}`
           break
         }
@@ -58,6 +61,8 @@ const htmlPlugin = () => {
   return {
     name: "html-path-manual",
     generateBundle(options, bundle) {
+      console.log('generateBundle options', options)
+      console.log('generateBundle bundle', bundle)
       for (let page of pages) {
         const htmlFile = bundle[page.htmlPath + page.htmlName]
         if (htmlFile) {

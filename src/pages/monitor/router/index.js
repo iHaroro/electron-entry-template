@@ -1,14 +1,13 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import { routes } from './modules'
 import { getTokenFormApplication } from '@/pages/monitor/utils/userInfo.js'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.MONITOR_BASE_URL),
   routes: [
     // 重定向
     {
       path: '/',
-      name: 'HomePage',
       redirect: '/index'
     },
     ...routes,
@@ -28,13 +27,15 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  console.log('monitor router beforeEach')
   const token = getTokenFormApplication()
   const whiteList = ['/login']
   if (token || whiteList.includes(to.path)) {
+    console.log('已登录', to)
     // 已登录
     next()
   } else {
-    console.log(to)
+    console.log('未登录', to)
     // 未登录
     next({ name: 'LoginPage' })
   }

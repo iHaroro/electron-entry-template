@@ -36,7 +36,7 @@ import router from './router'
 import 'dayjs/locale/zh-cn'
 // 注册指令
 import registerDirectives from '@/pages/index/directive'
-// 工具方法
+// 工具方法。
 import { fitChartSize } from '@/pages/index/assets/js/dataUtils.js'
 
 window.electronAPI?.getToken().then((token) => {

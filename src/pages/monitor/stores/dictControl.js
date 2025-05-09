@@ -1,9 +1,10 @@
 import { ref } from 'vue'
 import { getDict } from '@/pages/monitor/api/public.js'
+import { defineStore } from 'pinia'
 
-export const useDictControl = () => {
+export const useDictControl = defineStore('dictControl', () => {
   const dictionaryMap = ref({})
-
+  
   /**
    * @function getDictionaryAction
    * @description 获取字典
@@ -23,9 +24,9 @@ export const useDictControl = () => {
       return dictionaryMap.value
     }
   }
-
+  
   return {
     dictionaryMap,
     getDictionaryAction
   }
-}
+})

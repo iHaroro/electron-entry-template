@@ -11,11 +11,11 @@ import { preloadPath, iconPath } from '@/config'
  * @param {string} [options.icon=path.join(__dirname, '../../images/icon.ico')] - 窗口图标路径
  * @param {boolean} [options.frame=true] - 是否显示窗口边框
  * @param {boolean} [options.devTools=true] - 是否启用开发者工具
- * @param {boolean} [options.nodeIntegration=true] - 是否启用 Node.js 集成
  * @param {boolean} [options.nodeIntegrationInWorker=true] - 是否启用 Node.js 集成在工作线程中
  * @param {boolean} [options.enableRemoteModule=true] - 是否启用远程模块
  * @param {boolean} [options.sandbox=false] - 是否启用沙盒
  * @param {object} [options.webPreferences] - 窗口 Web 内容的偏好设置
+ * @param {boolean} [options.webPreferences.nodeIntegration=true] - 是否启用 Node.js 集成
  * @param {string} [options.webPreferences.preload=path.join(__dirname, '../../src/preload.js')] - 预加载脚本路径
  * @param {boolean} [options.showMenu=true] - 是否显示菜单
  * @returns {BrowserWindow} - 创建的自定义窗口实例
@@ -27,14 +27,16 @@ export const createCustomWindow = (options = {}) => {
     height: 1080,
     icon: iconPath,
     frame: true,
+    resizable: false,
     devTools: true,
-    nodeIntegration: true, // 允许渲染进程使用 Node.js API
+    fullscreen: true,
     nodeIntegrationInWorker: true, // 允许工作线程使用 Node.js API
     enableRemoteModule: true, // 允许渲染进程使用远程模块
     sandbox: false, // 沙盒模式，防止渲染进程访问系统资源
     webPreferences: {
+      nodeIntegration: true, // 允许渲染进程使用 Node.js API
       preload: preloadPath,
-      webSecurity: false
+      webSecurity: false,
     },
     ...options
   };
