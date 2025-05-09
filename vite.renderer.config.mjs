@@ -6,7 +6,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import Components from 'unplugin-vue-components/vite'
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
-import zipPack from 'vite-plugin-zip-pack'
+// import zipPack from 'vite-plugin-zip-pack'
 import viteCompression from 'vite-plugin-compression'
 import copy from 'rollup-plugin-copy'
 
@@ -31,6 +31,7 @@ const pages = [
     outPagePath: 'pages/monitor/'
   }
 ]
+
 pages.forEach((page) => page.path = pathResolve(page.htmlPath + page.htmlName))
 
 const getEntryInput = () => pages.reduce((res, cur) => {
@@ -54,21 +55,6 @@ const multiplePagePlugin = () => ({
   }
 })
 
-// 处理html输出路径
-const htmlPlugin = () => {
-  return {
-    name: "html-path-manual",
-    generateBundle(options, bundle) {
-      for (let page of pages) {
-        const htmlFile = bundle[page.htmlPath + page.htmlName]
-        if (htmlFile) {
-          htmlFile.fileName = page.outPagePath + page.htmlName
-        }
-      }
-    }
-  }
-}
-
 // https://vite.dev/config/
 export default defineConfig(() => {
   return {
@@ -88,7 +74,7 @@ export default defineConfig(() => {
       viteCompression({
         deleteOriginFile: false //压缩后是否删除源文件
       }),
-      zipPack(),
+      // zipPack(),
       copy({
         targets: [
           {
@@ -99,13 +85,14 @@ export default defineConfig(() => {
       })
     ],
     build: {
+      base: './',
       rollupOptions: {
         input: getEntryInput(),
         output: {
           // 自定义输出目录和文件名
           entryFileNames: (chunkInfo) => {
             // 尝试通过chunk名匹配多页面路径 若匹配到则放置在对应目录 否则放置在根目录
-            const page = pages.find((p) => p.name === chunkInfo.name);
+            const page = pages.find((p) => p.name === chunkInfo.name)
             return page
                    ? `${page.outPagePath.replace(/^\//, "")}assets/[name].[hash].js`
                    : "assets/[name].[hash].js";
@@ -113,31 +100,56 @@ export default defineConfig(() => {
           chunkFileNames: (chunkInfo) => {
             // 通过chunk的facadeModuleId匹配多页面路径
             if (chunkInfo.facadeModuleId) {
-              const chunk = pages.find((p) => chunkInfo.facadeModuleId?.includes(p.outPagePath));
+              const chunk = pages.find((p) => chunkInfo.facadeModuleId?.includes(p.outPagePath))
               return chunk
                      ? `${chunk.outPagePath.replace(/^\//, "")}assets/[name].[hash].js`
                      : "assets/[name].[hash].js";
             }
-            return "assets/[name].[hash].js";
+            return "assets/[name].[hash].js"
           },
           assetFileNames: (assetInfo) => {
             // 处理 CSS、图片等资源
             // 优先按照原始文件名处理 若匹配到多页面路径则放置在对应目录 否则放置在根目录assets
             if (assetInfo.originalFileName) {
-              const page = pages.find((p) => assetInfo.originalFileName?.includes(p.outPagePath));
+              const page = pages.find((p) => assetInfo.originalFileName?.includes(p.outPagePath))
               return page
                      ? `${page.outPagePath.replace(/^\//, "")}assets/[name].[hash][extname]`
-                     : "assets/[name].[hash][extname]";
+                     : "assets/[name].[hash][extname]"
             } else {
               // 如果没有原始文件名，通过name匹配
               const page = pages.find((p) => assetInfo.name?.includes(p.name));
               return page
                      ? `${page.outPagePath.replace(/^\//, "")}assets/[name].[hash][extname]`
-                     : "assets/[name].[hash][extname]";
+                     : "assets/[name].[hash][extname]"
+            }
+          },
+          plugins: [
+            {
+              name: 'electron-path-fix',
+              generateBundle(options, bundle) {
+                for (const file in bundle) {
+                  if (file.endsWith('.html')) {
+                    const html = bundle[file]
+                    console.log(html)
+                  }
+                }
+              }
+            }
+          ]
+        },
+        plugins: [
+          {
+            name: "html-path-manual",
+            generateBundle(options, bundle) {
+              for (let page of pages) {
+                const htmlFile = bundle[page.htmlPath + page.htmlName]
+                if (htmlFile) {
+                  htmlFile.fileName = page.outPagePath + page.htmlName
+                }
+              }
             }
           }
-        },
-        plugins: [htmlPlugin()]
+        ]
       }
     },
     optimizeDeps: {
