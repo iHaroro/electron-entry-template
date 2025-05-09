@@ -14,7 +14,7 @@
           class="menu-item"
           v-for="item in leftMenus"
           :key="item.path"
-          :class="{ active: activeMenuPath === item.path }"
+          :class="{ active: activeRouteName === item.routerName }"
           @click="jumpMenu(item)"
         >
           {{ item.name }}
@@ -37,22 +37,28 @@ const router = useRouter()
 const leftMenus = ref([
   {
     name: '智能驾驶室',
-    path: '/aiCopilot'
+    path: '/aiCopilot',
+    routerName: 'AiCopilotPage'
   },
   {
     name: '智能机舱',
-    path: '/deviceInfo'
+    path: '/deviceInfo',
+    routerName: 'DeviceInfoPage'
   },
   {
     name: '报警信息',
-    path: '/alarmInfo'
+    path: '/alarmInfo',
+    routerName: 'MonitoringInfoPage'
   },
   {
     name: '视频监控',
-    path: '/monitoringInfo'
-  },
+    path: '/monitoringInfo',
+    routerName: 'AlarmInfoPage'
+  }
   // {
   //   name: '数据分析',
+  //   path: '/dataAnalysis',
+  //   routerName: 'DataAnalysisPage',
   //   onClick: () => {
   //     window.electronAPI.getShipAppConfig().then(res => {
   //       console.log(res.isPackaged ? res.shipAppEntryPath : res.shipAppDevPath)
@@ -74,15 +80,15 @@ const leftMenus = ref([
   // },
 ])
 
-const activeMenuPath = computed(() => {
-  return route.path
-})
+const activeRouteName = computed(() => route.name)
 
 const jumpMenu = (item) => {
-  if (item.path) {
-    router.push(item.path)
-  } else {
+  if (item.onClick) {
     item.onClick()
+  } else {
+    router.push({
+      name: item.routerName
+    })
   }
 }
 </script>
