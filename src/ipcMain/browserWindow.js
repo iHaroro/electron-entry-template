@@ -35,7 +35,7 @@ export const initBrowserWindowIpcHandler = () => {
       monitorAppDevPath
     }
     
-    console.log('获取应用配置', appConfig)
+    console.log('app config', appConfig)
     
     return appConfig
   })
