@@ -1,8 +1,8 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
 import started from 'electron-squirrel-startup'
-import { getTokenService } from '@electron/api/loginService'
-import { createCustomWindow } from '@electron/utils/createWindow'
-import { initBrowserWindowIpcHandler } from '@electron/ipcMain/browserWindow'
+import { getTokenService } from '@/api/loginService'
+import { createCustomWindow } from '@/utils/createWindow'
+import { initBrowserWindowIpcHandler } from '@/ipcMain/browserWindow'
 import { shipAppEntryPath, shipAppDevPath } from './config'
 
 // 安装/卸载时处理在 Windows 上创建/删除快捷方式。
@@ -64,6 +64,10 @@ app.whenReady().then(async () => {
   initBrowserWindowIpcHandler()
 })
 
+/**
+ * 获取token
+ * @returns {Promise<void>}
+ */
 const refreshToken = async () => {
   tokenRes = await getTokenService()
   console.log('get token', tokenRes.data.data)
@@ -71,7 +75,7 @@ const refreshToken = async () => {
 
 // 当所有窗口都关闭时退出，macOS 除外。在那里，这很常见
 // 使应用程序及其菜单栏保持活动状态，直到用户退出
-// 显式使用 Cmd + Q。
+// Mac使用 Cmd + Q。
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit()

@@ -54,30 +54,41 @@ const leftMenus = ref([
     name: '视频监控',
     path: '/monitoringInfo',
     routerName: 'AlarmInfoPage'
+  },
+  {
+    name: '数据分析',
+    path: '/dataAnalysis',
+    routerName: 'DataAnalysisPage',
+    onClick: () => {
+      window.electronAPI.getShipAppConfig().then(res => {
+        if (res.isPackaged) {
+          // 打包后
+          window.electronAPI.openNewWindow(res.shipAppEntryPath, {
+            hash: '/dataAnalysis'
+          })
+        } else {
+          // 开发
+          window.electronAPI.openNewWindow(`${res.shipAppDevPath}/#/dataAnalysis`)
+        }
+      })
+    }
+  },
+  {
+    name: '测试智能监控',
+    onClick: () => {
+      window.electronAPI.getShipAppConfig().then(res => {
+        if (res.isPackaged) {
+          // 打包后
+          window.electronAPI.openNewWindow(res.shipMonitorAppEntryPath, {
+            hash: '/index'
+          })
+        } else {
+          // 开发
+          window.electronAPI.openNewWindow(`${res.monitorAppDevPath}/#/index`)
+        }
+      })
+    }
   }
-  // {
-  //   name: '数据分析',
-  //   path: '/dataAnalysis',
-  //   routerName: 'DataAnalysisPage',
-  //   onClick: () => {
-  //     window.electronAPI.getShipAppConfig().then(res => {
-  //       console.log(res.isPackaged ? res.shipAppEntryPath : res.shipAppDevPath)
-  //       console.log('shipAppEntryPath', res.shipAppEntryPath)
-  //       console.log('shipAppDevPath', res.shipAppDevPath)
-  //
-  //       if (res.isPackaged) {
-  //         // 打包后
-  //         window.electronAPI.openNewWindow(res.shipAppEntryPath, {
-  //           hash: '/dataAnalysis'
-  //         })
-  //       } else {
-  //         // 开发
-  //         console.log(`${res.shipAppDevPath}/#/dataAnalysis`)
-  //         window.electronAPI.openNewWindow(`${res.shipAppDevPath}/#/dataAnalysis`)
-  //       }
-  //     })
-  //   }
-  // },
 ])
 
 const activeRouteName = computed(() => route.name)

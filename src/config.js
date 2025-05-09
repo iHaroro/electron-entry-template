@@ -6,7 +6,9 @@ export const shipAppEntryPath = path.join(__dirname, '../renderer', MAIN_WINDOW_
 export const shipMonitorAppEntryPath = path.join(__dirname, '../renderer', MAIN_WINDOW_VITE_NAME, '/monitor/index.html')
 
 // 船端应用开发地址
-export const shipAppDevPath = `${MAIN_WINDOW_VITE_DEV_SERVER_URL}/index/#/`
+export const shipAppDevPath = `${MAIN_WINDOW_VITE_DEV_SERVER_URL}/index`
+// 船端智能控系统开发地址
+export const monitorAppDevPath = `${MAIN_WINDOW_VITE_DEV_SERVER_URL}/monitor`
 
 export const preloadPath = path.join(__dirname, './preload.js')
 

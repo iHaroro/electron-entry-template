@@ -8,7 +8,7 @@ const {
 module.exports = {
   packagerConfig: {
     asar: true,
-    icon: path.join(__dirname, 'images', 'icon')
+    icon: path.join(__dirname, 'images', 'icon.ico')
   },
   rebuildConfig: {},
   makers: [

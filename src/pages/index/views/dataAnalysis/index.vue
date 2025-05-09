@@ -45,7 +45,7 @@
       <div class="page-content">
         <a-tabs v-model:activeKey="activeKey" class="custom-tabs">
           <a-tab-pane v-for="(item, index) in systemClassify" :key="item.id" :tab="item.name">
-            <component :is="item.component" />
+            <!--<component :is="item.component" />-->
           </a-tab-pane>
         </a-tabs>
       </div>

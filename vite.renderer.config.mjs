@@ -45,8 +45,6 @@ const multiplePagePlugin = () => ({
       // 处理多页面路由
       for (let page of pages) {
         if (req.url.startsWith(`/${page.name}`)) {
-          console.log('server.middlewares.use', req.url, page.name)
-          console.log(req.url.startsWith(`/${page.name}`))
           req.url = `/${page.htmlPath}${page.htmlName}`
           break
         }

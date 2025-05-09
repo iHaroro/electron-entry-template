@@ -1,9 +1,18 @@
-import { Menu } from 'electron'
+import { app, Menu } from 'electron'
+
 export const getMenuTemplate = (win) => {
-  return [
+  const menus = [
     {
       label: "窗口",
       submenu: [
+        {
+          label: '刷新',
+          role: 'reload'
+        },
+        {
+          label: '强制刷新',
+          role: 'forceReload'
+        },
         {
           label: "打开全屏",
           accelerator: "F11",
@@ -21,23 +30,6 @@ export const getMenuTemplate = (win) => {
       ]
     },
     {
-      label: '查看',
-      submenu: [
-        {
-          label: '刷新',
-          role: 'reload'
-        },
-        {
-          label: '强制刷新',
-          role: 'forceReload'
-        },
-        {
-          label: '调试工具',
-          role: 'toggleDevTools'
-        }
-      ]
-    },
-    {
       label: '操作',
       submenu: [
         {
@@ -47,6 +39,21 @@ export const getMenuTemplate = (win) => {
       ]
     }
   ]
+  
+  // 如果不是打包环境的话，就添加调试菜单
+  if (!app.isPackaged) {
+    menus.push({
+      label: '调试',
+      submenu: [
+        {
+          label: '调试工具',
+          role: 'toggleDevTools'
+        }
+      ]
+    })
+  }
+  
+  return menus
 }
 
 export const setMenu = (mainWindow) => {
