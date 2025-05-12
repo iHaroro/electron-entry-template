@@ -7,6 +7,9 @@
     "name": "大江云视科技（安徽）有限公司",
     "email": "taohu@dajvision.com"
   },
+  "build": {
+    "appId": "com.dajvision.tool"
+  },
   "main": ".vite/build/main.js",
   "scripts": {
     "start": "electron-forge start",

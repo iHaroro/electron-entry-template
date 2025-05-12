@@ -42,7 +42,7 @@ export const getMenuTemplate = (win) => {
   
   // TODO 调试
   // 如果不是打包环境的话，就添加调试菜单
-  // if (!app.isPackaged) {
+  if (!app.isPackaged) {
     menus.push({
       label: '调试',
       submenu: [
@@ -52,7 +52,7 @@ export const getMenuTemplate = (win) => {
         }
       ]
     })
-  // }
+  }
   
   return menus
 }

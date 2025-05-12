@@ -35,7 +35,6 @@
             <div
               class="process-line-item"
               v-if="fieldKey in deviceParamData"
-              @click="getLineChartData(fieldKey)"
             >
               <processLine
                 :model="deviceParamData[fieldKey]?.value || 0"
@@ -56,7 +55,7 @@
         <div class="dashboard-box">
           <div class="top-dashboard">
             <!--主机转速为中间大仪表盘，必有参数-->
-            <div class="dashboard-item-box" @click="getLineChartData(dashboardList[0])">
+            <div class="dashboard-item-box">
               <dashboardNormal
                 class="dashboard-item"
                 type="main"
@@ -70,8 +69,8 @@
                     {{ deviceParamData[dashboardList[0]]?.value }}
                   </span>
                   <span class="top-value-unit">{{
-                    deviceParamData[dashboardList[0]]?.unit || ''
-                  }}</span>
+                      deviceParamData[dashboardList[0]]?.unit || ''
+                    }}</span>
                 </div>
                 <div class="bottom-desc">{{ deviceParamData[dashboardList[0]]?.name }}</div>
               </div>
@@ -79,7 +78,7 @@
           </div>
           <div class="bottom-dashboard">
             <!--仪表1-->
-            <div class="dashboard-item-box" @click="getLineChartData(dashboardList[1])">
+            <div class="dashboard-item-box">
               <dashboardNormal
                 class="dashboard-item"
                 :model-value="deviceParamData[dashboardList[1]]?.value || 0"
@@ -92,14 +91,14 @@
                     {{ deviceParamData[dashboardList[1]]?.value }}
                   </span>
                   <span class="top-value-unit">{{
-                    deviceParamData[dashboardList[1]]?.unit || ''
-                  }}</span>
+                      deviceParamData[dashboardList[1]]?.unit || ''
+                    }}</span>
                 </div>
                 <div class="bottom-desc">{{ deviceParamData[dashboardList[1]]?.name }}</div>
               </div>
             </div>
             <!--仪表2-->
-            <div class="dashboard-item-box" @click="getLineChartData(dashboardList[2])">
+            <div class="dashboard-item-box">
               <dashboardNormal
                 class="dashboard-item"
                 :model-value="deviceParamData[dashboardList[2]]?.value || 0"
@@ -112,8 +111,8 @@
                     {{ deviceParamData[dashboardList[2]]?.value }}
                   </span>
                   <span class="top-value-unit">{{
-                    deviceParamData[dashboardList[2]]?.unit || ''
-                  }}</span>
+                      deviceParamData[dashboardList[2]]?.unit || ''
+                    }}</span>
                 </div>
                 <div class="bottom-desc">{{ deviceParamData[dashboardList[2]]?.name }}</div>
               </div>
@@ -126,26 +125,22 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 import empty from '@/pages/index/components/empty/index.vue'
 import processLine from '@/pages/index/components/processLine/index.vue'
 import dashboardNormal from '@/pages/index/components/dashboardNormal/index.vue'
-import { CHART_SEARCHABLE_TYPE, DEVICE_STATUS } from '@/pages/index/constants/device.js'
-import { useDeviceChartControlStore } from '@/pages/index/stores/deviceChartControl.js'
+import { DEVICE_STATUS } from '@/pages/index/constants/device.js'
 import { getValueMapFromMap } from '@/pages/index/utils/utils.js'
 
 defineOptions({
-  name: 'SingleDeviceItem',
+  name: 'SingleDeviceItem'
 })
-
-const deviceChartControlStore = useDeviceChartControlStore()
-const { getChartData } = deviceChartControlStore
 
 const props = defineProps({
   deviceInfo: {
     type: Object,
-    default: () => ({}),
-  },
+    default: () => ({})
+  }
 })
 
 // 当前主机设备类型
@@ -227,27 +222,9 @@ const dashboardFields = computed(() => {
 //   return `${time} 小时`
 // })
 
-/**
- * @function getLineChartData
- * @description 获取折线图数据
- * @param {string} fieldKey 字段键值
- **/
-const getLineChartData = (fieldKey) => {
-  const item = deviceParamData.value[fieldKey]
-  if (item.type === CHART_SEARCHABLE_TYPE.ENABLE) {
-    // 获取折线图数据（目前固定字段都可查询）
-    getChartData({ paramName: fieldKey, fieldName: deviceParamData.value[fieldKey]?.name })
-  }
-}
-
 const deviceStatus = computed(() => {
   const mapValue = getValueMapFromMap(DEVICE_STATUS)
   return mapValue[props.deviceInfo.status]
-})
-
-onMounted(() => {
-  const firstField = dashboardList.value[0]
-  getChartData({ paramName: firstField, fieldName: deviceParamData.value[firstField]?.name })
 })
 </script>
 
@@ -394,7 +371,7 @@ onMounted(() => {
       overflow-y: auto;
       position: relative;
       box-sizing: border-box;
-      width: vw(633);
+      width: vw(980);
       height: vh(600);
       //background: linear-gradient(180deg, rgba(52, 88, 155, 0.27) 0%, rgba(48, 97, 219, 0.29) 100%);
 
@@ -404,11 +381,11 @@ onMounted(() => {
 
       .process-line-item {
         display: inline-block;
-        width: vw(270);
+        width: vw(245);
         margin-right: vw(40);
         margin-bottom: vh(16);
 
-        &:nth-child(2n) {
+        &:nth-child(3n) {
           margin-right: 0;
         }
       }

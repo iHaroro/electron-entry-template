@@ -10,7 +10,7 @@
       <div class="bottom-box">
         <div class="device-info-left">
           <template v-if="deviceInfo?.config?.length">
-            <titleComponent size="huge">
+            <titleComponent size="full">
               <!--设备类型-->
               <div class="device-info-tab">
                 <div
@@ -75,36 +75,10 @@
             <empty class="iot-empty"></empty>
           </template>
         </div>
-        <div class="device-info-right">
-          <div class="device-info-right_top">
-            <titleComponent size="small" class="device-info-right_top-title">历史数据</titleComponent>
-            <template
-              v-if="
-                isEmpty(mainDeviceInfo) && isEmpty(electricsDeviceInfo) && isEmpty(cabDeviceInfo)
-              "
-            >
-              <empty class="params-empty" />
-            </template>
-            <template v-else>
-              <dashboardParams class="device-info-right_top-chart" :chart-data="chartData" />
-            </template>
-          </div>
-          <div class="device-info-right_bottom">
-            <titleComponent size="small">报警信息</titleComponent>
-            <div class="device-info-right_bottom-content">
-              <div class="more-btn-box" @click="showMoreWarnList">
-                <div>查看更多</div>
-                <img src="../../assets/images/more_right_icon.png" alt="" />
-              </div>
-              <alarmInfoList :list="alarmInfo" />
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </pageLayout>
 
-  <deviceWarnTable v-if="showWarnTable" :boat="boat" @back="closeMoreWarnList" />
 </template>
 <script setup>
 import { DEVICE_TYPES, HOST_TYPE } from '@/pages/index/constants/device.js'
@@ -115,34 +89,19 @@ import singleDeviceItem from '@/pages/index/components/singleDeviceItem/index.vu
 import dynamoDeviceItem from '@/pages/index/components/dynamoDeviceItem/index.vue'
 import servoDeviceItem from '@/pages/index/components/servoDeviceItem/index.vue'
 import servoSwitcherItem from '@/pages/index/components/servoSwitcherItem/index.vue'
-import dashboardParams from '@/pages/index/components/dashboardParams/index.vue'
-import alarmInfoList from '@/pages/index/components/alarmInfoList/index.vue'
 import titleComponent from '@/pages/index/components/titleComponent/index.vue'
-import deviceWarnTable from '@/pages/index/components/deviceWarnTable/index.vue'
-import { getShipDevice, getShipAlarm } from '@/pages/index/api/device.js'
-import { storeToRefs } from 'pinia'
-import { computed, inject, onMounted, onUnmounted, ref } from 'vue'
-import { useDeviceChartControlStore, DEVICE_TYPE, TIME_TYPE } from '@/pages/index/stores/deviceChartControl.js'
+import { getShipDevice } from '@/pages/index/api/device.js'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { isEmpty } from '@/pages/index/utils/utils.js'
-import { BOAT_INFO } from '@/pages/index/provide/boat.js'
 
 defineOptions({ name: 'DeviceInfo' })
 
 let timer = null
 let destroyed = false
-const boat = ref(null) // 当前的选中的船舶
 const deviceTypes = ref({}) // 设备类型
 const deviceType = ref(null) // 选中的设备类型
 const deviceInfo = ref({}) // 当前船舶的设备信息
-const alarmInfo = ref([])
-const refreshTime = 10 * 1000
-const showWarnTable = ref(false)
-
-const boatInfoInject = inject(BOAT_INFO)
-
-const deviceChartControlStore = useDeviceChartControlStore()
-const { setRequestParams } = deviceChartControlStore
-const { chartData } = storeToRefs(deviceChartControlStore)
+const refreshTime = 2 * 1000
 
 const electricsTypeIndex = ref(0)
 
@@ -156,38 +115,12 @@ const changeElectricsTypeIndex = (index) => {
 }
 
 /**
- * @function showMoreWarnList
- * @description 展示报警列表
- **/
-const showMoreWarnList = () => {
-  showWarnTable.value = true
-}
-
-/**
- * @function closeMoreWarnList
- * @description 关闭报警列表
- **/
-const closeMoreWarnList = () => {
-  showWarnTable.value = false
-}
-
-/**
  * @function changeDeviceType
  * @description 切换设备类型
  * @param {number} value 设备类型
  **/
 const changeDeviceType = (value) => {
   deviceType.value = value
-  const params = {
-    mmsi: boat.value,
-    type: chartDeviceType.value,
-    time: TIME_TYPE.WEEK
-  }
-  // 舵机设备无需查询历史数据
-  if (deviceType.value !== DEVICE_TYPES.SERVO_DEVICE.value) {
-    params.name = deviceInfo.value[deviceType.value].name
-  }
-  setRequestParams(params)
 }
 
 /**
@@ -197,10 +130,7 @@ const changeDeviceType = (value) => {
 const refreshData = () => {
   timer = setTimeout(() => {
     if (destroyed) return
-    getDeviceData({
-      reset: false,
-      initChart: false
-    })
+    getDeviceData({ reset: false })
   }, refreshTime)
 }
 
@@ -209,11 +139,13 @@ const refreshData = () => {
  * @description 获取设备数据
  * @param {object} options 配置项
  * @param {boolean} options.reset 是否重置数据
- * @param {boolean} options.initChart 是否初始化图表数据
  **/
-const getDeviceData = async ({ reset = false, initChart = false }) => {
+const getDeviceData = async ({ reset = false }) => {
   // 获取设备数据
-  const shipDeviceRes = await getShipDevice({ mmsi: boat.value })
+  // const shipDeviceRes = await getShipDevice({ mmsi: '413884042' })
+  // const shipDeviceRes = await getShipDevice({ mmsi: '413569570' })
+  const shipDeviceRes = await getShipDevice()
+  console.log('机舱数据', shipDeviceRes)
   deviceInfo.value = shipDeviceRes.data
 
   // 插入已存在的设备类型（防止某种设备不存在）
@@ -227,59 +159,13 @@ const getDeviceData = async ({ reset = false, initChart = false }) => {
     })
   }
 
+  // 仅初始化时默认展示设备类型为主机
   if (reset) {
-    // 默认展示设备类型为主机
     deviceType.value = deviceInfo.value.config[0]
   }
 
-  if (initChart && deviceInfo.value.config?.length) {
-    console.log(deviceInfo.value[deviceInfo.value.config[0]])
-    // 获取图表数据
-    setRequestParams({
-      mmsi: boat.value,
-      type: chartDeviceType.value,
-      // 默认请求主机设备图表数据
-      name: deviceInfo.value[deviceInfo.value.config[0]]?.length
-            ? deviceInfo.value[deviceInfo.value.config[0]][0].name
-            : deviceInfo.value[deviceInfo.value.config[0]].name,
-      time: TIME_TYPE.WEEK
-    })
-  }
-
-  // 获取警报列表
-  getShipAlarmList()
-
   refreshData()
 }
-
-/**
- * @function getShipAlarmList
- * @description 获取报警数据
- **/
-const getShipAlarmList = () => {
-  getShipAlarm({ mmsi: boat.value }).then((res) => {
-    console.log('报警数据', res.data)
-    alarmInfo.value = res.data
-  })
-}
-
-/**
- * @function chartDeviceType
- * @description 图标请求的设备类型type映射值
- * @returns {string} 图标请求的设备类型type映射值
- **/
-const chartDeviceType = computed(() => {
-  switch (deviceType.value) {
-    case DEVICE_TYPES.MAIN_DEVICE.value:
-      return DEVICE_TYPE.MAIN_DEVICE
-    case DEVICE_TYPES.ELECTRICS_DEVICE.value:
-      return DEVICE_TYPE.ELECTRICS_DEVICE
-    case DEVICE_TYPES.SERVO_DEVICE.value:
-      return DEVICE_TYPE.SERVO_DEVICE
-    default:
-      return null
-  }
-})
 
 /**
  * @function mainDeviceInfo
@@ -308,25 +194,11 @@ const electricsDeviceInfo = computed(() => {
  * @returns {object} 舵机信息数据
  **/
 const cabDeviceInfo = computed(() => {
-  console.log('舵机信息数据', deviceInfo.value[DEVICE_TYPES.SERVO_DEVICE.value])
   return deviceInfo.value[DEVICE_TYPES.SERVO_DEVICE.value] || []
 })
 
-/**
- * @function setDefaultShip
- * @description 设置当前船舶
- **/
-const setDefaultShip = () => {
-  const boatInfo = boatInfoInject.getBoatInfo()
-  boat.value = boatInfo.mmsi ? `${boatInfo.mmsi}` : null
-}
-
 onMounted(() => {
-  setDefaultShip()
-  getDeviceData({
-    reset: true,
-    initChart: true
-  })
+  getDeviceData({ reset: true })
 })
 
 onUnmounted(() => {
@@ -341,61 +213,6 @@ onUnmounted(() => {
   flex-wrap: wrap;
   justify-content: space-between;
 
-  .top-box {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: vh(48);
-    margin-top: vh(13);
-
-    .top-title {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      height: vh(44);
-      margin: 0 vw(11);
-      text-align: center;
-      color: rgba(221, 240, 246, 1);
-      letter-spacing: vw(2);
-      background-image: url('../../assets/images/device_top_component_title.png');
-      background-size: 100% 100%;
-      background-repeat: no-repeat;
-
-      .net-state-box-position {
-        position: absolute;
-        left: vw(24);
-        top: 50%;
-        transform: translateY(-50%);
-      }
-
-      .top-title_title {
-        font-family: YouSheBiaoTiHei;
-        font-size: vh(24);
-        letter-spacing: vw(2);
-      }
-
-      .update-time {
-        position: absolute;
-        left: vw(138);
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: vh(16);
-        color: rgba(221, 240, 246, 1);
-      }
-    }
-
-    .back-btn {
-      .back-icon {
-        width: vw(20);
-        height: vw(20);
-        margin-right: vw(8);
-      }
-    }
-  }
-
   .bottom-box {
     display: flex;
     width: 100%;
@@ -403,27 +220,27 @@ onUnmounted(() => {
 
     .device-info-left {
       position: relative;
-      width: vw(1392);
+      width: vw(1872);
 
       .empty-device {
-        height: vh(700);
+        height: vh(750);
       }
 
       .main-host-device {
         width: 100%;
-        height: vh(797);
+        height: vh(850);
         margin-top: vh(16);
       }
 
       .dynamo-device {
         width: 100%;
-        height: vh(797);
+        height: vh(850);
         margin-top: vh(16);
       }
 
       .servo-device {
         width: 100%;
-        height: vh(797);
+        height: vh(850);
         margin-top: vh(16);
 
         .servo-device-box {
@@ -486,60 +303,7 @@ onUnmounted(() => {
 
         .double-device-box_item {
           &:first-child {
-            margin-right: vw(12);
-          }
-        }
-      }
-    }
-
-    .device-info-right {
-      width: vw(460);
-      margin-left: vw(23);
-
-      .device-info-right_top {
-        overflow: hidden;
-        position: relative;
-        margin-bottom: vh(24);
-
-        .params-empty {
-          margin-top: vh(90);
-        }
-
-        .device-info-right_top-title {
-          margin-bottom: vh(16);
-        }
-
-        .device-info-right_top-chart {
-        }
-      }
-
-      .device-info-right_bottom {
-        position: relative;
-
-        .device-info-right_bottom-content {
-          position: relative;
-          overflow-y: auto;
-          height: vh(330);
-          margin-top: vh(10);
-          padding: vh(12) vw(12);
-          background-image: url('../../assets/images/alarm_data_bg.png');
-          background-size: 100% 100%;
-          background-repeat: no-repeat;
-          background-position: center center;
-
-          .more-btn-box {
-            cursor: pointer;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            height: vh(20);
-            margin-bottom: vh(19);
-            font-weight: 400;
-            font-size: vh(16);
-            color: rgba(221, 240, 246, 1);
-            line-height: 22px;
-            text-align: left;
-            font-style: normal;
+            margin-right: vw(24);
           }
         }
       }
@@ -547,7 +311,7 @@ onUnmounted(() => {
   }
 
   .iot-empty {
-    padding-top: vh(250);
+    padding-top: vh(300);
   }
 }
 </style>

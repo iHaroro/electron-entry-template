@@ -18,7 +18,7 @@
     </div>
 
     <div class="dashboards-box">
-      <div class="dashboard-item" @click="getLineChartData(dashboardList[1])">
+      <div class="dashboard-item">
         <div class="dashboard-box">
           <dashboardNormal
             class="dashboard-item-2"
@@ -37,7 +37,7 @@
           <div class="bottom-desc">{{ deviceParamData[dashboardList[1]]?.name }}</div>
         </div>
       </div>
-      <div class="dashboard-item main" @click="getLineChartData(dashboardList[0])">
+      <div class="dashboard-item main">
         <div class="dashboard-box">
           <dashboardNormal
             type="main"
@@ -57,7 +57,7 @@
           <div class="bottom-desc">{{ deviceParamData[dashboardList[0]]?.name }}</div>
         </div>
       </div>
-      <div class="dashboard-item" @click="getLineChartData(dashboardList[2])">
+      <div class="dashboard-item">
         <div class="dashboard-box">
           <dashboardNormal
             class="dashboard-item-1"
@@ -81,7 +81,7 @@
     <div class="device-bottom-box">
       <template v-if="processFields?.length">
         <template v-for="fieldKey in processFields" :key="`double-process-line-${fieldKey}`">
-          <div class="process-line-item" @click="getLineChartData(fieldKey)">
+          <div class="process-line-item">
             <processLine
               :model="deviceParamData[fieldKey]?.value || 0"
               :min="deviceParamData[fieldKey]?.min"
@@ -103,13 +103,12 @@
 import empty from '@/pages/index/components/empty/index.vue'
 import dashboardNormal from '@/pages/index/components/dashboardNormal/index.vue'
 import processLine from '@/pages/index/components/processLine/index.vue'
-import { computed, onMounted } from 'vue'
-import { CHART_SEARCHABLE_TYPE, DEVICE_STATUS } from '@/pages/index/constants/device.js'
-import { useDeviceChartControlStore } from '@/pages/index/stores/deviceChartControl.js'
+import { computed } from 'vue'
+import { DEVICE_STATUS } from '@/pages/index/constants/device.js'
 import { getValueMapFromMap } from '@/pages/index/utils/utils.js'
 
 defineOptions({
-  name: 'DoubleDeviceItem',
+  name: 'DoubleDeviceItem'
 })
 
 const props = defineProps({
@@ -117,17 +116,14 @@ const props = defineProps({
     type: Object,
     default: () => ({
       name: '',
-      data: {},
-    }),
+      data: {}
+    })
   },
   deviceIndex: {
     type: Number,
-    required: true,
-  },
+    required: true
+  }
 })
-
-const deviceChartControlStore = useDeviceChartControlStore()
-const { getChartData } = deviceChartControlStore
 
 /**
  * @function dashboardList
@@ -171,38 +167,9 @@ const dashboardFields = computed(() => {
 //   return `${time} 小时`
 // })
 
-/**
- * @function getLineChartData
- * @description 获取折线图数据
- * @param {string} fieldKey 字段键值
- **/
-const getLineChartData = (fieldKey) => {
-  const item = deviceParamData.value[fieldKey]
-  if (item.type === CHART_SEARCHABLE_TYPE.ENABLE) {
-    // 获取折线图数据（目前固定字段都可查询）
-    getChartData({
-      paramName: fieldKey,
-      fieldName: deviceParamData.value[fieldKey]?.name,
-      name: props.deviceInfo.name,
-    })
-  }
-}
-
 const deviceStatus = computed(() => {
   const mapValue = getValueMapFromMap(DEVICE_STATUS)
   return mapValue[props.deviceInfo.status]
-})
-
-onMounted(() => {
-  // 第0个需要展示
-  if (props.deviceIndex === 0) {
-    const firstField = dashboardList.value[0]
-    getChartData({
-      paramName: firstField,
-      fieldName: deviceParamData.value[firstField]?.name,
-      name: props.deviceInfo.name,
-    })
-  }
 })
 </script>
 
@@ -210,8 +177,8 @@ onMounted(() => {
 .double-device-item-box {
   box-sizing: border-box;
   position: relative;
-  width: vw(690);
-  height: vh(797);
+  width: vw(924);
+  height: vh(843);
   padding: vh(12) vw(24) vh(20);
   background-image: url('../../assets/images/single_host_bg.png');
   background-size: 100% 100%;
@@ -334,7 +301,7 @@ onMounted(() => {
 
   .dashboards-box {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
 
     .dashboard-item {
       position: relative;
@@ -418,16 +385,16 @@ onMounted(() => {
     margin-top: vh(68);
 
     .process-empty {
-      margin: vh(150) auto 0;
+      margin: 0 auto;
     }
 
     .process-line-item {
       display: inline-block;
-      width: vw(270);
+      width: vw(245);
       margin-right: vw(42);
       margin-bottom: vh(16);
 
-      &:nth-child(2n) {
+      &:nth-child(3n) {
         margin-right: 0;
       }
     }

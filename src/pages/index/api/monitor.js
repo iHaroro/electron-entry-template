@@ -4,16 +4,24 @@ import request from '@/pages/index/utils/request'
 export const updateMonitorToken = () => {
   return request({
     url: '/largeScreen/updateMonitorToken',
-    method: 'POST',
+    method: 'POST'
   })
 }
 
 // 监控配置列表查询
-export const getShipMonitorConfig = (data) => {
+// export const getShipMonitorConfig = (data) => {
+//   return request({
+//     url: '/largeScreen/shipMonitor',
+//     method: 'POST',
+//     data,
+//   })
+// }
+
+// 监控配置列表查询
+export const getShipMonitorConfig = () => {
   return request({
-    url: '/largeScreen/shipMonitor',
-    method: 'POST',
-    data,
+    url: '/decoderList',
+    method: 'GET'
   })
 }
 
@@ -22,7 +30,7 @@ export const getShipMonitorAlarm = (data) => {
   return request({
     url: '/largeScreen/monitorAlarm',
     method: 'POST',
-    data,
+    data
   })
 }
 
@@ -31,7 +39,7 @@ export const getShipMonitorAlarmEcharts = (data) => {
   return request({
     url: '/largeScreen/monitorAlarmEcharts',
     method: 'POST',
-    data,
+    data
   })
 }
 
@@ -40,7 +48,7 @@ export const setAlarmRead = (data) => {
   return request({
     url: '/largeScreen/alarmRead',
     method: 'POST',
-    data,
+    data
   })
 }
 
@@ -49,6 +57,6 @@ export const getMonitorAlarmList = (data) => {
   return request({
     url: '/alarm/monitorAlarmList',
     method: 'POST',
-    data,
+    data
   })
 }

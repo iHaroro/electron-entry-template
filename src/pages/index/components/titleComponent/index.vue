@@ -36,6 +36,8 @@ const bgClass = computed(() => {
       return 'large-bg'
     case 'huge':
       return 'huge-bg'
+    case 'full':
+      return 'full-bg'
     default:
       return 'small-bg'
   }
@@ -69,6 +71,10 @@ const bgClass = computed(() => {
   }
 
   &.huge-bg {
+    background-image: url('../../assets/images/common_title_huge_bg.png');
+  }
+
+  &.full-bg {
     background-image: url('../../assets/images/common_title_huge_bg.png');
   }
 }

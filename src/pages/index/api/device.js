@@ -5,20 +5,25 @@ import request from '@/pages/index/utils/request'
 export const getShipList = () => {
   return request({
     url: '/largeScreen/shipList',
-    method: 'POST',
+    method: 'POST'
   })
 }
 
 // 获取设备信息
-export const getShipDevice = (data) => {
+// export const getShipDevice = (data) => {
+//   return request({
+//     url: '/largeScreen/shipDevice',
+//     method: 'POST',
+//     data
+//   })
+// }
+
+// 获取设备信息
+export const getShipDevice = () => {
   return request({
-    url: '/largeScreen/shipDevice',
-    method: 'POST',
-    data,
+    url: '/shipDevice',
+    method: 'GET'
   })
-  // return new Promise((resolve) => {
-  //   resolve({ data: deviceData })
-  // })
 }
 
 // 获取设备参数数据折线图
@@ -26,7 +31,7 @@ export const getShipEcharts = (data) => {
   return request({
     url: '/largeScreen/shipEcharts',
     method: 'POST',
-    data,
+    data
   })
 }
 
@@ -35,15 +40,16 @@ export const getShipAlarm = (data) => {
   return request({
     url: '/largeScreen/shipAlarm',
     method: 'POST',
-    data,
+    data
   })
 }
 
 // 设备告警事件列表
-export const getDeviceAlarmList = (data) => {
+export const getDeviceAlarmList = (params, data) => {
   return request({
-    url: '/alarm/alarmList',
+    url: '/alarmList',
     method: 'POST',
-    data,
+    params,
+    data
   })
 }

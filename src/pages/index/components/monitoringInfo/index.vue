@@ -1,11 +1,6 @@
 <template>
   <pageLayout :is-fix-container="false" :containerStyle="containerStyle">
     <div class="monitoring-box">
-      <!--<div class="top-box">-->
-      <!--  <div class="top-title">-->
-      <!--    <span class="top-title_title">设备信息</span>-->
-      <!--  </div>-->
-      <!--</div>-->
       <div class="page-container-left">
         <titleComponent :styles="{ backgroundImage: `url(${monitorLargeBg})` }">
           <div class="title-info">监控信息</div>
@@ -37,15 +32,6 @@
               :key="cameraConfigList[currentVideoIndex].key"
               :url="cameraConfigList[currentVideoIndex].url"
             />
-            <!--<div class="live-player-container" style="display: flex;flex-wrap: wrap;">-->
-            <!--  <LivePlayer-->
-            <!--    controls-->
-            <!--    v-for="item in 6"-->
-            <!--    style="width: 33.33333%;height: 50%;"-->
-            <!--    :key="cameraConfigList[currentVideoIndex].key"-->
-            <!--    :url="cameraConfigList[currentVideoIndex].url"-->
-            <!--  />-->
-            <!--</div>-->
           </div>
         </template>
         <template v-else>
@@ -57,51 +43,21 @@
 </template>
 
 <script setup>
-import {
-  computed,
-  nextTick,
-  onMounted,
-  ref,
-  reactive,
-  toRaw,
-  isRef,
-  inject
-} from 'vue'
-import { getShipDevice } from '@/pages/index/api/device.js'
+import { computed, onMounted, ref } from 'vue'
 import pageLayout from '@/pages/index/components/pageLayout/index.vue'
 import titleComponent from '@/pages/index/components/titleComponent/index.vue'
 import empty from '@/pages/index/components/empty/index.vue'
 import LivePlayer from '@/pages/index/components/LivePlayer/index.vue'
 import { getShipMonitorConfig } from '@/pages/index/api/monitor.js'
-import { BOAT_INFO } from '@/pages/index/provide/boat.js'
-import { Polling } from '@/pages/index/utils/polling.js'
 import { px2vh } from '@/pages/index/assets/js/sizeUtils.js'
 import monitorLargeBg from '@/pages/index/assets/images/monitor_title_bg.png'
 
-const GIRD_CONFIGS = {
-  FOUR: {
-    name: '四屏',
-    value: '1'
-  },
-  ONE: {
-    name: '单屏',
-    value: '2'
-  }
-}
-
 defineOptions({ name: 'MonitoringInfo' })
 
-const LOCAL_CAMERA_CONFIG_KEY = 'cameraConfig'
-const cameraLimit = 4 // 视频限制数量
-const boat = ref(null) // 当前的选中的船舶
 const cameraConfigList = ref([]) // 摄像机配置列表
-const cameraSortConfigs = reactive({})
-const girdModel = ref(GIRD_CONFIGS.FOUR.value)
 const deviceListRef = ref(null)
 const showVideos = ref(true)
 const currentVideoIndex = ref(0)
-
-const boatInfoInject = inject(BOAT_INFO)
 
 // const src = ref('rtsp://admin:djys2024@192.168.2.254:554/Streaming/Channels/101')
 
@@ -110,17 +66,6 @@ const containerStyle = computed(() => {
     marginTop: px2vh(126)
   }
 })
-
-// /**
-//  * @function changGird
-//  * @description 改变布局
-//  * @param {string} value 布局类型值
-//  **/
-const changGirdModel = (value) => {
-  nextTick(() => {
-    girdModel.value = value
-  })
-}
 
 /**
  * @function scrollBtnHandler
@@ -168,101 +113,26 @@ const changeCurrentVideo = (index) => {
 }
 
 /**
- * @function initCameraSortConfigs
- * @description 初始化摄像机配置
- **/
-const initCameraSortConfigs = () => {
-  const config = JSON.parse(localStorage.getItem(LOCAL_CAMERA_CONFIG_KEY) || '{}')
-  Object.keys(config).forEach((key) => {
-    cameraSortConfigs[key] = config[key]
-  })
-}
-
-/**
- * @function setCameraSortConfigs
- * @description 设置摄像机布局排序配置
- * @param {string} mmsi
- * @param {array} configs
- **/
-const setCameraSortConfigs = (mmsi, configs) => {
-  console.log('设置摄像机布局配置', mmsi, configs)
-  cameraSortConfigs[mmsi] = configs
-  localStorage.setItem(
-    LOCAL_CAMERA_CONFIG_KEY,
-    JSON.stringify(isRef(cameraSortConfigs) ? toRaw(cameraSortConfigs) : cameraSortConfigs)
-  )
-}
-
-/**
- * @function realRenderCameraList
- * @description 渲染的摄像机列表
- * @returns {array} 渲染的摄像机列表
- **/
-// const realRenderCameraList = computed(() => {
-//   if (!currentCameraSortConfig.value?.length || !cameraConfigList.value?.length) {
-//     return []
-//   }
-//   return currentCameraSortConfig.value.map((id) => {
-//     return cameraConfigList.value.find((item) => item.id === id)
-//   })
-// })
-
-/**
- * @function currentCameraSortConfig
- * @description 当前船舶的监控布局配置
- * @returns {object | null} 当前船舶的监控布局配置
- **/
-const currentCameraSortConfig = computed(() => {
-  return cameraSortConfigs[boat.value] || null
-})
-
-/**
  * @function getCameraConfigList
  * @description 获取摄像机配置列表
  **/
 const getCameraConfigList = async () => {
-  const cameraConfigListRes = await getShipMonitorConfig({ mmsi: boat.value })
+  const cameraConfigListRes = await getShipMonitorConfig()
   console.log('监控摄像机配置', cameraConfigListRes)
   // const configList = JSON.parse('[{"id":13,"type":"1","typeTxt":"船舶","mmsi":"413884042","channelNumber":"5","serialNumber":"FH1501930","areaCode":"1","areaCodeTxt":"机舱","name":"主机右","verificationCode":"Djys2024","accessToken":"at.4yiytpvo939y7yfn4ksrpvx53axweawg-73u0q0kmuk-073pr7v-8nxwnqbwo","expireTime":"2024-12-30 10:06:47","monitorUrl":"ezopen://open.ys7.com/FH1501930/1.hd.live"},{"id":14,"type":"1","typeTxt":"船舶","mmsi":"413884042","channelNumber":"6","serialNumber":"FH1501930","areaCode":"1","areaCodeTxt":"机舱","name":"辅机右","verificationCode":"Djys2024","accessToken":"at.4yiytpvo939y7yfn4ksrpvx53axweawg-73u0q0kmuk-073pr7v-8nxwnqbwo","expireTime":"2024-12-30 10:06:47","monitorUrl":"ezopen://open.ys7.com/FH1501930/1.hd.live"},{"id":1,"type":"1","typeTxt":"船舶","mmsi":"413884042","channelNumber":"1","serialNumber":"FR8131769","areaCode":"1","areaCodeTxt":"机舱","name":"辅机左","verificationCode":"Djys2024","accessToken":"at.4yiytpvo939y7yfn4ksrpvx53axweawg-73u0q0kmuk-073pr7v-8nxwnqbwo","expireTime":"2024-12-30 10:06:47","monitorUrl":"ezopen://open.ys7.com/FR8131769/1.hd.live"},{"id":3,"type":"1","typeTxt":"船舶","mmsi":"413884042","channelNumber":"3","serialNumber":"FR8131769","areaCode":"1","areaCodeTxt":"机舱","name":"集控室","verificationCode":"Djys2024","accessToken":"at.4yiytpvo939y7yfn4ksrpvx53axweawg-73u0q0kmuk-073pr7v-8nxwnqbwo","expireTime":"2024-12-30 10:06:47","monitorUrl":"ezopen://open.ys7.com/FR8131769/3.hd.live"},{"id":5,"type":"1","typeTxt":"船舶","mmsi":"413884042","channelNumber":"5","serialNumber":"FR8131769","areaCode":"1","areaCodeTxt":"机舱","name":"主机左","verificationCode":"Djys2024","accessToken":"at.4yiytpvo939y7yfn4ksrpvx53axweawg-73u0q0kmuk-073pr7v-8nxwnqbwo","expireTime":"2024-12-30 10:06:47","monitorUrl":"ezopen://open.ys7.com/FR8131769/5.hd.live"},{"id":9,"type":"1","typeTxt":"船舶","mmsi":"413884042","channelNumber":"1","serialNumber":"FH1501930","areaCode":"2","areaCodeTxt":"甲板","name":"右舷向后","verificationCode":"Djys2024","accessToken":"at.4yiytpvo939y7yfn4ksrpvx53axweawg-73u0q0kmuk-073pr7v-8nxwnqbwo","expireTime":"2024-12-30 10:06:47","monitorUrl":"ezopen://open.ys7.com/FH1501930/1.hd.live"},{"id":11,"type":"1","typeTxt":"船舶","mmsi":"413884042","channelNumber":"3","serialNumber":"FH1501930","areaCode":"2","areaCodeTxt":"甲板","name":"LNG右","verificationCode":"Djys2024","accessToken":"at.4yiytpvo939y7yfn4ksrpvx53axweawg-73u0q0kmuk-073pr7v-8nxwnqbwo","expireTime":"2024-12-30 10:06:47","monitorUrl":"ezopen://open.ys7.com/FH1501930/1.hd.live"},{"id":12,"type":"1","typeTxt":"船舶","mmsi":"413884042","channelNumber":"4","serialNumber":"FH1501930","areaCode":"2","areaCodeTxt":"甲板","name":"甲板右向前","verificationCode":"Djys2024","accessToken":"at.4yiytpvo939y7yfn4ksrpvx53axweawg-73u0q0kmuk-073pr7v-8nxwnqbwo","expireTime":"2024-12-30 10:06:47","monitorUrl":"ezopen://open.ys7.com/FH1501930/1.hd.live"},{"id":2,"type":"1","typeTxt":"船舶","mmsi":"413884042","channelNumber":"2","serialNumber":"FR8131769","areaCode":"2","areaCodeTxt":"甲板","name":"LNG左","verificationCode":"Djys2024","accessToken":"at.4yiytpvo939y7yfn4ksrpvx53axweawg-73u0q0kmuk-073pr7v-8nxwnqbwo","expireTime":"2024-12-30 10:06:47","monitorUrl":"ezopen://open.ys7.com/FR8131769/2.hd.live"},{"id":4,"type":"1","typeTxt":"船舶","mmsi":"413884042","channelNumber":"4","serialNumber":"FR8131769","areaCode":"2","areaCodeTxt":"甲板","name":"左舷后视","verificationCode":"Djys2024","accessToken":"at.4yiytpvo939y7yfn4ksrpvx53axweawg-73u0q0kmuk-073pr7v-8nxwnqbwo","expireTime":"2024-12-30 10:06:47","monitorUrl":"ezopen://open.ys7.com/FR8131769/4.hd.live"},{"id":6,"type":"1","typeTxt":"船舶","mmsi":"413884042","channelNumber":"6","serialNumber":"FR8131769","areaCode":"2","areaCodeTxt":"甲板","name":"LNG主","verificationCode":"Djys2024","accessToken":"at.4yiytpvo939y7yfn4ksrpvx53axweawg-73u0q0kmuk-073pr7v-8nxwnqbwo","expireTime":"2024-12-30 10:06:47","monitorUrl":"ezopen://open.ys7.com/FR8131769/6.hd.live"},{"id":7,"type":"1","typeTxt":"船舶","mmsi":"413884042","channelNumber":"7","serialNumber":"FR8131769","areaCode":"2","areaCodeTxt":"甲板","name":"甲板左向前","verificationCode":"Djys2024","accessToken":"at.4yiytpvo939y7yfn4ksrpvx53axweawg-73u0q0kmuk-073pr7v-8nxwnqbwo","expireTime":"2024-12-30 10:06:47","monitorUrl":"ezopen://open.ys7.com/FR8131769/7.hd.live"},{"id":10,"type":"1","typeTxt":"船舶","mmsi":"413884042","channelNumber":"2","serialNumber":"FH1501930","areaCode":"3","areaCodeTxt":"驾驶室","name":"驾驶室","verificationCode":"Djys2024","accessToken":"at.4yiytpvo939y7yfn4ksrpvx53axweawg-73u0q0kmuk-073pr7v-8nxwnqbwo","expireTime":"2024-12-30 10:06:47","monitorUrl":"ezopen://open.ys7.com/FH1501930/1.hd.live"},{"id":15,"type":"1","typeTxt":"船舶","mmsi":"413884042","channelNumber":"7","serialNumber":"FH1501930","areaCode":"3","areaCodeTxt":"驾驶室","name":"球机","verificationCode":"Djys2024","accessToken":"at.4yiytpvo939y7yfn4ksrpvx53axweawg-73u0q0kmuk-073pr7v-8nxwnqbwo","expireTime":"2024-12-30 10:06:47","monitorUrl":"ezopen://open.ys7.com/FH1501930/1.hd.live"},{"id":8,"type":"1","typeTxt":"船舶","mmsi":"413884042","channelNumber":"8","serialNumber":"FR8131769","areaCode":"3","areaCodeTxt":"驾驶室","name":"球机","verificationCode":"Djys2024","accessToken":"at.4yiytpvo939y7yfn4ksrpvx53axweawg-73u0q0kmuk-073pr7v-8nxwnqbwo","expireTime":"2024-12-30 10:06:47","monitorUrl":"ezopen://open.ys7.com/FR8131769/8.hd.live"}]')
   const configList = cameraConfigListRes.data
-  // 当前监控布局配置为空时，默认初始化前四条监控配置为四屏默认数据
-  console.log(`当前船舶${boat.value}监控布局配置：`, currentCameraSortConfig.value)
-  if (!currentCameraSortConfig.value && configList?.length) {
-    const configs = configList.slice(0, cameraLimit).map((item) => item.id)
-    console.log(`无当前船舶${boat.value}配置，设置船舶监控布局配置：`, configs)
-    setCameraSortConfigs(boat.value, configs)
-  }
-
   cameraConfigList.value = configList.map((item, index) => {
-    // TODO MOCK START
-    const url = 'http://192.168.2.147/main/0.live.flv'
-    // const url = 'http://192.168.2.100/lives/m0.live.flv'
-    // const url = 'http://192.168.2.100/lives/m4.live.flv'
-    // const url = 'http://192.168.2.100/lives/m5.live.flv'
-    // const url = 'http://192.168.2.100/lives/m10.live.flv'
-    // TODO MOCK END
-
     return {
       ...item,
-      url,
-      key: `live-video-${index}`,
+      // TODO MOCK
+      url: 'https://mister-ben.github.io/videojs-flvjs/bbb.flv' || item.address,
+      key: `live-video-${index}-${item.name}`,
       ref: null
     }
   })
 }
 
-/**
- * @function setDefaultShip
- * @description 设置当前船舶
- **/
-const setDefaultShip = () => {
-  const boatInfo = boatInfoInject.getBoatInfo()
-  boat.value = boatInfo.mmsi ? `${boatInfo.mmsi}` : null
-}
-
 onMounted(() => {
-  setDefaultShip()
-  initCameraSortConfigs()
   getCameraConfigList()
 })
 </script>

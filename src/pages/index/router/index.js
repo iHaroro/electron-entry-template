@@ -1,6 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { getConfigFromApplication, setConfigToApplication } from '@/pages/index/utils/userInfo.js'
-import { getGlobalConfig } from '@/pages/index/api/public.js'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -44,14 +43,7 @@ router.beforeEach((to, from, next) => {
   console.log('from', from)
   const config = getConfigFromApplication()
   console.log('系统配置', config)
-  if (config) {
-    next()
-  } else {
-    getGlobalConfig().then((res) => {
-      setConfigToApplication(JSON.stringify(res.data))
-      next()
-    })
-  }
+  next()
 })
 
 export default router

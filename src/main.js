@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, ipcMain, BrowserWindow, Notification, screen } from 'electron'
 import started from 'electron-squirrel-startup'
 import { getTokenService } from '@/api/loginService'
 import { createCustomWindow } from '@/utils/createWindow'
@@ -40,6 +40,8 @@ const createWindow = () => {
 app.whenReady().then(async () => {
   await refreshToken()
   createWindow()
+  
+  console.log('current os isSupport', Notification.isSupported())
   
   // 在 OS X 上，当
   // 单击 Dock 图标，并且没有打开其他窗口。

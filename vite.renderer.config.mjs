@@ -3,7 +3,7 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import vueDevTools from 'vite-plugin-vue-devtools'
+// import vueDevTools from 'vite-plugin-vue-devtools'
 import Components from 'unplugin-vue-components/vite'
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 // import zipPack from 'vite-plugin-zip-pack'
@@ -21,23 +21,25 @@ const pages = [
   {
     name: 'index',
     htmlName: 'index.html',
-    htmlPath: 'src/pages/index/',
-    outPagePath: 'pages/index/'
+    htmlPath: './',
+    path: pathResolve('./index.html'),
+    outPagePath: '/'
   },
   {
     name: 'monitor',
-    htmlName: 'index.html',
-    htmlPath: 'src/pages/monitor/',
-    outPagePath: 'pages/monitor/'
+    htmlName: 'monitor.html',
+    htmlPath: './',
+    path: pathResolve('./monitor.html'),
+    outPagePath: '/'
   }
 ]
-
-pages.forEach((page) => page.path = pathResolve(page.htmlPath + page.htmlName))
 
 const getEntryInput = () => pages.reduce((res, cur) => {
   res[cur.name] = cur.path;
   return res;
 }, {})
+
+console.log(getEntryInput())
 
 const multiplePagePlugin = () => ({
   name: "multiple-page-plugin",
@@ -62,7 +64,7 @@ export default defineConfig(() => {
       vue(),
       multiplePagePlugin(),
       vueJsx(),
-      vueDevTools(),
+      // vueDevTools(),
       Components({
         resolvers: [
           AntDesignVueResolver({
@@ -122,20 +124,7 @@ export default defineConfig(() => {
                      ? `${page.outPagePath.replace(/^\//, "")}assets/[name].[hash][extname]`
                      : "assets/[name].[hash][extname]"
             }
-          },
-          plugins: [
-            {
-              name: 'electron-path-fix',
-              generateBundle(options, bundle) {
-                for (const file in bundle) {
-                  if (file.endsWith('.html')) {
-                    const html = bundle[file]
-                    console.log(html)
-                  }
-                }
-              }
-            }
-          ]
+          }
         },
         plugins: [
           {
@@ -188,8 +177,11 @@ export default defineConfig(() => {
           target: 'http://djys-test-api.dajvision.com',
           changeOrigin: true
         },
+        '/iot': {
+          target: 'http://192.168.2.36:12688',
+          changeOrigin: true
+        },
         '/djys': {
-          // target: 'http://192.168.2.18:8082',
           target: 'https://djys-api.dajvision.com',
           changeOrigin: true
         }

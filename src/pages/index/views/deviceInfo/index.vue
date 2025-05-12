@@ -5,20 +5,7 @@
 
 <script setup>
 import deviceInfo from '@/pages/index/components/deviceInfo/index.vue'
-import { provide } from 'vue'
-import '@/pages/index/provide/boat.js'
-import { BOAT_INFO } from '@/pages/index/provide/boat.js'
-import { useBoatInfo } from '@/pages/index/composables/useBoatInfo.js'
-
 defineOptions({ name: 'DevicePage' })
-
-const { boatInfo, setBoatInfo, getBoatInfo } = useBoatInfo()
-
-provide(BOAT_INFO, {
-  boatInfo,
-  setBoatInfo,
-  getBoatInfo
-})
 </script>
 
 <style lang="scss" scoped>

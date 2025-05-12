@@ -5,18 +5,8 @@
 
 <script setup>
 import monitoringInfo from '@/pages/index/components/monitoringInfo/index.vue'
-import { provide } from 'vue'
-import { BOAT_INFO } from '@/pages/index/provide/boat.js'
-import { useBoatInfo } from '@/pages/index/composables/useBoatInfo.js'
 
 defineOptions({ name: 'MonitorPage' })
-
-const { boatInfo, getBoatInfo } = useBoatInfo()
-
-provide(BOAT_INFO, {
-  boatInfo,
-  getBoatInfo
-})
 </script>
 
 <style lang="scss" scoped>

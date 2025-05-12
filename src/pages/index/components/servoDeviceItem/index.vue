@@ -276,7 +276,7 @@ const deviceStatus = computed(() => {
       overflow-y: auto;
       position: relative;
       box-sizing: border-box;
-      width: vw(611);
+      width: vw(980);
       height: vh(700);
       padding: vh(20) vw(20) 0;
       background: linear-gradient(180deg, rgba(52, 88, 155, 0.27) 0%, rgba(48, 97, 219, 0.29) 100%);

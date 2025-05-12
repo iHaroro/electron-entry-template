@@ -11,18 +11,18 @@ export const getColumns = () => {
     // },
     {
       title: '设备名称',
-      dataIndex: 'name',
+      dataIndex: 'deviceName',
       align: 'center',
       width: 278
     },
     {
       title: '报警内容',
-      dataIndex: 'content',
+      dataIndex: 'message',
       align: 'center'
     },
     {
       title: '报警时间',
-      dataIndex: 'alarmTime',
+      dataIndex: 'createTime',
       align: 'center',
       width: 278
     }

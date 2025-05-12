@@ -5,6 +5,19 @@
         <div class="table-page-box">
           <div class="search-box">
             <a-form layout="inline">
+              <a-form-item label="报警类型">
+                <a-select
+                  ref="select"
+                  allow-clear
+                  class="from-input search-from-item-input"
+                  v-model:value="alarmType"
+                  placeholder="请选择报警类型"
+                >
+                  <a-select-option v-for="item in alarmTypeList" :value="item.code" :key="item.code">
+                    {{ item.name }}
+                  </a-select-option>
+                </a-select>
+              </a-form-item>
               <a-form-item label="选择设备">
                 <a-select
                   ref="select"
@@ -13,8 +26,8 @@
                   v-model:value="deviceType"
                   placeholder="请选择设备"
                 >
-                  <a-select-option v-for="boat in deviceTypeList" :value="boat.code" :key="boat.code">
-                    {{ boat.name }}
+                  <a-select-option v-for="item in deviceTypeList" :value="item.code" :key="item.code">
+                    {{ item.name }}
                   </a-select-option>
                 </a-select>
               </a-form-item>
@@ -49,18 +62,18 @@
             >
               <template #bodyCell="{ column, text }">
                 <!--设备名称-->
-                <template v-if="column.dataIndex === 'name'">
+                <template v-if="column.dataIndex === 'deviceName'">
                   <div class="device-name">
                     <img class="device-name-icon" src="../../assets/images/alarm_list_item_icon.png" :alt="text" />
                     设备名称：{{ text }}
                   </div>
                 </template>
                 <!--报警内容-->
-                <template v-if="column.dataIndex === 'content'">
+                <template v-if="column.dataIndex === 'message'">
                   <div class="device-warn-content">{{ text }}</div>
                 </template>
                 <!--报警时间-->
-                <template v-if="column.dataIndex === 'alarmTime'">
+                <template v-if="column.dataIndex === 'createTime'">
                   <div class="device-warn-time">{{ text }}</div>
                 </template>
               </template>
@@ -87,17 +100,16 @@
 import PageLayout from '@/pages/index/components/pageLayout/index.vue'
 import Empty from '@/pages/index/components/empty/index.vue'
 import dayjs from 'dayjs'
-import { onMounted, provide, ref } from 'vue'
-import { BOAT_INFO } from '@/pages/index/provide/boat.js'
-import { useBoatInfo } from '@/pages/index/composables/useBoatInfo.js'
-import { getColumns } from './columns.jsx'
+import { onMounted, ref } from 'vue'
+import { getColumns } from './columns.js'
 import { getDeviceAlarmList } from '@/pages/index/api/device'
 import { getDictName } from '@/pages/index/api/public'
 
 defineOptions({ name: 'AlarmInfoPage' })
 
 const loading = ref(false)
-const mmsi = ref(null)
+const alarmType = ref(null)
+const alarmTypeList = ref([])
 const deviceType = ref(null)
 const deviceTypeList = ref([])
 const date = ref([])
@@ -106,20 +118,6 @@ const total = ref(500)
 const pageNum = ref(1)
 const pageSize = ref(10)
 const columns = getColumns()
-
-const { boatInfo } = useBoatInfo()
-
-provide(BOAT_INFO, {
-  boatInfo
-})
-
-/**
- * @function setDefaultBoat
- * @description 设置默认船舶
- **/
-const setDefaultBoat = () => {
-  mmsi.value = boatInfo.value.mmsi
-}
 
 /**
  * @function resetHandler
@@ -154,6 +152,7 @@ const paginationChangeHandler = (page, pageSizes) => {
  **/
 const getDict = () => {
   getDictName({ type: ['device_type'] }).then((res) => {
+    alarmTypeList.value = res.data.alarm_type
     deviceTypeList.value = res.data.device_type
   })
 }
@@ -163,16 +162,18 @@ const getTableList = () => {
   const [startDate, endDate] = date.value || []
   getDeviceAlarmList({
     pageNum: pageNum.value,
-    pageSize: pageSize.value,
-    mmsi: mmsi.value,
+    pageSize: pageSize.value
+  }, {
+    type: alarmType.value,
     deviceType: deviceType.value,
-    name: '',
-    startDate: startDate ? dayjs(startDate).format('YYYY-MM-DD') : '',
-    endDate: endDate ? dayjs(endDate).format('YYYY-MM-DD') : ''
+    params: {
+      beginTime: startDate ? dayjs(startDate).format('YYYY-MM-DD') + ' 00:00:00' : '',
+      endTime: endDate ? dayjs(endDate).format('YYYY-MM-DD') + ' 23:59:59' : ''
+    }
   })
   .then((res) => {
-    dataSource.value = res.data.list
-    total.value = res.data.total
+    dataSource.value = res.rows
+    total.value = res.total
   })
   .then(() => {
     loading.value = false
@@ -180,7 +181,6 @@ const getTableList = () => {
 }
 
 onMounted(() => {
-  setDefaultBoat()
   getDict()
   resetHandler()
 })

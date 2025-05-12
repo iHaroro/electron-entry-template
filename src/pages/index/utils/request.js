@@ -14,11 +14,12 @@ import { getTokenFormApplication, cleanTokenFromApplication } from '@/pages/inde
 
 // 请求实例
 const service = axios.create({
+  // baseURL: '/djys', // api的base_url
   baseURL: import.meta.env.VITE_BASE_URL, // api的base_url
   timeout: 15000, // 请求超时时间
   headers: {
-    'Content-Type': 'application/json;',
-  },
+    'Content-Type': 'application/json;'
+  }
 })
 
 // 请求 拦截器
@@ -32,7 +33,7 @@ service.interceptors.request.use(
   (error) => {
     // setTimeout(hideLoading, hideDelay)
     return Promise.reject(error)
-  },
+  }
 )
 
 // 响应 拦截器
@@ -53,7 +54,7 @@ service.interceptors.response.use(
   (error) => {
     // setTimeout(hideLoading, hideDelay)
     return Promise.reject(error)
-  },
+  }
 )
 
 /**
@@ -74,7 +75,7 @@ const commonParamsAssignHandler = (config) => {
  * @returns {boolean} 业务请求是否成功，根据后端code判断，true：成功，false：失败
  **/
 const isRequestSuccess = (res = { errorMsg: undefined }) => {
-  let successCodes = ['200'] // 响应编码，200为正常，其他均为异常状态。注意和http返回编码区分。
+  let successCodes = [200, '200'] // 响应编码，200为正常，其他均为异常状态。注意和http返回编码区分。
   return successCodes.includes(res.code)
 }
 
@@ -85,10 +86,10 @@ const isRequestSuccess = (res = { errorMsg: undefined }) => {
  **/
 const handlerBusinessError = async (response) => {
   let {
-    data: { code },
+    data: { code }
   } = response
   switch (code) {
-    case '403': // token失效
+    case 403: // token失效
       // cleanTokenFromApplication()
       // message.error('登录失效，请重新登录')
       // location.replace('/login')

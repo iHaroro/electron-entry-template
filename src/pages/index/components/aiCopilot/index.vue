@@ -852,7 +852,7 @@ onUnmounted(() => {
 
         .no-signal-box {
           width: 100%;
-          height: calc(100% - vh(72));
+          height: calc(100% - vh(10));
           margin-top: vh(10);
 
           .no-signal-bg {

@@ -48,47 +48,47 @@ const leftMenus = ref([
   {
     name: '报警信息',
     path: '/alarmInfo',
-    routerName: 'MonitoringInfoPage'
+    routerName: 'AlarmInfoPage'
   },
   {
     name: '视频监控',
     path: '/monitoringInfo',
-    routerName: 'AlarmInfoPage'
-  },
-  {
-    name: '数据分析',
-    path: '/dataAnalysis',
-    routerName: 'DataAnalysisPage',
-    onClick: () => {
-      window.electronAPI.getShipAppConfig().then(res => {
-        if (res.isPackaged) {
-          // 打包后
-          window.electronAPI.openNewWindow(res.shipAppEntryPath, {
-            hash: '/dataAnalysis'
-          })
-        } else {
-          // 开发
-          window.electronAPI.openNewWindow(`${res.shipAppDevPath}/#/dataAnalysis`)
-        }
-      })
-    }
-  },
-  {
-    name: '测试智能监控',
-    onClick: () => {
-      window.electronAPI.getShipAppConfig().then(res => {
-        if (res.isPackaged) {
-          // 打包后
-          window.electronAPI.openNewWindow(res.shipMonitorAppEntryPath, {
-            hash: '/index'
-          })
-        } else {
-          // 开发
-          window.electronAPI.openNewWindow(`${res.monitorAppDevPath}/#/index`)
-        }
-      })
-    }
+    routerName: 'MonitoringInfoPage'
   }
+  // {
+  //   name: '数据分析',
+  //   path: '/dataAnalysis',
+  //   routerName: 'DataAnalysisPage',
+  //   onClick: () => {
+  //     window.electronAPI.getShipAppConfig().then(res => {
+  //       if (res.isPackaged) {
+  //         // 打包后
+  //         window.electronAPI.openNewWindow(res.shipAppEntryPath, {
+  //           hash: '/dataAnalysis'
+  //         })
+  //       } else {
+  //         // 开发
+  //         window.electronAPI.openNewWindow(`${res.shipAppDevPath}/#/dataAnalysis`)
+  //       }
+  //     })
+  //   }
+  // },
+  // {
+  //   name: '智能监控系统',
+  //   onClick: () => {
+  //     window.electronAPI.getShipAppConfig().then(res => {
+  //       if (res.isPackaged) {
+  //         // 打包后
+  //         window.electronAPI.openNewWindow(res.shipMonitorAppEntryPath, {
+  //           hash: '/index'
+  //         })
+  //       } else {
+  //         // 开发
+  //         window.electronAPI.openNewWindow(`${res.monitorAppDevPath}/#/index`)
+  //       }
+  //     })
+  //   }
+  // }
 ])
 
 const activeRouteName = computed(() => route.name)
