@@ -116,7 +116,7 @@
                 <LivePlayer
                   v-if="oceanVideoConfig.monitorUrl"
                   :key="`player_${TYPES.OCEAN_MAP.value}`"
-                  :url="'http://192.168.2.147/main/0.live.flv' || oceanVideoConfig.monitorUrl"
+                  :url="oceanVideoConfig.monitorUrl"
                 />
               </div>
               <div class="no-signal-box" v-else>
@@ -134,7 +134,7 @@
                 <LivePlayer
                   v-if="radarVideoConfig.monitorUrl"
                   :key="`player_${TYPES.RADAR.value}`"
-                  :url="'http://192.168.2.147/main/0.live.flv' || radarVideoConfig.monitorUrl"
+                  :url="radarVideoConfig.monitorUrl"
                 />
               </div>
               <div class="no-signal-box" v-else>
@@ -281,7 +281,6 @@ import dashboardMeter from '@/pages/index/components/dashboardMeter/index.vue'
 import LivePlayer from '@/pages/index/components/LivePlayer/index.vue'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { getDest, getDrivingCab, getShipSrs } from '@/pages/index/api/copilot.js'
-import { getShipDevice } from '@/pages/index/api/device.js'
 import { debugLog } from '@/pages/index/utils/utils.js'
 import { HOST_TYPE } from '@/pages/index/constants/device.js'
 import { decimalToDMS } from '@/pages/index/utils/utils.js'
@@ -304,9 +303,9 @@ const TYPES = {
 let timer = null
 let refreshUpdateShipMapTimer = null
 let refreshDisabled = false
-const refreshTime = 1000 * 10 // 10s刷新一次数据
-const OCEAN_MAP_KEY = ref(Date.now())
-const RADAR_KEY = ref(Date.now() + 1)
+const refreshTime = 1000 * 2 // 10s刷新一次数据
+const OCEAN_MAP_KEY = ref('OCEAN_MAP_KEY')
+const RADAR_KEY = ref('RADAR_KEY')
 const typesData = ref(TYPES)
 const currentTypeActive = ref(TYPES.OCEAN_MAP.value)
 const zfs = ref({}) // 真风速
@@ -446,44 +445,29 @@ const hostDevices = computed(() => {
 })
 
 /**
- * @function getShipDeviceData
- * @description 获取船舶设备数据
- **/
-const getShipDeviceData = async () => {
-  const shipDeviceRes = await getShipDevice()
-  deviceInfo.value = shipDeviceRes.data
-  console.log(shipDeviceRes.data)
-}
-
-/**
  * @function getShipSrsData
  * @description 获取船舶流媒体数据
  **/
 const getShipSrsData = async () => {
   const shipSrsRes = await getShipSrs()
-  const { data = [] } = shipSrsRes
-  // 先清空
-  oceanVideoConfig.value.monitorUrl = ''
-  radarVideoConfig.value.monitorUrl = ''
-  typesData.value.OCEAN_MAP.show = false
-  typesData.value.RADAR.show = false
-  OCEAN_MAP_KEY.value = Date.now()
-  RADAR_KEY.value = Date.now() + 1
+  const { data = {} } = shipSrsRes
+  // 是否配置海图视频流
+  if (data.marineChartAddress) {
+    debugLog('已配置海图视频流')
+    typesData.value.OCEAN_MAP.show = true
+    oceanVideoConfig.value.monitorUrl = data.marineChartAddress
+    OCEAN_MAP_KEY.value = Date.now() + data.marineChartAddress
+  }
 
-  data.forEach((item) => {
-    if (item.type === TYPES.OCEAN_MAP.value) {
-      // oceanSource.value.url = isDev ? testFlvUrl : item.monitorUrl
-      oceanVideoConfig.value.monitorUrl = item.monitorUrl
-      typesData.value.OCEAN_MAP.show = true
-      OCEAN_MAP_KEY.value = Date.now() + 2
-    } else if (item.type === TYPES.RADAR.value) {
-      // radarSource.value.url = isDev ? testFlvUrl : item.monitorUrl
-      radarVideoConfig.value.monitorUrl = item.monitorUrl
-      typesData.value.RADAR.show = true
-      RADAR_KEY.value = Date.now() + 3
-    }
-  })
+  // 是否配置雷达视频流
+  if (data.radarAddress) {
+    debugLog('已配置雷达视频流')
+    typesData.value.RADAR.show = true
+    radarVideoConfig.value.monitorUrl = data.radarAddress
+    RADAR_KEY.value = Date.now() + data.radarAddress
+  }
 
+  // 默认展示有配置的视频流
   if (typesData.value.OCEAN_MAP.show) {
     currentTypeActive.value = TYPES.OCEAN_MAP.value
   } else if (typesData.value.RADAR.show) {
@@ -493,7 +477,6 @@ const getShipSrsData = async () => {
 
 const getDestData = () => {
   getDest().then((res) => {
-    console.log(res)
     destInfo.value = res.data
   })
 }
@@ -507,7 +490,6 @@ const refreshCopilotData = () => {
   debugLog('加载数据')
   getDestData()
   getDrivingCabData()
-  // getShipDeviceData()
 
   timer = setTimeout(() => {
     refreshCopilotData()

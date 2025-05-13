@@ -12,8 +12,8 @@ export const getDrivingCab = (data) => {
 // 获取智能驾驶海图，雷达数据
 export const getShipSrs = (data) => {
   return request({
-    url: '/largeScreen/shipSrs',
-    method: 'POST',
+    url: '/radarMarineInfo',
+    method: 'GET',
     data,
   })
 }

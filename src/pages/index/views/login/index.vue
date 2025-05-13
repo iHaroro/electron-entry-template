@@ -18,6 +18,7 @@
             type="text"
             placeholder="请输入账户名"
             maxlength="50"
+            autofocus
             @keyup.enter="loginHandler"
           />
         </div>
@@ -47,7 +48,7 @@
 import { computed, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { message } from 'ant-design-vue'
-import { phoneLogin } from '@/pages/index/api/user'
+import { setLogin } from '@/pages/index/api/user'
 import { setTokenToApplication } from '@/pages/index/utils/userInfo.js'
 import { handlerPromise } from '@/pages/index/utils/utils.js'
 
@@ -77,7 +78,7 @@ const loginHandler = async () => {
     message.warn('请输入密码')
   } else {
     loginLoading.value = true
-    const [loginErr, loginRes] = await handlerPromise(phoneLogin({ username, password }))
+    const [loginErr, loginRes] = await handlerPromise(setLogin({ username, password }))
     setTimeout(() => {
       loginLoading.value = false
     }, 500)

@@ -27,8 +27,11 @@ const service = axios.create({
 service.interceptors.request.use(
   async (config) => {
     // showLoading()
+    const token = getTokenFormApplication()
     // ！！！Bearer后间隔空格
-    config.headers['Authorization'] = `Bearer ${getTokenFormApplication()}`
+    if (token && config.url !== '/login') {
+      config.headers['Authorization'] = `Bearer ${getTokenFormApplication()}`
+    }
     commonParamsAssignHandler(config)
     return config
   },

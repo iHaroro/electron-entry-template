@@ -1,8 +1,9 @@
 <script setup>
 import dayjs from 'dayjs'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, nextTick } from 'vue'
 import { cleanTokenFromApplication } from '@/pages/index/utils/userInfo'
 import { getCurrentPagePath } from '@/pages/index/utils/utils'
+import { setLogout } from '@/pages/index/api/user'
 
 defineOptions({
   name: 'TimeBox'
@@ -36,9 +37,12 @@ const nowTime = computed(() => {
 })
 
 const logout = () => {
-  cleanTokenFromApplication()
-  const pagePath = getCurrentPagePath()
-  location.replace(`${pagePath}#/login`)
+  setLogout()
+  nextTick(() => {
+    cleanTokenFromApplication()
+    const pagePath = getCurrentPagePath()
+    location.replace(`${pagePath}#/login`)
+  })
 }
 
 const updateTime = () => {
