@@ -1,9 +1,30 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue'
 import dayjs from 'dayjs'
+import { computed, onMounted, ref } from 'vue'
+import { cleanTokenFromApplication } from '@/pages/index/utils/userInfo'
+import { getCurrentPagePath } from '@/pages/index/utils/utils'
 
 defineOptions({
   name: 'TimeBox'
+})
+
+const props = defineProps({
+  timeBoxStyle: {
+    type: Object,
+    default: () => ({})
+  },
+  dateStyle: {
+    type: Object,
+    default: () => ({})
+  },
+  timeStyle: {
+    type: Object,
+    default: () => ({})
+  },
+  hasLogout: {
+    type: Boolean,
+    default: true
+  }
 })
 
 const datetime = ref(Date.now())
@@ -13,6 +34,12 @@ const nowDate = computed(() => {
 const nowTime = computed(() => {
   return dayjs(datetime.value).format('HH:mm:ss')
 })
+
+const logout = () => {
+  cleanTokenFromApplication()
+  const pagePath = getCurrentPagePath()
+  location.replace(`${pagePath}#/login`)
+}
 
 const updateTime = () => {
   setTimeout(() => {
@@ -27,9 +54,19 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="time-box">
-    <span class="date">{{ nowDate }}</span>
-    <span class="time">{{ nowTime }}</span>
+  <div class="time-box" :style="timeBoxStyle">
+    <span class="date" :style="dateStyle">{{ nowDate }}</span>
+    <span class="time" :style="timeStyle">{{ nowTime }}</span>
+    <a-popconfirm
+      v-if="hasLogout"
+      placement="bottom"
+      title="是否确认退出登录？"
+      ok-text="确认"
+      cancel-text="取消"
+      @confirm="logout"
+    >
+      <div class="logout-box"></div>
+    </a-popconfirm>
   </div>
 </template>
 
@@ -54,6 +91,7 @@ onMounted(() => {
   }
 
   .logout-box {
+    cursor: pointer;
     width: vh(28);
     height: vh(28);
     margin-left: vw(28);

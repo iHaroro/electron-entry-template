@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import { getConfigFromApplication, setConfigToApplication } from '@/pages/index/utils/userInfo.js'
+import { getTokenFormApplication } from '@/pages/index/utils/userInfo'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -8,6 +8,11 @@ const router = createRouter({
     {
       path: '/',
       redirect: '/aiCopilot'
+    },
+    {
+      path: '/login',
+      name: 'LoginPage',
+      component: () => import('@/pages/index/views/login/index.vue')
     },
     {
       path: '/aiCopilot',
@@ -38,11 +43,19 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  const token = getTokenFormApplication()
   console.log('路由跳转')
   console.log('to', to)
   console.log('from', from)
-  const config = getConfigFromApplication()
-  console.log('系统配置', config)
+  const whiteList = ['/login']
+  if (token || whiteList.includes(to.path)) {
+    // 已登录
+    next()
+  } else {
+    console.log(to)
+    // 未登录
+    next({ path: '/login' })
+  }
   next()
 })
 

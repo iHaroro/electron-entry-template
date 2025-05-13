@@ -81,8 +81,8 @@ export const getUrlKey = (name) => {
  **/
 export const getDataByValue = (dataObject, value, options = { value: 'value' }) => {
   return Object.keys(dataObject)
-    .map((key) => dataObject[key])
-    .find((item) => item[options.value] === value)
+  .map((key) => dataObject[key])
+  .find((item) => item[options.value] === value)
 }
 
 /**
@@ -145,8 +145,8 @@ export const debugLog = (
   data,
   name = 'DEBUG LOG',
   styles = {
-    background: 'red',
-  },
+    background: 'red'
+  }
 ) => {
   let stylesStr = ''
   Object.keys(styles).forEach((item) => {
@@ -202,6 +202,47 @@ export const decimalToDMS = (decimal, decimalPlaces = 0) => {
   // 计算并四舍五入秒数
   const seconds = (minutesWithDecimal - minutes) * 60
   const roundedSeconds = Number(Math.round(seconds + 'e' + decimalPlaces) + 'e-' + decimalPlaces)
-
+  
   return `${degrees}°${minutes}'${roundedSeconds.toFixed(decimalPlaces)}"`
+}
+
+/**
+ * @function getCurrentPagePath
+ * @description 获取当前页面路径
+ * @returns {string} 返回当前页面路径
+ **/
+export const getCurrentPagePath = () => {
+  const portStr = location.port
+                  ? `:${location.port}`
+                  : ''
+  return `${location.protocol}//${location.hostname}${portStr}${location.pathname}`
+}
+
+/**
+ * @function downloadBlobExcelFile
+ * @description 下载Blob文件
+ * @param {object} blobRes blob数据
+ * @param {string} fileName 文件名
+ **/
+export const downloadBlobExcelFile = (blobRes, fileName) => {
+  // 创建Blob对象
+  const blob = new Blob([blobRes], { type: 'application/vnd.ms-excel' });
+  
+  // 创建下载链接
+  const downloadUrl = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = downloadUrl;
+  
+  // 设置下载文件名
+  link.download = fileName;
+  
+  // 触发下载
+  document.body.appendChild(link);
+  link.click();
+  
+  // 清理
+  setTimeout(() => {
+    document.body.removeChild(link);
+    URL.revokeObjectURL(downloadUrl);
+  }, 100);
 }

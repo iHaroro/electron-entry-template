@@ -36,18 +36,18 @@
               </a-form-item>
             </a-form>
 
-            <div class="reset-btn" @click="resetHandler">
+            <a-button type="ghost" class="reset-btn" @click="resetHandler">
               <img class="btn-icon" src="../../assets/images/reset_icon.png" alt="" />
               重置
-            </div>
-            <div class="confirm-btn" @click="confirmHandler">
+            </a-button>
+            <a-button type="ghost" class="confirm-btn" @click="confirmHandler">
               <img class="btn-icon" src="../../assets/images/confirm_icon.png" alt="" />
               确认
-            </div>
-            <!--<div class="reset-btn" @click="resetHandler">-->
-            <!--  <img class="btn-icon" src="@pages/index/assets/images/export_icon.png" alt="" />-->
-            <!--  导出历史-->
-            <!--</div>-->
+            </a-button>
+            <a-button type="ghost" class="reset-btn" :loading="exportLoading" @click="exportHandler">
+              <img class="btn-icon" src="../../assets/images/export_icon.png" alt="" />
+              导出历史
+            </a-button>
           </div>
 
           <div class="table-box">
@@ -102,12 +102,14 @@ import Empty from '@/pages/index/components/empty/index.vue'
 import dayjs from 'dayjs'
 import { onMounted, ref } from 'vue'
 import { getColumns } from './columns.js'
-import { getDeviceAlarmList } from '@/pages/index/api/device'
+import { getDeviceAlarmExportList, getDeviceAlarmList } from '@/pages/index/api/device'
 import { getDictName } from '@/pages/index/api/public'
+import { downloadBlobExcelFile } from '@/pages/index/utils/utils'
 
 defineOptions({ name: 'AlarmInfoPage' })
 
 const loading = ref(false)
+const exportLoading = ref(false)
 const alarmType = ref(null)
 const alarmTypeList = ref([])
 const deviceType = ref(null)
@@ -126,6 +128,7 @@ const columns = getColumns()
 const resetHandler = () => {
   pageNum.value = 1
   pageSize.value = 10
+  alarmType.value = null
   deviceType.value = null
   date.value = []
   getTableList()
@@ -138,6 +141,27 @@ const resetHandler = () => {
 const confirmHandler = () => {
   pageNum.value = 1
   getTableList()
+}
+
+const exportHandler = async () => {
+  exportLoading.value = true
+  const [startDate, endDate] = date.value || []
+  try {
+    const res = await getDeviceAlarmExportList({
+      type: alarmType.value,
+      deviceType: deviceType.value,
+      params: {
+        beginTime: startDate ? dayjs(startDate).format('YYYY-MM-DD') + ' 00:00:00' : '',
+        endTime: endDate ? dayjs(endDate).format('YYYY-MM-DD') + ' 23:59:59' : ''
+      }
+    })
+    downloadBlobExcelFile(res, `报警信息_${dayjs().format('YYYYMMDDHHmmss')}.xlsx`)
+  } catch (error) {
+    console.log('导出失败:', error)
+  } finally {
+    console.log('导出结束')
+    exportLoading.value = false
+  }
 }
 
 const paginationChangeHandler = (page, pageSizes) => {

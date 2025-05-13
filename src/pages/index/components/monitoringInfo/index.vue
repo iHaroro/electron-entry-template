@@ -124,8 +124,8 @@ const getCameraConfigList = async () => {
   cameraConfigList.value = configList.map((item, index) => {
     return {
       ...item,
-      // TODO MOCK
-      url: 'https://mister-ben.github.io/videojs-flvjs/bbb.flv' || item.address,
+      // 'https://mister-ben.github.io/videojs-flvjs/bbb.flv'
+      url: item.address,
       key: `live-video-${index}-${item.name}`,
       ref: null
     }

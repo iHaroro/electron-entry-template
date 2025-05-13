@@ -5,22 +5,7 @@
 
 <script setup>
 import aiCopilot from '@/pages/index/components/aiCopilot/index.vue'
-import { provide } from 'vue'
-import { BOAT_INFO } from '@/pages/index/provide/boat.js'
-import { useBoatInfo } from '@/pages/index/composables/useBoatInfo.js'
-
 defineOptions({ name: 'AiCopilotPage' })
-
-const { boats, boatInfo, setBoatInfo, getBoatInfo, setBoats, getBoats } = useBoatInfo()
-
-provide(BOAT_INFO, {
-  boats,
-  boatInfo,
-  setBoatInfo,
-  setBoats,
-  getBoatInfo,
-  getBoats,
-})
 </script>
 
 <style lang="scss" scoped>

@@ -14,18 +14,17 @@
             <div class="left-box_top-list-box">
               <div class="left-box-top_state">
                 <div class="left-box_top-list-box-from-box">
-                  <p :title="destInfo.legStartPortNameCn">{{ destInfo.legStartPortNameCn }}</p>
-                  <p>[{{ destInfo.legStartPortCtryCode }}]</p>
+                  <p :title="destInfo.startPortNameCn">{{ destInfo.startPortNameCn }}</p>
+                  <p>[{{ destInfo.startPortCode }}]</p>
                 </div>
                 <div class="left-box_top-list-box-state-box">
-                  <div class="state-name-cn">{{ boatInfo.statusNameCn }}</div>
+                  <div class="state-name-cn">{{ destInfo.dynamicTypeCn }}</div>
                   <img class="to-from-icon" src="../../assets/images/to_from_icon.png" alt="" />
-                  <!--<div class="state-end-time">ETA：{{ boatInfo.eta }}</div>-->
-                  <!--<div class="state-end-time">ETA：{{ destInfo.legEndTime }}</div>-->
+                  <div class="state-end-time">ETA：{{ destInfo.cta || '--' }}</div>
                 </div>
                 <div class="left-box_top-list-box-to-box">
-                  <p :title="destInfo.legEndPortNameCn">{{ destInfo.legEndPortNameCn }}</p>
-                  <p>[{{ destInfo.legEndPortCtryCode }}]</p>
+                  <p :title="destInfo.endPortNameCn">{{ destInfo.endPortNameCn }}</p>
+                  <p>[{{ destInfo.endPortCode }}]</p>
                 </div>
               </div>
             </div>
@@ -280,8 +279,7 @@ import dashboardCompassEmpty from '@/pages/index/components/dashboardCompassEmpt
 import dashboardAiServo from '@/pages/index/components/dashboardAiServo/index.vue'
 import dashboardMeter from '@/pages/index/components/dashboardMeter/index.vue'
 import LivePlayer from '@/pages/index/components/LivePlayer/index.vue'
-import { computed, inject, onMounted, onUnmounted, ref } from 'vue'
-import { BOAT_INFO } from '@/pages/index/provide/boat.js'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { getDest, getDrivingCab, getShipSrs } from '@/pages/index/api/copilot.js'
 import { getShipDevice } from '@/pages/index/api/device.js'
 import { debugLog } from '@/pages/index/utils/utils.js'
@@ -303,18 +301,10 @@ const TYPES = {
   }
 }
 
-const UPDATE_TYPE = {
-  MAP: 'map',
-  LD: 'ld'
-}
-
 let timer = null
 let refreshUpdateShipMapTimer = null
 let refreshDisabled = false
 const refreshTime = 1000 * 10 // 10s刷新一次数据
-const boatInfoInject = inject(BOAT_INFO)
-const boatInfo = computed(() => boatInfoInject.getBoatInfo())
-const boat = ref(null) // 当前的选中的船舶
 const OCEAN_MAP_KEY = ref(Date.now())
 const RADAR_KEY = ref(Date.now() + 1)
 const typesData = ref(TYPES)
@@ -352,15 +342,6 @@ const setRadarRef = (el) => {
 }
 
 /**
- * @function setDefaultShip
- * @description 设置当前船舶
- **/
-const setDefaultShip = () => {
-  const boatInfo = boatInfoInject.getBoatInfo()
-  boat.value = boatInfo.mmsi ? `${boatInfo.mmsi}` : null
-}
-
-/**
  * @function changeType
  * @description 切换数据流视频类型
  * @param {string} value 当前选中的类型
@@ -379,7 +360,7 @@ const changeType = (value) => {
  * @description 获取驾驶舱数据
  **/
 const getDrivingCabData = async () => {
-  const drivingCabRes = await getDrivingCab({ mmsi: boat.value })
+  const drivingCabRes = await getDrivingCab()
   // 字段配置
   zfs.value = drivingCabRes.data.zfs
   zfx.value = drivingCabRes.data.zfx
@@ -469,7 +450,7 @@ const hostDevices = computed(() => {
  * @description 获取船舶设备数据
  **/
 const getShipDeviceData = async () => {
-  const shipDeviceRes = await getShipDevice({ mmsi: boat.value })
+  const shipDeviceRes = await getShipDevice()
   deviceInfo.value = shipDeviceRes.data
   console.log(shipDeviceRes.data)
 }
@@ -479,7 +460,7 @@ const getShipDeviceData = async () => {
  * @description 获取船舶流媒体数据
  **/
 const getShipSrsData = async () => {
-  const shipSrsRes = await getShipSrs({ mmsi: boat.value })
+  const shipSrsRes = await getShipSrs()
   const { data = [] } = shipSrsRes
   // 先清空
   oceanVideoConfig.value.monitorUrl = ''
@@ -511,7 +492,8 @@ const getShipSrsData = async () => {
 }
 
 const getDestData = () => {
-  getDest({ mmsi: boat.value }).then((res) => {
+  getDest().then((res) => {
+    console.log(res)
     destInfo.value = res.data
   })
 }
@@ -525,7 +507,7 @@ const refreshCopilotData = () => {
   debugLog('加载数据')
   getDestData()
   getDrivingCabData()
-  getShipDeviceData()
+  // getShipDeviceData()
 
   timer = setTimeout(() => {
     refreshCopilotData()
@@ -533,7 +515,6 @@ const refreshCopilotData = () => {
 }
 
 onMounted(() => {
-  setDefaultShip()
   refreshCopilotData()
   getShipSrsData()
 })
@@ -670,8 +651,8 @@ onUnmounted(() => {
 
             .left-box_top-list-box-state-box {
               flex: 1;
-              //margin-top: vh(88);
-              margin-top: vh(108);
+              margin-top: vh(88);
+              //margin-top: vh(108);
               text-align: center;
 
               .state-name-cn {

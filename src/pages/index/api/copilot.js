@@ -18,21 +18,11 @@ export const getShipSrs = (data) => {
   })
 }
 
-// 轮询通知设备推流
-export const updateShipMap = (data) => {
-  return request({
-    url: '/mqtt/updateShipMap',
-    method: 'POST',
-    data,
-  })
-}
-
-
 // 获取船舶始发港信息
 export const getDest = (data) => {
   return request({
-    url: '/largeScreen/getDest',
-    method: 'POST',
+    url: '/coscoInfo',
+    method: 'GET',
     data,
   })
 }
