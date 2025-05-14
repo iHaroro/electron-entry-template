@@ -1,6 +1,7 @@
 import { app, BrowserWindow } from 'electron'
 import started from 'electron-squirrel-startup'
 import { createCustomWindow } from '@/utils/createWindow'
+import { initVueDevTools } from '@/utils/vueDevTools'
 import { initIpcHandles } from '@/ipcMain/handle'
 import { initIpcOns } from '@/ipcMain/on'
 import { shipAppEntryPath, shipAppDevPath } from './config'
@@ -31,7 +32,14 @@ const createWindow = () => {
 }
 
 app.whenReady().then(() => {
+  initVueDevTools()
   createWindow()
+  
+  // 渲染进程用 ipcRenderer.send 发，主进程用 ipcMain.on接，不期待返回；
+  // 渲染进程用 ipcRenderer.invoke 发，主进程用 ipcMain.handle接，期待返回；
+  // 统一注册ipc通信事件
+  initIpcHandles(mainWindow)
+  initIpcOns(mainWindow)
   
   // 在 OS X 上，当单击 Dock 图标，并且没有打开其他窗口。
   app.on('activate', () => {
@@ -39,12 +47,6 @@ app.whenReady().then(() => {
       createWindow()
     }
   })
-  
-  // 渲染进程用 ipcRenderer.send 发，主进程用 ipcMain.on接，不期待返回；
-  // 渲染进程用 ipcRenderer.invoke 发，主进程用 ipcMain.handle接，期待返回；
-  // 统一注册ipc通信事件
-  initIpcHandles(mainWindow)
-  initIpcOns(mainWindow)
 })
 
 // 当所有窗口都关闭时退出，macOS 除外。在那里，这很常见
