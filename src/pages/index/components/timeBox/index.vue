@@ -1,9 +1,7 @@
 <script setup>
 import dayjs from 'dayjs'
-import { computed, onMounted, ref, nextTick } from 'vue'
-import { cleanTokenFromApplication } from '@/pages/index/utils/userInfo'
-import { getCurrentPagePath } from '@/pages/index/utils/utils'
-import { setLogout } from '@/pages/index/api/user'
+import { computed, onMounted, ref } from 'vue'
+import { useAppControlStore } from '@/pages/index/stores/appControl'
 
 defineOptions({
   name: 'TimeBox'
@@ -36,14 +34,7 @@ const nowTime = computed(() => {
   return dayjs(datetime.value).format('HH:mm:ss')
 })
 
-const logout = () => {
-  setLogout()
-  nextTick(() => {
-    cleanTokenFromApplication()
-    const pagePath = getCurrentPagePath()
-    location.replace(`${pagePath}#/login`)
-  })
-}
+const appControlStore = useAppControlStore()
 
 const updateTime = () => {
   setTimeout(() => {
@@ -67,7 +58,7 @@ onMounted(() => {
       title="是否确认退出登录？"
       ok-text="确认"
       cancel-text="取消"
-      @confirm="logout"
+      @confirm="appControlStore.logout"
     >
       <div class="logout-box"></div>
     </a-popconfirm>

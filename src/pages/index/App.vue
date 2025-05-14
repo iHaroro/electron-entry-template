@@ -12,6 +12,7 @@ import { theme } from 'ant-design-vue'
 import { storeToRefs } from 'pinia'
 import { RouterView } from 'vue-router'
 import { useLoadingStore } from '@/pages/index/stores/loadingControl.js'
+import { useAppControlStore } from '@/pages/index/stores/appControl'
 
 defineOptions({ name: 'ShipApp' })
 
@@ -23,4 +24,10 @@ const customTheme = {
   token: {},
   components: {}
 }
+
+const appControlStore = useAppControlStore()
+
+window.electronAPI.addListener('logout', () => {
+  appControlStore.logout()
+})
 </script>

@@ -13,5 +13,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
     loadOptions
   }),
   getShipAppConfig: () => ipcRenderer.invoke('getShipAppConfig'),
-  openDevTools: () => ipcRenderer.send('openDevTools')
+  openDevTools: () => ipcRenderer.send('openDevTools'),
+  addListener: (channel, listener) => ipcRenderer.addListener(channel, listener)
 })

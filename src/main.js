@@ -15,7 +15,7 @@ if (started) {
 let mainWindow = null
 
 const createWindow = () => {
-  // 创建浏览器窗口。
+  // 创建浏览器窗口
   mainWindow = createCustomWindow()
   // 加载web应用首页
   loadMainWindowHome(mainWindow)
