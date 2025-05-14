@@ -3,7 +3,7 @@
     <div class="left-box"></div>
     <div class="right-box">
       <div class="logo-box">
-        <img class="logo-icon" src="@/pages/index/assets/images/login_logo.png" alt="云视船舶" />
+        <img class="logo-icon" src="@/pages/index/assets/images/login_logo.png" alt="云视船舶" @click="continuousClickHandler" />
       </div>
       <div class="title-box">
         <div class="title-box-title">欢迎登录</div>
@@ -95,6 +95,19 @@ const loginHandler = async () => {
     }
   }
 }
+
+const clickRecords = ref([])
+
+const continuousClickHandler = () => {
+  const now = Date.now()
+  clickRecords.value = clickRecords.value.filter(time => now - time < 1000)
+  clickRecords.value.push(now)
+
+  if (clickRecords.value.length >= 5) {
+    window.electronAPI.openDevTools()
+    clickRecords.value = []
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -134,6 +147,8 @@ const loginHandler = async () => {
       text-align: center;
 
       .logo-icon {
+        appearance: none;
+        user-select: none;
         width: vh(120);
         height: vh(120);
       }

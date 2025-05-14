@@ -39,10 +39,6 @@ import registerDirectives from '@/pages/index/directive'
 // 工具方法。
 import { fitChartSize } from '@/pages/index/assets/js/dataUtils.js'
 
-window.electronAPI?.getToken().then((token) => {
-  localStorage.setItem('token', token)
-})
-
 const app = createApp(App)
 
 // 注册全局方法

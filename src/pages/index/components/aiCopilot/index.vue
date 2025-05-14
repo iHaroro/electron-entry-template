@@ -489,7 +489,7 @@ const refreshCopilotData = () => {
   if (refreshDisabled) return
   debugLog('加载数据')
   getDestData()
-  getDrivingCabData()
+  // getDrivingCabData()
 
   timer = setTimeout(() => {
     refreshCopilotData()
@@ -498,7 +498,7 @@ const refreshCopilotData = () => {
 
 onMounted(() => {
   refreshCopilotData()
-  getShipSrsData()
+  // getShipSrsData()
 })
 
 onUnmounted(() => {
