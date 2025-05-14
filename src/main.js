@@ -4,7 +4,7 @@ import { createCustomWindow } from '@/utils/createWindow'
 import { initVueDevTools } from '@/utils/vueDevTools'
 import { initIpcHandles } from '@/ipcMain/handle'
 import { initIpcOns } from '@/ipcMain/on'
-import { shipAppEntryPath, shipAppDevPath } from './config'
+import { loadMainWindowHome } from '@/utils/loadMainWindow'
 
 // 安装/卸载时处理在 Windows 上创建/删除快捷方式。
 if (started) {
@@ -17,18 +17,8 @@ let mainWindow = null
 const createWindow = () => {
   // 创建浏览器窗口。
   mainWindow = createCustomWindow()
-  
-  // 并加载应用程序的 index.html
-  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
-    mainWindow.loadURL(shipAppDevPath)
-  } else {
-    mainWindow.loadFile(shipAppEntryPath)
-    
-    // 拦截所有路由请求，确保返回 index.html
-    // mainWindow.webContents.on('did-fail-load', () => {
-    //   mainWindow.loadFile(shipAppEntryPath)
-    // })
-  }
+  // 加载web应用首页
+  loadMainWindowHome(mainWindow)
 }
 
 app.whenReady().then(() => {

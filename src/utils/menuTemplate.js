@@ -1,10 +1,17 @@
 import { app, Menu } from 'electron'
+import { loadMainWindowHome } from '@/utils/loadMainWindow'
 
-export const getMenuTemplate = (win) => {
+export const getMenuTemplate = (mainWindow) => {
   const menus = [
     {
       label: "窗口",
       submenu: [
+        {
+          label: '首页',
+          click: () => {
+            loadMainWindowHome(mainWindow)
+          }
+        },
         {
           label: '刷新',
           role: 'reload'
@@ -17,14 +24,14 @@ export const getMenuTemplate = (win) => {
           label: "打开全屏",
           accelerator: "F11",
           click: () => {
-            win.setFullScreen(true);
+            mainWindow.setFullScreen(true);
           }
         },
         {
           label: "退出全屏",
           accelerator: "Esc",
           click: () => {
-            win.setFullScreen(false);
+            mainWindow.setFullScreen(false);
           }
         }
       ]
