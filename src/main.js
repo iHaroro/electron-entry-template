@@ -8,7 +8,6 @@ import { loadMainWindowHome } from '@/utils/loadMainWindow'
 
 // 安装/卸载时处理在 Windows 上创建/删除快捷方式。
 if (started) {
-  console.log('started')
   app.quit()
 }
 
@@ -16,7 +15,7 @@ let mainWindow = null
 
 const createWindow = () => {
   // 创建浏览器窗口
-  mainWindow = createCustomWindow()
+  mainWindow = createCustomWindow({ fullscreen: true })
   // 加载web应用首页
   loadMainWindowHome(mainWindow)
 }

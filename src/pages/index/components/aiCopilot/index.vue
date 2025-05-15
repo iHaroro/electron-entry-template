@@ -1017,7 +1017,7 @@ onUnmounted(() => {
           .sailing-bottom-box {
             display: flex;
             justify-content: center;
-            margin-top: vh(30);
+            margin-top: vh(58);
             padding: 0 vw(52);
 
             .sailing-bottom-item {
