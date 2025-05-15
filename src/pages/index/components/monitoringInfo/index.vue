@@ -280,8 +280,10 @@ onMounted(() => {
 
             .device-tab-item {
               display: inline-block;
+              text-align: center;
               position: relative;
               cursor: pointer;
+              min-width: vh(35);
               height: vh(29);
               margin-left: vw(12);
               margin-right: vw(12);
