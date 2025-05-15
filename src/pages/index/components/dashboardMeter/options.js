@@ -23,6 +23,12 @@ export const getOptions = (value, min, max) => {
         z: 5,
         startAngle,
         endAngle,
+        pointer: {
+          show: true,
+          length: '55%',
+          width: 10,
+          icon: pointer,
+        },
         axisLine: {
           show: true,
           lineStyle: {
@@ -47,6 +53,7 @@ export const getOptions = (value, min, max) => {
         detail: {
           show: false,
         },
+        data: [{ value }],
       },
       {
         name: '',
@@ -58,6 +65,9 @@ export const getOptions = (value, min, max) => {
         endAngle,
         radius: '100%',
         splitNumber: 0, // Math.floor(((value / max) * 100) / 10),
+        pointer: {
+          show: false,
+        },
         axisLine: {
           show: true,
           lineStyle: {
@@ -122,12 +132,6 @@ export const getOptions = (value, min, max) => {
             fontSize: 14,
             color: '#ffffff',
           },
-        },
-        pointer: {
-          show: true,
-          length: '55%',
-          width: 10,
-          icon: pointer,
         },
         detail: {
           show: false,

@@ -124,6 +124,7 @@ const getCameraConfigList = async () => {
   cameraConfigList.value = configList.map((item, index) => {
     return {
       ...item,
+      name: item ? item.name.trim() : '',
       // 'https://mister-ben.github.io/videojs-flvjs/bbb.flv'
       url: item.address,
       key: `live-video-${index}-${item.name}`,
@@ -282,7 +283,8 @@ onMounted(() => {
               position: relative;
               cursor: pointer;
               height: vh(29);
-              margin-right: vw(24);
+              margin-left: vw(12);
+              margin-right: vw(12);
               font-weight: 500;
               font-size: vh(16);
               line-height: 1;

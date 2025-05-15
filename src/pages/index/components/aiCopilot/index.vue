@@ -168,10 +168,8 @@
                 </div>
                 <div class="sailing-top-item position">
                   <div class="sailing-info-box">
-                    <!--<p class="sailing-info-value">{{ longitude.value }}{{ longitude.unit }}E</p>-->
-                    <!--<p class="sailing-info-value">{{ latitude.value }}{{ latitude.unit }}N</p>-->
-                    <p class="sailing-info-value">{{ decimalToDMS(longitude.value) }}E</p>
-                    <p class="sailing-info-value">{{ decimalToDMS(latitude.value) }}N</p>
+                    <p class="sailing-info-value">{{ longitude }}E</p>
+                    <p class="sailing-info-value">{{ latitude }}N</p>
                     <p class="sailing-info-desc">经度/纬度</p>
                   </div>
                 </div>
@@ -257,9 +255,9 @@
               <div class="dashboard-servo-box">
                 <dashboardAiServo
                   class="servo-box"
-                  :model-value="dfx.value"
-                  :min="dfx.min"
-                  :max="dfx.max"
+                  :model-value="dfx"
+                  :min="40"
+                  :max="40"
                   :textStyle="{ fontSize: 26 }"
                 />
               </div>
@@ -284,6 +282,7 @@ import { getDest, getDrivingCab, getShipSrs } from '@/pages/index/api/copilot.js
 import { debugLog } from '@/pages/index/utils/utils.js'
 import { HOST_TYPE } from '@/pages/index/constants/device.js'
 import { decimalToDMS } from '@/pages/index/utils/utils.js'
+import { getShipDevice } from '@/pages/index/api/device'
 
 defineOptions({ name: 'AiCopilot' })
 
@@ -312,12 +311,11 @@ const zfs = ref({}) // 真风速
 const zfx = ref({}) // 真风向
 const sfs = ref({}) // 视风速
 const sfx = ref({}) // 视风向
-const longitude = ref({}) // Gps纬度
-const latitude = ref({}) // Gps经度
+const longitude = ref(null) // Gps纬度
+const latitude = ref(null) // Gps经度
 const draftDepth = ref({}) // 水深度
 const speed = ref({}) // 水深度
-const dfx = ref({}) // 舵角
-const hostSpeed = ref({}) // 主机转速
+const dfx = ref(null) // 舵角
 const csx = ref(null) // 船艏向
 const deviceInfo = ref({}) // 当前船舶的设备信息
 const destInfo = ref({})
@@ -361,27 +359,51 @@ const changeType = (value) => {
 const getDrivingCabData = async () => {
   const drivingCabRes = await getDrivingCab()
   // 字段配置
-  zfs.value = drivingCabRes.data.zfs
-  zfx.value = drivingCabRes.data.zfx
-  sfs.value = drivingCabRes.data.sfs
-  sfx.value = drivingCabRes.data.sfx
-  longitude.value = drivingCabRes.data.longitude
-  latitude.value = drivingCabRes.data.latitude
-  draftDepth.value = drivingCabRes.data.draftDepth
-  speed.value = drivingCabRes.data.speed
-  dfx.value = drivingCabRes.data.dfx
-  hostSpeed.value = drivingCabRes.data.hostSpeed
-  csx.value = drivingCabRes.data.csx
+  console.log('drivingCabRes:', drivingCabRes)
 
-  // zfs.value.value = 13
-  // zfx.value.value = 10
-  // sfs.value.value = 14
-  // sfx.value.value = 10
-  // longitude.value.value = 13.378137
-  // latitude.value.value = 151.378173
-  // draftDepth.value.value = 1
-  // speed.value.value = 10
-  // csx.value = 90
+  // 真风速
+  zfs.value = {
+    value: drivingCabRes.data.trueWindSpeed,
+    unit: drivingCabRes.data.windSpeedUnit
+  }
+  // 真风向
+  zfx.value = {
+    value: drivingCabRes.data.trueWindDirection,
+    unit: '°'
+  }
+  // 视风速
+  sfs.value = {
+    value: drivingCabRes.data.visualWindSpeed,
+    unit: drivingCabRes.data.windSpeedUnit
+  }
+  // 视风向
+  sfx.value = {
+    value: drivingCabRes.data.visualWindDirection,
+    unit: '°'
+  }
+  // 测深仪
+  draftDepth.value = {
+    value: drivingCabRes.data.depth,
+    unit: drivingCabRes.data.depthUnit
+  }
+  // 航速
+  speed.value = {
+    value: drivingCabRes.data.speed,
+    unit: drivingCabRes.data.speedUnit
+  }
+  // 船艏向
+  csx.value = drivingCabRes.data.bowOrientation
+  // 舵角方向
+  if (drivingCabRes.data.cabinCourse === 'L') {
+    dfx.value = Math.abs(drivingCabRes.data.rudderAngle)
+  } else if (drivingCabRes.data.cabinCourse === 'R') {
+    dfx.value = -Math.abs(drivingCabRes.data.rudderAngle)
+  } else {
+    dfx.value = 0
+  }
+  // 经纬度
+  longitude.value = decimalToDMS(+drivingCabRes.data.longitude)
+  latitude.value = decimalToDMS(+drivingCabRes.data.latitude)
 }
 
 /**
@@ -445,6 +467,31 @@ const hostDevices = computed(() => {
 })
 
 /**
+ * @function getShipDeviceData
+ * @description 获取船舶设备数据
+ **/
+const getShipDeviceData = async () => {
+  const shipDeviceRes = await getShipDevice()
+  // MOCK
+  // shipDeviceRes.data.iotHosts.forEach((item) => {
+  //   item.data = {
+  //     "hostSpeed": {
+  //       "cloumName": "hostSpeed",
+  //       "description": null,
+  //       "name": "主机转速",
+  //       "max": "1000",
+  //       "min": "0",
+  //       "value": "700",
+  //       "unit": "rpm",
+  //       "type": "1",
+  //       "sort": null
+  //     },
+  //   }
+  // })
+  deviceInfo.value = shipDeviceRes.data
+}
+
+/**
  * @function getShipSrsData
  * @description 获取船舶流媒体数据
  **/
@@ -489,16 +536,17 @@ const refreshCopilotData = () => {
   if (refreshDisabled) return
   debugLog('加载数据')
   getDestData()
-  // getDrivingCabData()
+  getDrivingCabData()
+  getShipDeviceData()
 
   timer = setTimeout(() => {
-    refreshCopilotData()
+    // refreshCopilotData()
   }, refreshTime)
 }
 
 onMounted(() => {
   refreshCopilotData()
-  // getShipSrsData()
+  getShipSrsData()
 })
 
 onUnmounted(() => {

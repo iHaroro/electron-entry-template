@@ -3,8 +3,8 @@ import request from '@/pages/index/utils/request'
 // 获取智能驾驶信息
 export const getDrivingCab = (data) => {
   return request({
-    url: '/largeScreen/drivingCab',
-    method: 'POST',
+    url: '/cabinInfo',
+    method: 'GET',
     data,
   })
 }

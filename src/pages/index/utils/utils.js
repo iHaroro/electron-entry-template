@@ -189,21 +189,15 @@ export const handlerPromise = (promise) =>
 
 /**
  * 将十进制度数转换为度分秒格式
- * @param {number} decimal 十进制度数值
- * @param {number} [decimalPlaces=0] 秒数保留小数位（默认四舍五入到整数）
+ * @param {number} data 十进制度数
  * @returns {string} 度分秒格式字符串
  */
-export const decimalToDMS = (decimal, decimalPlaces = 0) => {
-  // 获取度数
-  const degrees = Math.floor(decimal)
-  // 获取小数部分计算分数
-  const minutesWithDecimal = (decimal - degrees) * 60
-  const minutes = Math.floor(minutesWithDecimal)
-  // 计算并四舍五入秒数
-  const seconds = (minutesWithDecimal - minutes) * 60
-  const roundedSeconds = Number(Math.round(seconds + 'e' + decimalPlaces) + 'e-' + decimalPlaces)
-  
-  return `${degrees}°${minutes}'${roundedSeconds.toFixed(decimalPlaces)}"`
+export const decimalToDMS = (data) => {
+  const degrees = Math.floor(data / 100)
+  const remaining = data % 100
+  const minutes = Math.floor(remaining)
+  const seconds = (remaining - minutes) * 60
+  return `${degrees}°${minutes}′${seconds.toFixed(0)}″`
 }
 
 /**

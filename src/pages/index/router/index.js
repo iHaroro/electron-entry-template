@@ -52,11 +52,9 @@ router.beforeEach((to, from, next) => {
     // 已登录
     next()
   } else {
-    console.log(to)
     // 未登录
     next({ path: '/login' })
   }
-  next()
 })
 
 export default router
