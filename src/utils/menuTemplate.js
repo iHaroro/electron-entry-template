@@ -40,12 +40,12 @@ export const getMenuTemplate = (mainWindow) => {
     {
       label: '操作',
       submenu: [
-        {
-          label: '退出登录',
-          click: () => {
-            shipAppLogout(mainWindow)
-          }
-        },
+        // {
+        //   label: '退出登录',
+        //   click: () => {
+        //     shipAppLogout(mainWindow)
+        //   }
+        // },
         {
           label: '退出应用',
           role: 'quit'
