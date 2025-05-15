@@ -27,7 +27,7 @@ const customTheme = {
 
 const appControlStore = useAppControlStore()
 
-window.electronAPI.addListener('logout', () => {
+window?.electronAPI?.addListener('logout', () => {
   appControlStore.logout()
 })
 </script>
