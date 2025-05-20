@@ -2,6 +2,7 @@ import { BrowserWindow } from 'electron'
 import { setMenu } from '@/utils/menuTemplate'
 import { preloadPath, iconPath } from '@/config'
 
+
 /**
  * @function createCustomWindow
  * @description 创建自定义窗口
