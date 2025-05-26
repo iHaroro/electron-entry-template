@@ -1,23 +1,70 @@
+import { resolve } from 'path'
 import { fileURLToPath, URL } from 'node:url'
-
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import vueDevTools from 'vite-plugin-vue-devtools'
+// import vueDevTools from 'vite-plugin-vue-devtools'
 import Components from 'unplugin-vue-components/vite'
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
-import zipPack from 'vite-plugin-zip-pack'
+// import zipPack from 'vite-plugin-zip-pack'
 import viteCompression from 'vite-plugin-compression'
 import copy from 'rollup-plugin-copy'
+
+const root = process.cwd();
+
+function pathResolve(dir) {
+  return resolve(root, '.', dir);
+}
+
+// 多页面配置
+const pages = [
+  {
+    name: 'index',
+    htmlName: 'index.html',
+    htmlPath: './',
+    path: pathResolve('./index.html'),
+    outPagePath: '/'
+  },
+  {
+    name: 'monitor',
+    htmlName: 'monitor.html',
+    htmlPath: './',
+    path: pathResolve('./monitor.html'),
+    outPagePath: '/'
+  }
+]
+
+const getEntryInput = () => pages.reduce((res, cur) => {
+  res[cur.name] = cur.path;
+  return res;
+}, {})
+
+console.log(getEntryInput())
+
+const multiplePagePlugin = () => ({
+  name: "multiple-page-plugin",
+  configureServer(server) {
+    server.middlewares.use((req, res, next) => {
+      // 处理多页面路由
+      for (let page of pages) {
+        if (req.url.startsWith(`/${page.name}`)) {
+          req.url = `/${page.htmlPath}${page.htmlName}`
+          break
+        }
+      }
+      next()
+    })
+  }
+})
 
 // https://vite.dev/config/
 export default defineConfig(() => {
   return {
-    
     plugins: [
       vue(),
+      multiplePagePlugin(),
       vueJsx(),
-      vueDevTools(),
+      // vueDevTools(),
       Components({
         resolvers: [
           AntDesignVueResolver({
@@ -29,7 +76,7 @@ export default defineConfig(() => {
       viteCompression({
         deleteOriginFile: false //压缩后是否删除源文件
       }),
-      zipPack(),
+      // zipPack(),
       copy({
         targets: [
           {
@@ -39,6 +86,61 @@ export default defineConfig(() => {
         ]
       })
     ],
+    build: {
+      base: './',
+      rollupOptions: {
+        input: getEntryInput(),
+        output: {
+          // 自定义输出目录和文件名
+          entryFileNames: (chunkInfo) => {
+            // 尝试通过chunk名匹配多页面路径 若匹配到则放置在对应目录 否则放置在根目录
+            const page = pages.find((p) => p.name === chunkInfo.name)
+            return page
+                   ? `${page.outPagePath.replace(/^\//, "")}assets/[name].[hash].js`
+                   : "assets/[name].[hash].js";
+          },
+          chunkFileNames: (chunkInfo) => {
+            // 通过chunk的facadeModuleId匹配多页面路径
+            if (chunkInfo.facadeModuleId) {
+              const chunk = pages.find((p) => chunkInfo.facadeModuleId?.includes(p.outPagePath))
+              return chunk
+                     ? `${chunk.outPagePath.replace(/^\//, "")}assets/[name].[hash].js`
+                     : "assets/[name].[hash].js";
+            }
+            return "assets/[name].[hash].js"
+          },
+          assetFileNames: (assetInfo) => {
+            // 处理 CSS、图片等资源
+            // 优先按照原始文件名处理 若匹配到多页面路径则放置在对应目录 否则放置在根目录assets
+            if (assetInfo.originalFileName) {
+              const page = pages.find((p) => assetInfo.originalFileName?.includes(p.outPagePath))
+              return page
+                     ? `${page.outPagePath.replace(/^\//, "")}assets/[name].[hash][extname]`
+                     : "assets/[name].[hash][extname]"
+            } else {
+              // 如果没有原始文件名，通过name匹配
+              const page = pages.find((p) => assetInfo.name?.includes(p.name));
+              return page
+                     ? `${page.outPagePath.replace(/^\//, "")}assets/[name].[hash][extname]`
+                     : "assets/[name].[hash][extname]"
+            }
+          }
+        },
+        plugins: [
+          {
+            name: "html-path-manual",
+            generateBundle(options, bundle) {
+              for (let page of pages) {
+                const htmlFile = bundle[page.htmlPath + page.htmlName]
+                if (htmlFile) {
+                  htmlFile.fileName = page.outPagePath + page.htmlName
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
     optimizeDeps: {
       include: ['qs', 'echarts', 'lodash', 'dayjs'],
       exclude: []
@@ -57,7 +159,7 @@ export default defineConfig(() => {
       // 全局配置 utils.scss
       preprocessorOptions: {
         scss: {
-          additionalData: `@use "@/assets/styles/sizeUtils.scss" as *;`
+          additionalData: `@use "@/pages/index/assets/styles/sizeUtils.scss" as *;`
         },
         less: {
           modifyVars: {},
@@ -69,8 +171,17 @@ export default defineConfig(() => {
       port: 8888,
       host: '0.0.0.0',
       proxy: {
+        '/djysConfig': {
+          // target: 'http://192.168.2.18:8062',
+          // target: 'https://djys-api.dajvision.com',
+          target: 'http://djys-test-api.dajvision.com',
+          changeOrigin: true
+        },
+        '/iot': {
+          target: 'http://192.168.2.36:12688',
+          changeOrigin: true
+        },
         '/djys': {
-          // target: 'http://192.168.2.18:8082',
           target: 'https://djys-api.dajvision.com',
           changeOrigin: true
         }

@@ -1,0 +1,20 @@
+{
+  "token": {
+    "colorPrimary": "#0091ff",
+    "colorPrimaryBg": "#0a5e94",
+    "colorPrimaryBorder": "#15b0ff",
+    "colorPrimaryTextHover": "#0091ff",
+    "colorPrimaryText": "#0091ff",
+    "colorPrimaryActive": "#0091ff",
+    "colorPrimaryBgHover": "#0a5e94",
+    "colorPrimaryBorderHover": "#0a5e94",
+    "colorPrimaryTextActive": "#279ae8",
+    "colorSuccess": "#70cc0e",
+    "colorWarning": "#ffa217",
+    "colorError": "#fc5232",
+    "colorTextBase": "#f2fcff",
+    "colorBgBase": "#03122c",
+    "colorBorder": "#0091ff",
+    "colorInfo": "#00fcee"
+  }
+}
