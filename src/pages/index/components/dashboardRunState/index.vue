@@ -1,5 +1,5 @@
 <template>
-  <div class="run-state-chart-box">
+  <div class="chart-box">
     <div class="state-box" v-for="(item, index) in model" :key="`state-item-${index}`">
       <div class="state-item">
 
@@ -57,7 +57,7 @@ const model = defineModel({
 </script>
 
 <style scoped lang="scss">
-.run-state-chart-box {
+.chart-box {
   box-sizing: border-box;
   display: flex;
   flex-direction: column-reverse;

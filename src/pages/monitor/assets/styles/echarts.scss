@@ -1,0 +1,89 @@
+@use "sizeUtils.scss";
+
+.line-tooltip-style {
+  display: flex;
+  align-items: center;
+  padding: 10px 10px !important;
+  border: 1px solid transparent !important;
+  background-color: transparent !important;
+  background-image: linear-gradient(180deg, rgba(67, 67, 67, 0.7) 0%, rgba(0, 0, 0, 0.8) 100%) !important;
+  box-shadow: 0 0 7px 0 #00a9ff !important;
+
+  .date {
+    font-weight: 400;
+    font-size: 10px;
+    color: #ffffff;
+    line-height: 14px;
+    margin-bottom: 4px;
+  }
+
+  .value {
+    font-weight: 400;
+    font-size: 10px;
+    color: #ffffff;
+    line-height: 14px;
+  }
+}
+
+.line-tooltip-dot-box-style {
+  position: relative;
+  background-color: transparent !important;
+  border: 1px solid transparent !important;
+
+  .line-tooltip-dot-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    min-width: 158px;
+    padding: 10px 10px !important;
+    border: 1px solid transparent !important;
+    background-color: transparent !important;
+    background-image: linear-gradient(180deg, rgba(67, 67, 67, 0.7) 0%, rgba(0, 0, 0, 0.8) 100%) !important;
+    box-shadow: 0 0 7px 0 #00a9ff !important;
+
+    .date {
+      margin-left: 20px;
+      margin-bottom: 13px;
+    }
+
+    .date,
+    .value {
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 14px;
+      color: #ffffff;
+    }
+
+    .dot-value-box {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 13px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .left-box {
+        display: flex;
+        align-items: center;
+
+        .dot {
+          width: 11px;
+          height: 11px;
+          border-radius: 50%;
+          margin-right: 22px;
+        }
+      }
+
+      .right-box {
+        margin-left: 11px;
+      }
+    }
+  }
+}
+

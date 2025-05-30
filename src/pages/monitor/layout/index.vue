@@ -1,9 +1,9 @@
 <template>
-  <div class="page-container">
-    <div class="page-menu-box" :class="[{'expended': expended}]">
+  <div class="page-container" :class="{'is-expended': expended}">
+    <div class="page-menu-box">
       <!--顶部logo-->
       <div class="header-logo">
-        <img class="header-logo-icon" src="@/pages/monitor/assets/images/login_logo.png" alt="船舶智能监控系统" />
+        <img class="header-logo-icon" src="@/pages/monitor/assets/images/monitor_system_icon.png" alt="船舶智能监控系统" />
         <div class="header-platform-name text-overflow" v-show="!expended">船舶智能监控系统</div>
       </div>
       <!--菜单-->
@@ -11,39 +11,44 @@
         <MenuItems :inline-collapsed="expended" />
       </div>
       <!--展开收起按钮-->
-      <div class="expend-box" @click="toggleExpend">
+      <div class="expend-box" @click="expendedControl.toggleExpend">
         <MenuUnfoldOutlined class="expend-icon" v-if="expended" />
         <MenuFoldOutlined class="expend-icon" v-else />
       </div>
     </div>
-    <div class="page-content-box" :class="[{'expended': expended}]">
+    <div class="page-content-box">
       <!--顶部nav-->
       <div class="page-content-header">
         <!--面包屑-->
-        <BreadcrumbItems />
+        <div>
+          <!--<BreadcrumbItems />-->
+        </div>
 
         <!--右侧功能-->
         <div class="page-content-header_right">
           <a-space class="user-info-box">
-            <a-avatar :size="20">
-              <template #icon>
-                <UserOutlined />
-              </template>
-            </a-avatar>
-            <span>{{ userInfo.userName }}</span>
+            <!--TODO MOCK DATA-->
+            <!--<NetStateBox :status="1"/>-->
+            <TimeBox />
+            <!--    <a-avatar :size="20">-->
+            <!--      <template #icon>-->
+            <!--        <UserOutlined />-->
+            <!--      </template>-->
+            <!--    </a-avatar>-->
+            <!--    <span>{{ userInfo.userName }}</span>-->
           </a-space>
 
-          <a-popconfirm
-            placement="bottomRight"
-            title="确认登出系统吗？"
-            ok-text="是"
-            cancel-text="否"
-            @confirm="logout"
-          >
-            <div class="logout-btn">
-              <PoweroffOutlined />
-            </div>
-          </a-popconfirm>
+          <!--  <a-popconfirm-->
+          <!--    placement="bottomRight"-->
+          <!--    title="确认登出系统吗？"-->
+          <!--    ok-text="是"-->
+          <!--    cancel-text="否"-->
+          <!--    @confirm="logout"-->
+          <!--  >-->
+          <!--    <div class="logout-btn">-->
+          <!--      <PoweroffOutlined />-->
+          <!--    </div>-->
+          <!--  </a-popconfirm>-->
         </div>
       </div>
       <!--页面内容-->
@@ -58,13 +63,15 @@
 </template>
 
 <script setup>
-import { computed, ref, useSlots, onMounted } from 'vue'
-import { storeToRefs } from 'pinia'
+import { computed, ref, useSlots } from 'vue'
 import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined, PoweroffOutlined } from '@ant-design/icons-vue'
 import { cleanTokenFromApplication } from '@/pages/monitor/utils/userInfo.js'
+import { useExpendedControl } from '@/pages/monitor/stores/menuExpendControl.js'
 import MenuItems from './menuItems.vue'
-import BreadcrumbItems from './breadcrumbItems.vue'
-import { useUserControl } from '@/pages/monitor/stores/userControl.js'
+import { storeToRefs } from 'pinia'
+import TimeBox from '@/pages/monitor/components/timeBox'
+// import NetStateBox from '@/pages/index/components/netStateBox'
+// import BreadcrumbItems from './breadcrumbItems.vue'
 
 defineOptions({ name: 'PageLayout' })
 
@@ -74,23 +81,14 @@ const hasDefaultSlot = computed(() => {
   return !!slots.default && slots.default().length > 0
 })
 
-const expended = ref(false)
-const toggleExpend = () => {
-  expended.value = !expended.value
-}
+const expendedControl = useExpendedControl()
+const { expended } = storeToRefs(expendedControl)
 
 const logout = () => {
   console.log('logout')
   cleanTokenFromApplication()
   window.location.href = '/monitor/#/login'
 }
-
-const userControl = useUserControl()
-const { userInfo } = storeToRefs(userControl)
-
-onMounted(() => {
-  userControl.getUserInfoAction()
-})
 </script>
 
 <style lang="scss" scoped>
@@ -98,17 +96,36 @@ onMounted(() => {
   display: flex;
   width: 100vw;
   height: 100vh;
+  background-color: rgba(2, 17, 51, 1);
+
+  &.is-expended {
+    .page-menu-box {
+      width: 58px;
+
+      .header-logo {
+        .header-logo-icon {
+          margin: 0 auto;
+        }
+      }
+    }
+
+    .page-content-box {
+      width: calc(100vw - 59px);
+    }
+
+    .expend-box {
+      .expend-icon {
+        margin: 0 auto;
+      }
+    }
+  }
 
   .page-menu-box {
     position: relative;
-    width: 240px;
-    border-right: 1px solid rgb(5 5 5/6%);
+    width: 270px;
+    //border-right: 1px solid rgb(5 5 5/6%);
     transition: all .2s ease-in-out;
-
-    // 侧边栏收起状态
-    &.expended {
-      width: 58px;
-    }
+    background-color: rgba(2, 17, 51, 1);
 
     .header-logo {
       position: absolute;
@@ -121,24 +138,30 @@ onMounted(() => {
       font-size: 18px;
       font-weight: bold;
       //border-bottom: 1px solid rgb(5 5 5/6%);
+      background-color: rgba(4, 26, 71, 1);
 
       .header-logo-icon {
-        width: 42px;
-        margin: 0 8px;
+        width: 25px;
+        margin: 0 6px 0 20px;
       }
 
       .header-platform-name {
         width: auto;
+        font-weight: 500;
+        font-size: 20px;
+        color: rgba(242, 252, 255, 1);
+        line-height: 28px;
       }
     }
 
     .menu-box {
       overflow-y: auto;
       position: absolute;
-      top: 65px;
+      top: 64px;
       right: 0;
       bottom: 40px;
       left: 0;
+      background-color: rgba(4, 26, 71, 1);
     }
 
     .expend-box {
@@ -148,14 +171,15 @@ onMounted(() => {
       bottom: 0;
       left: 0;
       display: flex;
-      justify-content: center;
+      justify-content: flex-end;
       align-items: center;
       height: 40px;
-      box-shadow: 0 0 6px -3px #409EFF;
-      font-size: 20px;
+      font-size: 24px;
+      color: rgba(242, 252, 255, 1);
+      background-color: rgba(4, 26, 71, 1);
 
       .expend-icon {
-        margin: 0 8px;
+        margin: 0 16px;
       }
     }
   }
@@ -163,11 +187,7 @@ onMounted(() => {
   .page-content-box {
     position: relative;
     width: calc(100vw - 241px);
-    background-color: rgba(240, 242, 245, 1);
-
-    &.expended {
-      width: calc(100vw - 59px);
-    }
+    color: rgba(242, 252, 255, 1);
 
     .page-content-header {
       display: flex;
@@ -175,8 +195,8 @@ onMounted(() => {
       align-items: center;
       height: 64px;
       padding: 0 24px;
-      background-color: #ffffff;
-      border-bottom: 1px solid rgb(5 5 5/6%);
+      background-color: rgba(4, 26, 71, 1);
+      //border-bottom: 1px solid rgb(5 5 5/6%);
 
       .page-content-header_right {
         display: flex;
@@ -201,7 +221,6 @@ onMounted(() => {
       max-height: calc(100vh - 65px);
 
       .page-content-slot {
-        margin: 16px;
       }
     }
   }

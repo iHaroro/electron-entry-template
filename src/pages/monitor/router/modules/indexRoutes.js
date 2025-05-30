@@ -1,12 +1,11 @@
-import { ToolOutlined } from '@ant-design/icons-vue'
-
-export const indexRouters = [
+export const indexRoutes = [
   {
     path: '/index',
     name: 'IndexPage',
     meta: {
       title: '首页',
-      icon: ToolOutlined
+      showLayout: true,
+      icon: 'icon-home_menu_icon'
     },
     component: () => import('@/pages/monitor/views/index')
   }

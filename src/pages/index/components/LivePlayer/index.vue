@@ -7,6 +7,7 @@
       live
       stretch
       digital-zoom
+      v-bind="$attrs"
     />
   </div>
 </template>

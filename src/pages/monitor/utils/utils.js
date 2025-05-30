@@ -216,7 +216,7 @@ export const decimalToDMS = (decimal, decimalPlaces = 0) => {
   // 计算并四舍五入秒数
   const seconds = (minutesWithDecimal - minutes) * 60
   const roundedSeconds = Number(Math.round(seconds + 'e' + decimalPlaces) + 'e-' + decimalPlaces)
-
+  
   return `${degrees}°${minutes}'${roundedSeconds.toFixed(decimalPlaces)}"`
 }
 
@@ -256,12 +256,24 @@ export const getReFillFile = (data) => {
 export const compareArrays = (newValues, oldValues) => {
   // 新增的值（在新数组中有，旧数组中没有）
   const addedValues = newValues.filter((item) => !oldValues.includes(item))
-
+  
   // 移除的值（在旧数组中有，新数组中没有）
   const removedValues = oldValues.filter((item) => !newValues.includes(item))
-
+  
   return {
     addedValues,
     removedValues
   }
+}
+
+// 在文件顶部添加颜色转换函数
+export const hexToRgba = (hex, opacity = 1) => {
+  // 去除#号
+  hex = hex.replace('#', '');
+  // 解析为r,g,b值
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+  
+  return `rgba(${r}, ${g}, ${b}, ${opacity})`;
 }

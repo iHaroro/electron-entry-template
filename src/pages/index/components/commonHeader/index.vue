@@ -91,6 +91,26 @@ const leftMenus = ref([
   // }
 ])
 
+// TODO DEV 开发环境下，添加智能监控系统菜单
+if (process.env.NODE_ENV === 'development') {
+  leftMenus.value.push({
+    name: '智能监控系统',
+    onClick: () => {
+      window.electronAPI.getShipAppConfig().then(async res => {
+        if (res.isPackaged) {
+          // 打包后
+          const windowId = await window.electronAPI.openNewWindow(res.shipMonitorAppEntryPath, { hash: '/index' })
+          console.log('监控系统ID', windowId)
+        } else {
+          // 开发
+          const windowId = await window.electronAPI.openNewWindow(`${res.monitorAppDevPath}/#/index`)
+          console.log('监控系统ID', windowId)
+        }
+      })
+    }
+  })
+}
+
 const activeRouteName = computed(() => route.name)
 
 const jumpMenu = (item) => {

@@ -3,7 +3,7 @@
     <div class="left-box"></div>
     <div class="right-box">
       <div class="logo-box">
-        <img class="logo-icon" src="@/pages/index/assets/images/login_logo.png" alt="云视船舶" />
+        <img class="logo-icon" src="@/pages/monitor/assets/images/login_logo.png" alt="云视船舶" />
       </div>
       <div class="title-box">
         <div class="title-box-title">欢迎登录</div>

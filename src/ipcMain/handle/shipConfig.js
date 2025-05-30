@@ -19,7 +19,6 @@ export const initShipConfig = () => {
       // 开发时智能监控应用地址
       monitorAppDevPath
     }
-    console.log('app config', appConfig)
     return appConfig
   })
 }

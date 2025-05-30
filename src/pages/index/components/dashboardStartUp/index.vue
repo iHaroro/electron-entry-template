@@ -1,5 +1,5 @@
 <template>
-  <div class="run-state-chart-box">
+  <div class="chart-box">
     <canvas ref="dashboardRef" class="chart-box" :width="600" :height="300" />
   </div>
 </template>
@@ -36,7 +36,7 @@ watch(model, () => {
 </script>
 
 <style scoped lang="scss">
-.run-state-chart-box {
+.chart-box {
   width: 100%;
   height: calc(100% + 2px);
   background-image: url("../../assets/images/start_up_dashboard_bg.png");

@@ -1,29 +1,32 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { routes } from './modules'
 import { getTokenFormApplication } from '@/pages/monitor/utils/userInfo.js'
+import { Modal } from 'ant-design-vue'
+
+export const routesList = [
+  // 重定向
+  {
+    path: '/',
+    redirect: '/index'
+  },
+  ...routes,
+  // 登录页
+  // {
+  //   path: '/login',
+  //   name: 'LoginPage',
+  //   component: () => import('@/pages/monitor/views/login')
+  // },
+  // 404页面
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFoundPage',
+    component: () => import('@/pages/monitor/views/404')
+  }
+]
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.MONITOR_BASE_URL),
-  routes: [
-    // 重定向
-    {
-      path: '/',
-      redirect: '/index'
-    },
-    ...routes,
-    // 登录页
-    {
-      path: '/login',
-      name: 'LoginPage',
-      component: () => import('@/pages/monitor/views/login')
-    },
-    // 404页面
-    {
-      path: '/:pathMatch(.*)*',
-      name: 'NotFoundPage',
-      component: () => import('@/pages/monitor/views/404')
-    }
-  ]
+  routes: routesList
 })
 
 router.beforeEach((to, from, next) => {
@@ -37,7 +40,15 @@ router.beforeEach((to, from, next) => {
   } else {
     console.log('未登录', to)
     // 未登录
-    next({ name: 'LoginPage' })
+    Modal.error({
+      title: '提示',
+      content: '登录已过期，请先登录',
+      okText: '确定',
+      onOk() {
+        console.log('click ok')
+        window.close()
+      }
+    })
   }
 })
 

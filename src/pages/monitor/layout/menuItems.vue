@@ -1,14 +1,17 @@
 <template>
   <a-menu
-    id="pageMenu"
+    id="monitorPageMenuComponent"
     style="width: 100%"
     mode="inline"
+    popupClassName="monitor-menu-popup-class"
     v-model:openKeys="openKeys"
     v-model:selectedKeys="selectedKeys"
     :items="items"
     :inline-collapsed="inlineCollapsed"
+    trigger-sub-menu-action="click"
     @click="handleClick"
-  ></a-menu>
+  >
+  </a-menu>
 </template>
 
 <script setup>
@@ -24,6 +27,11 @@ defineProps({
     default: false
   }
 })
+
+const route = useRoute()
+const router = useRouter()
+const selectedKeys = ref([])
+const openKeys = ref([])
 
 /**
  * 点击菜单
@@ -50,33 +58,37 @@ const handleClick = ({ key }) => {
   }
 }
 
-const route = useRoute()
-const router = useRouter()
-const selectedKeys = ref([])
-const openKeys = ref([])
-
+/**
+ * @function transformRoutesToMenuItems
+ * @description 将路由转换为菜单数据
+ * @param {array} routes 路由数据
+ * @returns {array} 菜单数据
+ **/
 const transformRoutesToMenuItems = (routes) => {
   return routes
-    .filter(route => !route.meta?.hideInMenu)
-    .map(route => {
-      const item = {
-        key: route.name,
-        label: route.meta?.title || route.name,
-        title: route.meta?.title || route.name
-      }
+  .filter(route => !route.meta?.hideInMenu)
+  .map(route => {
+    const item = {
+      key: route.name,
+      label: route.meta?.title || route.name,
+      title: route.meta?.title || route.name
+    }
 
-      if (route.meta?.icon) {
-        item.icon = () => h(route.meta.icon, {
-          style: { fontSize: '18px' }
-        })
-      }
+    // 自定义icon
+    if (route.meta?.icon) {
+      // ICON_FONT
+      item.icon = () => h('i', {
+        class: ['iconfont', route.meta.icon],
+        style: { fontSize: '24px' }
+      })
+    }
 
-      if (route.children?.length) {
-        item.children = transformRoutesToMenuItems(route.children)
-      }
+    if (route.children?.length) {
+      item.children = transformRoutesToMenuItems(route.children)
+    }
 
-      return item
-    })
+    return item
+  })
 }
 
 const items = reactive(transformRoutesToMenuItems(routes))
@@ -90,9 +102,9 @@ const updateMenuState = () => {
       [activeMenu] :
       [matchedRoutes[matchedRoutes.length - 1].name]
     openKeys.value = matchedRoutes
-      .slice(0, -1)
-      .map(r => r.name)
-      .filter(Boolean)
+    .slice(0, -1)
+    .map(r => r.name)
+    .filter(Boolean)
   }
 }
 
@@ -108,3 +120,110 @@ watch(openKeys, val => {
   console.log('openKeys', val)
 })
 </script>
+
+<style lang="scss">
+#monitorPageMenuComponent {
+  &.ant-menu {
+    background-color: rgba(4, 26, 71, 1);
+    border-inline-end: none !important;
+
+    .ant-menu-sub {
+      background-color: rgba(4, 26, 71, 1);
+
+      .ant-menu-item {
+        width: 100%;
+        height: 56px;
+        line-height: 56px;
+        padding-inline: 0;
+        margin-inline: 0;
+        margin-block: 0;
+      }
+    }
+
+    .ant-menu-title-content {
+      font-size: 18px;
+    }
+
+    &.ant-menu-inline-collapsed {
+      .ant-menu-item {
+        padding-inline: calc(50% - 12px);
+      }
+
+      .ant-menu-submenu {
+        .ant-menu-submenu-title {
+          padding-inline: calc(50% - 12px);
+        }
+      }
+    }
+
+    .ant-menu-submenu-selected {
+      .ant-menu-submenu-title {
+        color: rgba(25, 141, 255, 1);
+      }
+    }
+
+    .ant-menu-item-selected {
+      &.ant-menu-item {
+        position: relative;
+        background-color: rgba(242, 252, 255, 0.10);
+
+        &::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          width: 6px;
+          height: 56px;
+          background: #198DFF;
+          border-radius: 0 5px 5px 0;
+        }
+      }
+
+      .ant-menu-title-content {
+        color: rgba(25, 141, 255, 1);
+      }
+    }
+
+    .ant-menu-submenu-title {
+      width: 100%;
+      height: 56px;
+      line-height: 56px;
+      padding-inline: 0;
+      margin-inline: 0;
+      margin-block: 0;
+    }
+
+    .ant-menu-item {
+      width: 100%;
+      height: 56px;
+      line-height: 56px;
+      padding-inline: 0;
+      margin-inline: 0;
+      margin-block: 0;
+      border-radius: 0;
+
+      //.ant-menu-item-icon {
+      //  svg {
+      //    width: 100%;
+      //    height: 100%;
+      //
+      //    path, rect, circle, polygon, polyline, line {
+      //      stroke: red;
+      //      fill: none;
+      //    }
+      //  }
+      //}
+    }
+  }
+}
+
+.ant-menu-submenu-popup {
+  .ant-menu-vertical {
+    .ant-menu-item {
+      display: flex;
+      align-items: center;
+    }
+  }
+}
+</style>

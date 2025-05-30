@@ -1,5 +1,11 @@
-import { indexRouters } from './indexRouters.js'
+import { indexRoutes } from './indexRoutes.js'
+import { warnModelRoutes } from './warnModelRoutes.js'
+import { warnListRoutes } from './warnListRoutes.js'
+import { warnStatisticsRoutes } from './warnStatisticsRoutes.js'
 
 export const routes = [
-  ...indexRouters
+  ...indexRoutes,
+  ...warnModelRoutes,
+  ...warnListRoutes,
+  ...warnStatisticsRoutes
 ]

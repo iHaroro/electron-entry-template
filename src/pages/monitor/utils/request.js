@@ -83,11 +83,11 @@ const handlerBusinessError = async (response) => {
     data: { code }
   } = response
   switch (code) {
-    case '403': // token失效
-      cleanTokenFromApplication()
-      message.error('登录失效，请重新登录')
-      location.replace('/login')
-      return Promise.reject()
+    // case '403': // token失效
+    //   cleanTokenFromApplication()
+    //   message.error('登录失效，请重新登录')
+    //   location.replace('/login')
+    //   return Promise.reject()
     default:
       return Promise.reject(response.data)
   }

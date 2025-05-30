@@ -15,7 +15,7 @@ let mainWindow = null
 
 const createWindow = () => {
   // 创建浏览器窗口
-  mainWindow = createCustomWindow({ fullscreen: true })
+  mainWindow = createCustomWindow({ fullscreen: false })
   // 加载web应用首页
   loadMainWindowHome(mainWindow)
 }
