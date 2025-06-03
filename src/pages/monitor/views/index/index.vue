@@ -91,7 +91,7 @@ const CHANGE_OPTIONS_MAP = {
 }
 
 const changeOptions = ref(getArrayMapFromMap(CHANGE_OPTIONS_MAP))
-const activeType = ref(CHANGE_OPTIONS_MAP.ONE.value)
+const activeType = ref(CHANGE_OPTIONS_MAP.NINE.value)
 const changeActiveType = (value) => {
   activeType.value = value
 }
@@ -144,10 +144,6 @@ const monitorList = ref([
   {
     name: 'HDMI-9',
     url: 'http://192.168.2.100/lives/m9.live.flv'
-  },
-  {
-    name: 'HDMI-10',
-    url: 'http://192.168.2.100/lives/m10.live.flv'
   }
 ])
 
