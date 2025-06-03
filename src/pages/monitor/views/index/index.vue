@@ -26,27 +26,30 @@
     <template v-if="activeType === CHANGE_OPTIONS_MAP.ONE.value">
       <div class="sign-video-box">
         <MonitorTabs
+          class="sign-device-tabs"
           v-model:active="activeDeviceIndex"
           :options="monitorList"
           label-key="name"
         />
-        <LivePlayer
-          :key="`sign_player_${activeDeviceIndex}`"
-          :videoUrl="monitorList[activeDeviceIndex].url"
-          controls
-          autoplay
-          live
-          stretch
-          digital-zoom
-          aspect="fullscreen"
-        />
+        <div class="player-box">
+          <LivePlayer
+            :key="`sign_player_${activeDeviceIndex}`"
+            :videoUrl="monitorList[activeDeviceIndex].url"
+            controls
+            autoplay
+            live
+            stretch
+            digital-zoom
+            aspect="fullscreen"
+          />
+        </div>
       </div>
     </template>
   </div>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import LivePlayer from '@liveqing/liveplayer-v3'
 import monitorIcon9 from '@/pages/monitor/assets/images/monitor_9_icon.png'
 import monitorIcon9Active from '@/pages/monitor/assets/images/monitor_9_icon_active.png'
@@ -195,6 +198,22 @@ const monitorList = ref([
     left: 24px;
     right: 24px;
     bottom: 12px;
+
+    .sign-device-tabs {
+      z-index: 9;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+    }
+
+    .player-box {
+      position: absolute;
+      top: 68px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
   }
 }
 </style>

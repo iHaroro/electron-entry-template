@@ -84,11 +84,6 @@ const scrollBtnHandler = (type) => {
 
 <style scoped lang="scss">
 .device-tab-box {
-  z-index: 9;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
   box-sizing: border-box;
   width: 100%;
   height: 68px;
