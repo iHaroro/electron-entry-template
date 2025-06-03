@@ -146,7 +146,7 @@ const monitorList = ref([
   position: relative;
   box-sizing: border-box;
   width: 100%;
-  height: calc(100vh - 66px);
+  height: calc(100vh - 82px);
   padding: 12px 24px;
 
   .top-box {

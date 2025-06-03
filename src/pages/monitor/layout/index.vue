@@ -134,7 +134,7 @@ const logout = () => {
       left: 0;
       display: flex;
       align-items: center;
-      height: 64px;
+      height: 80px;
       font-size: 18px;
       font-weight: bold;
       //border-bottom: 1px solid rgb(5 5 5/6%);
@@ -157,7 +157,7 @@ const logout = () => {
     .menu-box {
       overflow-y: auto;
       position: absolute;
-      top: 64px;
+      top: 80px;
       right: 0;
       bottom: 40px;
       left: 0;
@@ -193,7 +193,7 @@ const logout = () => {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      height: 64px;
+      height: 80px;
       padding: 0 24px;
       background-color: rgba(4, 26, 71, 1);
       //border-bottom: 1px solid rgb(5 5 5/6%);
@@ -218,7 +218,7 @@ const logout = () => {
       overflow-x: hidden;
       overflow-y: auto;
       box-sizing: border-box;
-      max-height: calc(100vh - 65px);
+      max-height: calc(100vh - 80px);
 
       .page-content-slot {
       }
