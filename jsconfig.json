@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "jsx": "preserve",
+    "jsxImportSource": "vue",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@monitor/*": ["./monitorSrc/*"],
+      "@electron/*": ["./electron/*"]
+    }
+  },
+  "exclude": ["node_modules", "dist"]
+}
