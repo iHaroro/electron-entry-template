@@ -71,7 +71,9 @@ export const getMenuTemplate = (mainWindow) => {
   return menus
 }
 
-export const setMenu = (mainWindow) => {
-  const menu = Menu.buildFromTemplate(getMenuTemplate(mainWindow))
+export const setMenu = (mainWindow, menus) => {
+  const menu = menus === undefined
+               ? Menu.buildFromTemplate(getMenuTemplate(mainWindow))
+               : null
   Menu.setApplicationMenu(menu)
 }

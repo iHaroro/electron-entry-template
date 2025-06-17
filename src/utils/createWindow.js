@@ -8,6 +8,7 @@ import { preloadPath, iconPath } from '@/config'
  * @description 创建自定义窗口
  * @param {object} options - 自定义窗口选项
  * @param {string} [options.icon=path.join(__dirname, '../../images/icon.ico')] - 窗口图标路径
+ * @param {boolean} [options.showMenu=true] - 是否设置菜单
  * @param {number} [options.width=1920] - 窗口宽度
  * @param {number} [options.height=1080] - 窗口高度
  * @param {boolean} [options.frame=true] - 是否显示窗口边框
@@ -50,6 +51,8 @@ export const createCustomWindow = (options = {}) => {
   // 根据选项设置菜单
   if (showMenu) {
     setMenu(newWindow);
+  } else {
+    setMenu(newWindow, null)
   }
   
   return newWindow;
