@@ -8,10 +8,10 @@ export const initVueDevTools = () => {
   if (process.env.NODE_ENV === 'development') {
     try {
       electronDevtoolsInstaller(VUEJS_DEVTOOLS)
-      .then((name) => console.log(`installed: ${name}`))
-      .catch(err => console.log('Unable to install `vue-devtools`: \n', err))
+      .then((name) => console.log(`Vue DevTools installed: ${name}`))
+      .catch(err => console.log('Unable to install `Vue DevTools`: \n', err))
     } catch (e) {
-      console.error("Vue Devtools failed to install:", e.toString());
+      console.error("Vue DevTools failed to install:", e.toString());
     }
   }
 }
